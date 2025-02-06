@@ -9,6 +9,7 @@ namespace _15TextRPG.Source.State
             Console.Clear();
             Console.WriteLine("\n[캠프 입구]");
             Console.WriteLine("\n1. 상태 보기");
+            Console.WriteLine("\n2. 의뢰 수주");
             Console.WriteLine("0. 종료");
         }
 
@@ -18,6 +19,9 @@ namespace _15TextRPG.Source.State
             {
                 case "1":
                     gameManager.ChangeState(new StatusMenuState());
+                    break;
+                case "2":
+                    gameManager.ChangeState(new BattleMenuState());
                     break;
                 case "0":
                     gameManager.QuitGame();
