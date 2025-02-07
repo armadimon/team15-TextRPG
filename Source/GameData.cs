@@ -37,6 +37,7 @@ namespace _15TextRPG.Source
             stage1.SetTile(15, 15, TileType.ChangeStage, new ChangeStage("Stage2"));
             stage1.SetTile(20, 15, TileType.Password, new Password("password"));
             stage1.SetTile(12, 12, TileType.NPC, new NPC("무슨일이지?"));
+            stage1.SetQuestEvent("비밀번호 획득", "비밀번호 획득 관련 이벤트");
 
             StageData stage2 = new StageData("Stage2", 30, 20);
             stage2.PlayerStartPosition = (15, 10);
@@ -86,12 +87,26 @@ namespace _15TextRPG.Source
     {
 
     }
+    public class QuestItem
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public bool IsGet { get; set; }
+
+        public QuestItem(string questName, string questDesc, bool isGet)
+        {
+            Name = questName;
+            Description = questDesc;
+            IsGet = isGet;
+        }
+    }
 
     public class StageData
     {
         public string Name { get; set; }
         public Tile[,] Tiles { get; private set; }
         public (int x, int y) PlayerStartPosition { get; set; }
+        public List<QuestItem> QuestItems { get; private set; }
 
         public StageData(string name, int width, int height)
         {
@@ -110,6 +125,11 @@ namespace _15TextRPG.Source
         public void SetTile(int x, int y, TileType type, IInteractableObject? obj = null)
         {
             Tiles[y, x] = new Tile(type, obj);
+        }
+
+        public void SetQuestEvent(string questName, string questDesc)
+        {
+            QuestItems.Add(new QuestItem(questName, questDesc, false));
         }
     }
 }

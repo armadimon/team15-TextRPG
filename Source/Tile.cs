@@ -32,9 +32,16 @@ namespace _15TextRPG.Source
     public class ChangeStage : IInteractableObject
     {
         private string nextStage;
+        private bool isOpen = false;
 
-        public ChangeStage(string nextStage)
+        public ChangeStage(string nextStage, bool isOpen)
         {
+            this.isOpen = isOpen;
+            if (isOpen == false)
+            {
+                Console.WriteLine();
+                Console.ReadLine();
+            }
             this.nextStage = nextStage;
         }
 
