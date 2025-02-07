@@ -23,7 +23,7 @@ namespace _15TextRPG
         public GameManager()
         {
             GameData = new GameData();
-            currentState = new MainMenuState();
+            currentState = new TitleMenuState();
         }
 
         public void Run()
