@@ -1,4 +1,5 @@
-﻿using _15TextRPG.Source.State;
+﻿using _15TextRPG.Source;
+using _15TextRPG.Source.State;
 using System;
 using System.Collections.Generic;
 using System.Linq;

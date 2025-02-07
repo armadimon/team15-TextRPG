@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _15TextRPG.Source.hn;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace _15TextRPG.Source.State
         {
             Console.Clear();
             Console.WriteLine("\n1. 승리");
+            Console.WriteLine("\n2. 전투");
+
             Console.WriteLine("0. 나가기");
         }
 
@@ -27,6 +30,9 @@ namespace _15TextRPG.Source.State
                     gameManager.GameData.Player.Health--;
                     Console.WriteLine($"{gameManager.GameData.Player.Health}");
                     gameManager.ChangeState(new ExploreState("stage1"));
+                    break;
+                case "2":
+                    gameManager.ChangeState(new CombatState2());
                     break;
                 case "0":
                     gameManager.ChangeState(new MainMenuState());

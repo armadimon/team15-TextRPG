@@ -8,23 +8,22 @@ using _15TextRPG.Source.State;
 
 namespace _15TextRPG.Source.hn
 {
-    public class CombatState : IGameState
+    public class CombatState2 : IGameState
     {
 
-        private Combat combat;
-
-        public CombatState()
+        public Combat2 combat;
+        public CombatState2()
         {
-            combat = new Combat(GameManager.Instance.Player, EnemyManager.Instance.GetRandomEnemy());
+            this.combat = new Combat2();
         }
 
         public void DisplayMenu(GameManager gameManager)
         {
             Console.Clear();
             Console.WriteLine("[해킹 시작]");
-            Console.WriteLine($"{combat.Player.Name} vs  {combat.GetRevealedEnemyName()} ");
-            Console.WriteLine($"{combat.Player.Name} - HP: {combat.Player.Health}");
-            Console.WriteLine($"{combat.GetRevealedEnemyName()} - HP: {combat.Enemy.Health}");
+            //Console.WriteLine($"{gamedata.Player.Name} vs  {combat.GetRevealedEnemyName()} ");
+            //Console.WriteLine($"{gamedata.Player.Name} - HP: {gamedata.Player.Health}");
+            //Console.WriteLine($"{combat.GetRevealedEnemyName()} - HP: {combat.Enemy.Health}");
             Console.WriteLine("");
             Console.WriteLine("1. 정보 스캔");
             Console.WriteLine("2. 해킹 공격");
@@ -33,21 +32,21 @@ namespace _15TextRPG.Source.hn
             Console.WriteLine("0. 도망");
         }
 
-        public void HandleInput(GameManager gameManager, string input)
+        public void HandleInput(GameManager gameManager)
         {
+            string input = Console.ReadLine() ?? "";
             switch (input)
             {
                 case "1":
-                    combat.ScanEnemy();
+                    combat.ScanEnemy(gameManager.GameData.enemies[0]);
                     break;
                 case "2":
-                    combat.Hack();
+                    combat.Hack(gameManager.GameData.Player, gameManager.GameData.enemies[0]);
                     break;
                 case "3":
-                    combat.Attack();
+                    combat.Attack(gameManager.GameData.Player, gameManager.GameData.enemies[0]);
                     break;
                 case "0":
-                    combat.Run();
                     gameManager.ChangeState(new MainMenuState());
                     return;
             }

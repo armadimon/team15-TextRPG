@@ -11,6 +11,8 @@ namespace _15TextRPG.Source.State
             Console.WriteLine("\n[캠프 입구]");
             Console.WriteLine("\n1. 상태 보기");
             Console.WriteLine("\n2. 전투");
+            Console.WriteLine("\n3. hn전투");
+
             Console.WriteLine("0. 종료");
         }
 
@@ -26,6 +28,9 @@ namespace _15TextRPG.Source.State
                     break;
                 case "2":
                     gameManager.ChangeState(new CombatState());
+                    break;
+                case "3":
+                    gameManager.ChangeState(new CombatState2());
                     break;
                 case "0":
                     gameManager.QuitGame();

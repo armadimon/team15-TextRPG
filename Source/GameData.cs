@@ -12,6 +12,7 @@ namespace _15TextRPG.Source
         public FieldData Field { get; set; }
         public BattleData Battle { get; set; }
         public List<StageData> Stages { get; set; }
+        public List<Enemy> enemies { get; set; }
         public StageData CurrentStage { get; set; }
         public GameData()
         {
@@ -56,6 +57,13 @@ namespace _15TextRPG.Source
 
             Stages = new List<StageData> { stage1, stage2 };
             CurrentStage = stage1;
+
+            enemies = new List<Enemy>()
+            {
+                new Enemy("Omnic_A", 1, "abc d e f ", 5, 20, 30, new List<Item>()),
+                new Enemy("Omnic_B", 1, "abc d e f ", 5, 20, 30, new List<Item>()),
+                new Enemy("Omnic_C", 1, "abc d e f ", 5, 20, 30, new List<Item>()),
+            };
         }
         public void ChangeStage(string stageName)
         {
