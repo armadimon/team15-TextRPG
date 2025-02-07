@@ -9,15 +9,22 @@ namespace _15TextRPG.Source.State
             Console.Clear();
             Console.WriteLine("\n[캠프 입구]");
             Console.WriteLine("\n1. 상태 보기");
+            Console.WriteLine("\n2. 전투");
             Console.WriteLine("0. 종료");
         }
 
-        public void HandleInput(GameManager gameManager, string input)
+        public void HandleInput(GameManager gameManager)
         {
+            Console.Write("\n원하시는 행동을 입력해주세요. >> ");
+            string input = Console.ReadLine() ?? "";
+
             switch (input)
             {
                 case "1":
                     gameManager.ChangeState(new StatusMenuState());
+                    break;
+                case "2":
+                    gameManager.ChangeState(new CombatState());
                     break;
                 case "0":
                     gameManager.QuitGame();
