@@ -12,57 +12,31 @@ namespace _15TextRPG.Source.State
 {
     internal class SaveLoadManager()
     {
-        List<ISaveable> observers = new();
+        List<ISaveable> saveableEntitys = new();
 
         public void AddSaveableEntity<T>(T target, string fileName)
         {
-            SaveableEntity<T> observer = new(target, fileName);
-            observers.Add(observer);
+            SaveableEntity<T> saveableEntity= new(target, fileName);
+            saveableEntitys.Add(saveableEntity);
         }
 
-        public override string ToString()
+        public string ToString(JsonSerializerOptions option)
         {
-            string result = "DATA: ";
-            foreach (ISaveable t in observers)
+            string result = "";
+            foreach (ISaveable t in saveableEntitys)
             {
-                result += t.ToString();
+                result += t.FileName + ": " + t.ToString();
             }
             return result;
         }
 
-        public void DoSave()
-        {
-            foreach (ISaveable t in observers) 
-            { 
-                t.Save();
-            }
-        }
+        public void DoSave() => saveableEntitys.ForEach(t => t.Save());
 
-        public void DoSave(string fileName)
-        {
-            foreach (ISaveable t in observers)
-            {
-                if(t.FileName == fileName)
-                    t.Save();
-            }
-        }
+        public void DoSave(string fileName) => saveableEntitys.ForEach(t => { if (t.FileName == fileName) t.Save(); });
 
-        public void DoLoad()
-        {
-            foreach (ISaveable t in observers)
-            {
-                t.Load();
-            }
-        }
+        public void DoLoad() => saveableEntitys.ForEach(t => t.Load());
 
-        public void DoLoad(string fileName)
-        {
-            foreach (ISaveable t in observers)
-            {
-                if (t.FileName == fileName)
-                    t.Load();
-            }
-        }
+        public void DoLoad(string fileName) => saveableEntitys.ForEach(t => { if (t.FileName == fileName) t.Load(); });
     }
 
     interface ISaveable
@@ -70,19 +44,13 @@ namespace _15TextRPG.Source.State
         string FileName { get; }
         bool Save();
         bool Load();
-        string ToString();
+        string ToString(JsonSerializerOptions option);
     }
 
-    class SaveableEntity<T> : ISaveable
+    class SaveableEntity<T>(T target, string fileName) : ISaveable
     {
-        public T Target { get; private set; }
-        public string FileName { get; set; } = "EMPTY";
-
-        public SaveableEntity(T target, string fileName)
-        {
-            Target = target;
-            FileName = fileName;
-        }
+        public T? Target { get; private set; } = target;
+        public string FileName { get; set; } = fileName;
 
         public bool Save()
         {
@@ -109,6 +77,6 @@ namespace _15TextRPG.Source.State
             return true;
         }
 
-        public override string ToString() => JsonSerializer.Serialize(Target);
+        public string ToString(JsonSerializerOptions? option) => JsonSerializer.Serialize(Target, option);
     }
 }
