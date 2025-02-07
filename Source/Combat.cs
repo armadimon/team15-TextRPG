@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace _15TextRPG.Source
 {
+
+
     public class Combat
     {
         public Player Player { get; set; }
@@ -299,5 +301,95 @@ namespace _15TextRPG.Source
             return new string(maskedName);
         }
 
+
+        //===================================================어택
+
+        public void Attack()
+        {
+            Console.WriteLine("\n공격을 시작합니다! 방향키를 5개 입력하세요!");
+
+            // 적의 랜덤 방향 리스트 생성
+            List<char> enemyDirections = GenerateRandomDirections(5);
+            Console.WriteLine($"(적이 선택한 방향: {string.Join(" ", enemyDirections)})");
+
+            // 플레이어 입력 리스트 생성 (5초 제한)
+            List<char> playerInputs = GetPlayerAttackInput(5);
+
+            // 입력이 없거나 5개 미만이면 실패 처리
+            if (playerInputs.Count < 5)
+            {
+                Console.WriteLine("\n시간 초과! 공격이 실패했습니다...");
+                Console.WriteLine("아무 키나 입력해주세요.");
+                Console.ReadKey();
+                return;
+            }
+
+            // 정확도 계산 (일치하는 개수)
+            int matchCount = 0;
+            for (int i = 0; i < 5; i++)
+            {
+                if (playerInputs[i] == enemyDirections[i])
+                    matchCount++;
+            }
+
+            // 정확도 비례 데미지 계산
+            double accuracy = (double)matchCount / 5;
+            int baseDamage = (int)Player.AttackDamage;
+            int totalDamage = (int)(baseDamage * accuracy);
+            if (totalDamage < 1) totalDamage = 1; // 최소 1 데미지 보장
+
+            Enemy.Health -= totalDamage;
+            Console.WriteLine($"\n공격 정확도: {accuracy * 100:F1}%");
+            Console.WriteLine($"{Player.Name}이(가) {GetRevealedEnemyName()}에게 {totalDamage}의 피해를 입혔습니다!");
+
+            Console.WriteLine("아무 키나 입력해주세요.");
+            Console.ReadKey();
+        }
+
+        private List<char> GenerateRandomDirections(int count)
+        {
+            char[] possibleDirections = { '↑', '↓', '←', '→' };
+            Random random = new Random();
+            List<char> selectedDirections = new List<char>();
+
+            for (int i = 0; i < count; i++)
+            {
+                selectedDirections.Add(possibleDirections[random.Next(possibleDirections.Length)]);
+            }
+
+            return selectedDirections;
+        }
+
+        private List<char> GetPlayerAttackInput(int count)
+        {
+            List<char> inputs = new List<char>();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            Console.WriteLine("\n방향키 입력 중... (5초 안에 5번 입력)");
+
+            while (stopwatch.Elapsed.TotalSeconds < 5 && inputs.Count < count)
+            {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKey key = Console.ReadKey(true).Key;
+
+                    if (key == ConsoleKey.UpArrow) inputs.Add('↑');
+                    else if (key == ConsoleKey.DownArrow) inputs.Add('↓');
+                    else if (key == ConsoleKey.LeftArrow) inputs.Add('←');
+                    else if (key == ConsoleKey.RightArrow) inputs.Add('→');
+
+                    // 현재 입력된 값 표시
+                    Console.Write(string.Join(" ", inputs) + "\r");
+                }
+            }
+
+            stopwatch.Stop();
+            Console.WriteLine();
+
+            return inputs;
+        }
     }
+
+
 }

@@ -27,7 +27,7 @@ namespace _15TextRPG.Source.State
             Console.WriteLine("");
             Console.WriteLine("1. 정보 스캔");
             Console.WriteLine("2. 해킹 공격");
-            //Console.WriteLine("3. 해킹 공격");
+            Console.WriteLine("3. 주먹 공격");
 
             Console.WriteLine("0. 도망");
         }
@@ -41,6 +41,9 @@ namespace _15TextRPG.Source.State
                     break;
                 case "2":
                     combat.Hack();
+                    break;
+                case "3":
+                    combat.Attack();
                     break;
                 case "0":
                     combat.Run();
