@@ -9,6 +9,7 @@ namespace _15TextRPG
 {
     public class GameManager
     {
+        private static GameManager? instance;
         private IGameState currentState;
         private bool isRunning = true;
         public Player Player { get; private set; }
@@ -17,6 +18,16 @@ namespace _15TextRPG
         {
             Player = new Player("Default");
             currentState = new MainMenuState();
+        }
+
+        public static GameManager Instance // 싱글톤
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new GameManager();
+                return instance;
+            }
         }
 
         public void Run()

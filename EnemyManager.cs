@@ -16,9 +16,9 @@ namespace _15TextRPG
         {
             enemyList = new List<Enemy>()
             {
-                new Enemy("옴닉a", 1, "옴닉a이다.", 5, 2, 30, new List<Item>()),
-                new Enemy("옴닉b", 1, "옴닉b이다.", 5, 2, 30, new List<Item>()),
-                new Enemy("옴닉c", 1, "옴닉c이다.", 5, 2, 30, new List<Item>()),
+                new Enemy("Omnic_A", 1, "abc d e f ", 5, 20, 30, new List<Item>()),
+                new Enemy("Omnic_B", 1, "abc d e f ", 5, 20, 30, new List<Item>()),
+                new Enemy("Omnic_C", 1, "abc d e f ", 5, 20, 30, new List<Item>()),
             };
         }
 
