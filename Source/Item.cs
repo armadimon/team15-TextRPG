@@ -1,6 +1,6 @@
 using System;
 
-namespace _15TextRPG.Source.State
+namespace _15TextRPG.Source
 {
     //[Serializable]
     public class Item
