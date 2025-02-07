@@ -1,8 +1,9 @@
-using System.Diagnostics;
+using System;
+using _15TextRPG.Source;
+using _15TextRPG.Source.State;
 
-namespace _15TextRPG.Source.State
+namespace _15TextRPG
 {
-
     class TextRPG
     {
         private static void Main()
@@ -19,11 +20,13 @@ namespace _15TextRPG.Source.State
     {
         private IGameState currentState;
         private bool isRunning = true;
+        public GameData GameData { get; private set; }
         public Player Player { get; private set; }
         public Enemy Enemy { get; set; }
 
         public GameManager()
         {
+            GameData = new GameData();
             Player = new Player("Agent Ahn");
             currentState = new MainMenuState();
         }
@@ -33,9 +36,7 @@ namespace _15TextRPG.Source.State
             while (isRunning)
             {
                 currentState.DisplayMenu(this);
-                Console.Write("\n원하시는 행동을 입력해주세요. >> ");
-                string input = Console.ReadLine() ?? "";
-                currentState.HandleInput(this, input);
+                currentState.HandleInput(this);
             }
         }
 
