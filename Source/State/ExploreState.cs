@@ -85,31 +85,7 @@ namespace _15TextRPG.Source.State
             {
                 Console.WriteLine("여기에는 아무것도 없습니다.");
             }
-            //if (stage.Events.TryGetValue(targetPos, out string eventType))
-            //{
-            //    if (eventType == "Battle")
-            //    {
-            //        gameManager.ChangeState(new CombatState());
-            //    }
-            //    else if (eventType.StartsWith("ChangeStage:"))
-            //    {
-            //        string nextStageName = eventType.Split(':')[1];
-            //        gameManager.GameData.ChangeStage(nextStageName);
-            //        Console.WriteLine($"다음 스테이지로 이동: {nextStageName}");
-            //    }
-            //    else if (eventType == "EnterPassword")
-            //    {
-            //        Console.WriteLine("패스워드를 입력하세요");
-            //        string pass = Console.ReadLine() ?? "";
-            //        Console.WriteLine(pass);
-            //        if (pass == "password")
-            //            gameManager.ChangeState(new MainMenuState());
-            //    }
-            //}
         }
-
-
-
 
         public void DisplayMap(GameData gameData)
         {
