@@ -4,8 +4,9 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using _15TextRPG.Source.State;
 
-namespace _15TextRPG.Source.State
+namespace _15TextRPG.Source.hn
 {
     public class CombatState : IGameState
     {
@@ -17,7 +18,7 @@ namespace _15TextRPG.Source.State
             combat = new Combat(GameManager.Instance.Player, EnemyManager.Instance.GetRandomEnemy());
         }
 
-        public void DisplayMenu(GameManager gameManager) 
+        public void DisplayMenu(GameManager gameManager)
         {
             Console.Clear();
             Console.WriteLine("[해킹 시작]");

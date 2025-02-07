@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _15TextRPG.Source
+namespace _15TextRPG.Source.hn
 {
 
 
@@ -154,8 +154,8 @@ namespace _15TextRPG.Source
             int remainingTime = timeoutSeconds;
             Console.WriteLine("");
             int timerCurTop = Console.CursorTop;      //타이머 커서 저장
-            
-            Console.WriteLine($"{remainingTime}초 남음..."); 
+
+            Console.WriteLine($"{remainingTime}초 남음...");
             int playerCurTop = Console.CursorTop; // 입력 줄 저장
             int playerCurLeft = Console.CursorLeft; // 입력 위치 저장
 
@@ -188,8 +188,8 @@ namespace _15TextRPG.Source
                         Console.Write(key.KeyChar);
                     }
 
-                    playerCurTop = Console.CursorTop;  
-                    playerCurLeft = Console.CursorLeft; 
+                    playerCurTop = Console.CursorTop;
+                    playerCurLeft = Console.CursorLeft;
 
                 }
 
@@ -205,7 +205,7 @@ namespace _15TextRPG.Source
                     Console.SetCursorPosition(playerCurLeft, playerCurTop);
                 }
 
-                
+
             }
 
             stopwatch.Stop();
