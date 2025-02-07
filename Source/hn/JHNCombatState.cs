@@ -8,13 +8,13 @@ using _15TextRPG.Source.State;
 
 namespace _15TextRPG.Source.hn
 {
-    public class CombatState2 : IGameState
+    public class JHNCombatState : IGameState
     {
 
-        public Combat2 combat;
-        public CombatState2()
+        public JHNCombat combat;
+        public JHNCombatState()
         {
-            this.combat = new Combat2();
+            this.combat = new JHNCombat();
         }
 
         public void DisplayMenu(GameManager gameManager)

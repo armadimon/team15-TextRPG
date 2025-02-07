@@ -30,7 +30,7 @@ namespace _15TextRPG.Source.State
                     gameManager.ChangeState(new CombatState());
                     break;
                 case "3":
-                    gameManager.ChangeState(new CombatState2());
+                    gameManager.ChangeState(new JHNCombatState());
                     break;
                 case "0":
                     gameManager.QuitGame();

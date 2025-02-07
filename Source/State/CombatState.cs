@@ -32,7 +32,7 @@ namespace _15TextRPG.Source.State
                     gameManager.ChangeState(new ExploreState("stage1"));
                     break;
                 case "2":
-                    gameManager.ChangeState(new CombatState2());
+                    gameManager.ChangeState(new JHNCombatState());
                     break;
                 case "0":
                     gameManager.ChangeState(new MainMenuState());

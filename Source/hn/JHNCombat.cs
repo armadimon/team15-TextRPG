@@ -11,7 +11,7 @@ namespace _15TextRPG.Source.hn
 {
 
 
-    public class Combat2
+    public class JHNCombat
     {
 
 
@@ -19,7 +19,7 @@ namespace _15TextRPG.Source.hn
         private int revealedLetters = 0; // 플레이어가 알아낸 적의 글자 수
         private HashSet<int> revealedIndex = new HashSet<int>(); // 공개된 글자들 위치 저장
 
-        public Combat2()
+        public JHNCombat()
         {
 
         }
