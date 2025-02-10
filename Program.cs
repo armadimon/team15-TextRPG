@@ -14,16 +14,22 @@ namespace _15TextRPG
         }
     }
 
+
+
     public class GameManager
     {
         private IGameState currentState;
         private bool isRunning = true;
         public GameData GameData { get; private set; }
+        public Player Player { get; private set; }
+        public BattleManager BattleManager { get; private set; }
 
         public GameManager()
         {
             GameData = new GameData();
+            Player = new Player("Agent Ahn");
             currentState = new MainMenuState();
+            BattleManager = new BattleManager();
         }
 
         public void Run()
@@ -45,5 +51,7 @@ namespace _15TextRPG
             Console.WriteLine("게임을 종료합니다.");
             isRunning = false;
         }
-    }
+            
+    }   
 }
+
