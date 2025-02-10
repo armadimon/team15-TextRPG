@@ -12,9 +12,11 @@ namespace _15TextRPG.Source
         public string Description { get; set; }
         public double AttackDamage { get; set; }
         public double SkillDamage { get; set; }
-        public double DefensePoint { get; set; }
-        public double SkillDefensePoint { get; set; }
+        public int DefensePoint { get; set; }
+        public int SkillDefensePoint { get; set; }
+        public int MaxHP { get; set; }
         public int Health { get; set; }
+        public int MaxMP { get; set; }
         public int MP { get; set; }
         public int Gold { get; set; }
         public int Level { get; set; }
@@ -30,9 +32,12 @@ namespace _15TextRPG.Source
             Level = 1;
             Description = "용병";
             AttackDamage = 10;
+            SkillDamage = 20;
             DefensePoint = 5;
-            Health = 100;
-            MP = 50;
+            MaxHP = 100;
+            Health = MaxHP;
+            MaxMP = 50;
+            MP = MaxMP;
             Gold = 1500;
             Inventory = new(this);
         }
@@ -70,21 +75,24 @@ namespace _15TextRPG.Source
             }
         }
 
-        public void UseSkill(GameManager gameManager, int i, ISKill skill)
+        public void UseSkill(GameManager gameManager, int i, ISKill skill, IMonster monster)
         {
             Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}에게 {skill.SkillName}(을/를) 사용합니다");
             Console.ReadLine();
-            gameManager.BattleManager.monsters[i].Health -= skill.SkillDamage + gameManager.BattleManager.monsters[i].SkillRisistence;
+            if(skill.SkillType == monster.Type)
+            {
+                gameManager.BattleManager.monsters[i].Health -= (gameManager.Player.SkillDamage + skill.BonusDamage) - gameManager.BattleManager.monsters[i].SkillRisistence;
+            }
+            else
+            {
+                gameManager.BattleManager.monsters[i].Health -= gameManager.Player.SkillDamage - gameManager.BattleManager.monsters[i].SkillRisistence;
+            }
+
             gameManager.Player.MP -= skill.SkillCost;
             if (gameManager.BattleManager.monsters[i].Health < 0)
             {
                 gameManager.BattleManager.monsters[i].Health = 0;
             }
-        }
-
-        public void Defense()
-        {
-
         }
     }
 }

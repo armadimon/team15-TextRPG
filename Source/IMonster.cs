@@ -106,7 +106,4 @@ namespace _15TextRPG.Source
             player.Health -= SkillDamage;
         }
     }
-
-
-
 }
