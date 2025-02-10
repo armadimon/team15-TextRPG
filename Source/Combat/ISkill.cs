@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _15TextRPG.Source
+namespace _15TextRPG.Source.Combat
 {
     public interface ISKill
     {
-            public string SkillName { get; set; }
-            public string Description { get; set; }
-            public int SkillDamage { get; set; }
-            public int SkillCost { get; set; }
-            public string SkillType { get; set; }     
+        public string SkillName { get; set; }
+        public string Description { get; set; }
+        public int SkillDamage { get; set; }
+        public int SkillCost { get; set; }
+        public string SkillType { get; set; }
     }
 
     public class RailGun : ISKill

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using _15TextRPG.Source.Combat;
 
 namespace _15TextRPG.Source
 {
@@ -18,7 +19,6 @@ namespace _15TextRPG.Source
         {
             Player = new Player("Default");
             Chapters = new List<ChapterData>();
-
 
             ChapterData chapter1 = new ChapterData("Chapter1");
             chapter1.InitailizeChapter1();

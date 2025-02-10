@@ -20,7 +20,8 @@ namespace _15TextRPG.Source
         Battle,
         NPC,
         Password,
-        Boss
+        Boss,
+        CCTV,
     }
 
     public class Tile

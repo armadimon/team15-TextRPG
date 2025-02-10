@@ -1,5 +1,6 @@
 using System;
 using _15TextRPG.Source;
+using _15TextRPG.Source.Combat;
 using _15TextRPG.Source.State;
 
 namespace _15TextRPG

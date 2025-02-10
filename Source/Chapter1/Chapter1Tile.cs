@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using _15TextRPG.Source.State;
@@ -55,6 +56,78 @@ namespace _15TextRPG.Source.Chapter1
             }
         }
     }
+
+    public class CCTV : IInteractableObject, IHackable
+    {
+        public bool IsHacked { get; set; }
+        internal HackState HackState { get; private set; }
+
+        HackState IHackable.HackState => throw new NotImplementedException();
+
+        public CCTV()
+        {
+            IsHacked = false;
+            HackState = new HackState(HackingProcess);
+        }
+
+        public void Interact(GameManager gameManager)
+        {
+            if (IsHacked == true)
+            {
+                Console.WriteLine("1. 살펴보기");
+                Console.WriteLine("2. 그만두기");
+                string input = Console.ReadLine() ?? "";
+                ExploreState temp = new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name);
+
+                switch (input)
+                {
+                    case "1":
+                        temp.enterCCTVMode(gameManager);
+                        break;
+                    case "2":
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("1. 접근 권한 얻기");
+                Console.WriteLine("2. 그만두기");
+                string input = Console.ReadLine() ?? "";
+                ExploreState temp = new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name);
+
+                switch (input)
+                {
+                    case "1":
+                        gameManager.ChangeState(HackState);
+                        break;
+                    case "2":
+                        break;
+                }
+            }
+        }
+
+        public void HackingProcess(string command)
+        {
+            Console.WriteLine($"Executing command: {command}");
+            if (command == "ITEM ICE")
+            {
+                string msg = "아이스 브레이커를 사용하셨습니다.";
+                foreach (char c in msg)
+                {
+                    Console.Write(c);
+                    Thread.Sleep(50);
+                }
+                foreach (char c in "시스템 방화벽 해제...")
+                {
+                    Console.Write(c);
+                    Thread.Sleep(50);
+                }
+                IsHacked = true;
+                HackState.checkHacked();
+            }
+        }
+    }
+
 
     public class EnemyTrigger : IInteractableObject
     {

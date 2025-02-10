@@ -16,6 +16,7 @@ namespace _15TextRPG.Source.State
         string command = "";
         List<string> commands = new List<string>();
         int commandIndex = -1;
+        bool isHacked = false;
 
         public void DisplayMenu(GameManager gameManager)
         {
@@ -138,12 +139,21 @@ namespace _15TextRPG.Source.State
                 }
 
                 Thread.Sleep(1);
+                if (isHacked == true)
+                {
+                    Console.WriteLine("\nHACKING Sucssed!!");
+                    gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
+                    return;
+                }
             }
-
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\nHACKING FAILED! SYSTEM SHUTDOWN...");
         }
 
+        public void checkHacked()
+        {
+            isHacked = true;
+        }
 
         public void HandleInput(GameManager gameManager)
         {

@@ -39,6 +39,7 @@ namespace _15TextRPG.Source
             NPCs.Add(npc2);
             stage1.SetTile(12, 12, TileType.NPC, npc1);
             stage1.SetTile(15, 15, TileType.NPC, npc2);
+            stage1.SetTile(15, 0, TileType.CCTV, new CCTV());
             AddStage(stage2);
             CurrentStage = stage1;
             BossMob boss = new BossMob();

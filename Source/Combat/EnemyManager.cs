@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _15TextRPG
+namespace _15TextRPG.Source.Combat
 {
     public class EnemyManager
     {

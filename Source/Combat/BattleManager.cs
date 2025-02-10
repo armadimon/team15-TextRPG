@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace _15TextRPG.Source
+namespace _15TextRPG.Source.Combat
 {
     public class BattleManager
     {
@@ -19,7 +19,7 @@ namespace _15TextRPG.Source
         public List<ISKill> skills = new List<ISKill>();
         public void SpawnMonster(IMonster monster, int x, int y)
         {
-                monsters.Add(monster);
+            monsters.Add(monster);
         }
 
         public void ShowMonster(int x, int y)
@@ -75,7 +75,7 @@ namespace _15TextRPG.Source
 
         public void ShowSkill()
         {
-            for ( int i = 0; i < skills.Count; i += 3)
+            for (int i = 0; i < skills.Count; i += 3)
             {
                 Console.SetCursorPosition(60, i);
                 Console.WriteLine($"Skills");

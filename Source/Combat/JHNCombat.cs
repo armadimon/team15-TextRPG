@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _15TextRPG.Source.hn
+namespace _15TextRPG.Source.Combat
 {
 
 
@@ -121,7 +121,7 @@ namespace _15TextRPG.Source.hn
 
             for (int i = 0; i < count; i++)
             {
-                int choice = random.Next(26); 
+                int choice = random.Next(26);
                 selectedChar.Add((char)('a' + choice)); // 'a'부터 'z'까지 선택
             }
 
