@@ -28,8 +28,9 @@ namespace _15TextRPG
         {
             GameData = new GameData();
             currentState = new TitleMenuState();
+            Console.WriteLine(currentState);
+            Console.ReadLine();
             Player = new Player("Agent Ahn");
-            currentState = new MainMenuState();
             BattleManager = new BattleManager();
         }
 
