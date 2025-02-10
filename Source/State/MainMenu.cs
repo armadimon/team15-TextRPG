@@ -28,7 +28,7 @@ namespace _15TextRPG.Source.State
                     gameManager.ChangeState(new StatusMenuState());
                     break;
                 case "2":
-                    gameManager.ChangeState(new BattleMenuState(gameManager));
+                    gameManager.ChangeState(new BattleMenuState());
                     break;
                 case "3":
                     gameManager.ChangeState(new CombatState());
