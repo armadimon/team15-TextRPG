@@ -12,7 +12,7 @@ namespace _15TextRPG.Source.State
 
         Computer()
         {
-            HackState = new HackState(HackingProcess);
+            HackState = new HackState(HackingProcess, 10);
         }
 
         public void HackingProcess(string userCommand)
