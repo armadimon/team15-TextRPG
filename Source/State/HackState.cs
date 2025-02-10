@@ -5,7 +5,7 @@ using System.Text;
 
 namespace _15TextRPG.Source.State
 {
-    internal class HackState(Action<string> HackingProcess) : IGameState
+    internal class HackState(Action<string> HackingProcess, int limitTimeSec) : IGameState
     {
         string[] commandList = 
         { 
@@ -25,7 +25,7 @@ namespace _15TextRPG.Source.State
             Console.Title = "Hacking in Progress...";
             Console.Clear();
 
-            int totalTime = 1000; // 해킹 제한 시간 (초)
+            int totalTime = limitTimeSec * 100; // 해킹 제한 시간 (초)
             int barLength = 3000; // 진행 바 길이
 
             int cursorTop, cursorLeft;
@@ -137,7 +137,7 @@ namespace _15TextRPG.Source.State
                     }
                 }
 
-                Thread.Sleep(1);
+                Thread.Sleep(10);
             }
 
             Console.ForegroundColor = ConsoleColor.Red;
