@@ -12,9 +12,11 @@ namespace _15TextRPG.Source
         public string Description { get; set; }
         public double AttackDamage { get; set; }
         public double SkillDamage { get; set; }
-        public double DefensePoint { get; set; }
-        public double SkillDefensePoint { get; set; }
+        public int DefensePoint { get; set; }
+        public int SkillDefensePoint { get; set; }
+        public int MaxHP { get; set; }
         public int Health { get; set; }
+        public int MaxMP { get; set; }
         public int MP { get; set; }
         public int Gold { get; set; }
         public int Level { get; set; }
@@ -31,8 +33,10 @@ namespace _15TextRPG.Source
             Description = "용병";
             AttackDamage = 10;
             DefensePoint = 5;
-            Health = 100;
-            MP = 50;
+            MaxHP = 100;
+            Health = MaxHP;
+            MaxMP = 50;
+            MP = MaxMP;
             Gold = 1500;
             Weapon = null;
             Armor = null;
@@ -209,11 +213,6 @@ namespace _15TextRPG.Source
             {
                 gameManager.BattleManager.monsters[i].Health = 0;
             }
-        }
-
-        public void Defense()
-        {
-
         }
     }
 }

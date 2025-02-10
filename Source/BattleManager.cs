@@ -15,6 +15,7 @@ namespace _15TextRPG.Source
 {
     public class BattleManager
     {
+        public bool defensePose = false;
         public List<IMonster> monsters = new List<IMonster>();
         public List<ISKill> skills = new List<ISKill>();
         public void SpawnMonster(IMonster monster, int x, int y)
@@ -22,17 +23,33 @@ namespace _15TextRPG.Source
                 monsters.Add(monster);
         }
 
-        public void ShowMonster(int x, int y)
+        public void ShowMonster(bool num, int x, int y)
         {
-            for (int i = 0; i < monsters.Count; i++)
+            if(num)
             {
-                Console.SetCursorPosition(x + i * 15, y);
-                Console.WriteLine($"{i + 1} " + monsters[i].MonsterName);
-                Console.SetCursorPosition(x + i * 15, y + 1);
-                Console.WriteLine("Lv. " + monsters[i].Level);
-                Console.SetCursorPosition(x + i * 15, y + 2);
-                Console.WriteLine("HP " + monsters[i].Health);
+                for (int i = 0; i < monsters.Count; i++)
+                {
+                    Console.SetCursorPosition(x + i * 15, y);
+                    Console.WriteLine($"{i + 1} " + monsters[i].MonsterName);
+                    Console.SetCursorPosition(x + i * 15, y + 1);
+                    Console.WriteLine("Lv. " + monsters[i].Level);
+                    Console.SetCursorPosition(x + i * 15, y + 2);
+                    Console.WriteLine("HP " + monsters[i].Health);
+                }
             }
+            else
+            {
+                for (int i = 0; i < monsters.Count; i++)
+                {
+                    Console.SetCursorPosition(x + i * 15, y);
+                    Console.WriteLine(monsters[i].MonsterName);
+                    Console.SetCursorPosition(x + i * 15, y + 1);
+                    Console.WriteLine("Lv. " + monsters[i].Level);
+                    Console.SetCursorPosition(x + i * 15, y + 2);
+                    Console.WriteLine("HP " + monsters[i].Health);
+                }
+            }
+
         }
 
         public void BattleStat(Player player)
@@ -80,7 +97,7 @@ namespace _15TextRPG.Source
                 Console.SetCursorPosition(60, i);
                 Console.WriteLine($"Skills");
                 Console.SetCursorPosition(60, i + 1);
-                Console.WriteLine($"{i + 1} {skills[0].SkillName}: {skills[0].Description})");
+                Console.WriteLine($"{i + 1} {skills[0].SkillName}: {skills[0].Description}");
                 Console.SetCursorPosition(60, 2);
             }
         }
