@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Source\State\BattleMenu.cs" />
+    <None Include="Source\State\BattleMenuState.cs" />
   </ItemGroup>
 
 </Project>
