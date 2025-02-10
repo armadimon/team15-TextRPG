@@ -30,28 +30,18 @@ namespace _15TextRPG.Source.hn
             string playerInput = Console.ReadLine() ?? "";
 
             // 적의 이름과 유사도를 계산
-            double similarity = CalculateNameSimilarity(playerInput, enemy.Name);
+            double accuracy = CalculateNameSimilarity(playerInput, enemy.Name);
 
             // 정확하게 맞췄다면 즉시 처치
-            if (similarity == 1.0)
+            if (accuracy == 1.0)
             {
                 Console.WriteLine($"{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
                 enemy.Health = 0;
             }
             else
             {
-                //기본 데미지 계산(공격력과 방어력의 비율 적용)
-                double attackDefenseRatio = (double)player.AttackDamage / enemy.DefensePoint;
+                int totalDamage = CalculateDamage(player.AttackDamage, enemy.DefensePoint, accuracy);
 
-                int baseDamage = (int)player.AttackDamage;
-                baseDamage = (int)(baseDamage * attackDefenseRatio);
-
-
-
-                int additionalDamage = (int)(baseDamage * similarity);   // 유사도에 비례하여 데미지 증가
-
-                int totalDamage = baseDamage + additionalDamage;
-                if (totalDamage < 1) totalDamage = 1; // 최소 데미지 보장
 
                 enemy.Health -= totalDamage;
                 Console.WriteLine($"{player.Name}이(가) {GetRevealedEnemyName(enemy)}의 시스템을 해킹하여 {totalDamage}만큼 해킹 데미지를 주었습니다!");
@@ -62,7 +52,7 @@ namespace _15TextRPG.Source.hn
             Console.ReadKey();
 
             if (enemy.Health > 0)
-                EnemyTurn(player, enemy);
+                DefendHack(player, enemy);
         }
 
         private double CalculateNameSimilarity(string input, string enemyName)
@@ -87,11 +77,55 @@ namespace _15TextRPG.Source.hn
             return (double)matchCount / enemyName.Length; // 정확도 비율 반환 -> 0~1
         }
 
-
-        public void Defend(Player player, Enemy enemy)
+        public void DefendHack(Player player, Enemy enemy)
         {
             Console.WriteLine("플레이어 방어 구현");
-            EnemyTurn(player, enemy);
+
+            // 적의 랜덤 방향 리스트 생성
+            List<char> enemyText = GenerateRandomText(5);
+            Console.WriteLine($"(적이 해킹 공격을 시도합니다. {string.Join(" ", enemyText)})");
+            Console.WriteLine("방어하세요: ");
+
+            string playerInput = Console.ReadLine() ?? "";
+            double accuracy = CalculateNameSimilarity(playerInput, new string(enemyText.ToArray()));
+
+            // 정확도 비례 데미지 계산
+            int totalDamage = CalculateDamage(enemy.DefensePoint, player.AttackDamage, accuracy);
+            Console.WriteLine($"\n방어 정확도: {accuracy * 100:F1}%");
+
+            player.Health -= totalDamage;
+            Console.WriteLine($"{GetRevealedEnemyName(enemy)}이(가) {player.Name}에게 {totalDamage}만큼 데미지를 주었습니다");
+
+            // 플레이어 체력 확인
+            if (player.Health <= 0)
+            {
+                Console.WriteLine("\n방어 실패! 플레이어가 쓰러집니다...");
+                Console.WriteLine("아무 키나 입력하면 메인 화면으로 돌아갑니다.");
+                Console.ReadKey();
+
+                // 메인 메뉴로 이동
+                //GameManager.Instance.ChangeState(new MainMenuState());
+
+            }
+
+            Console.WriteLine("아무키나 입력해주세요");
+            Console.ReadKey();
+
+
+        }
+
+        private List<char> GenerateRandomText(int count)
+        {
+            Random random = new Random();
+            List<char> selectedChar = new List<char>();
+
+            for (int i = 0; i < count; i++)
+            {
+                int choice = random.Next(26); 
+                selectedChar.Add((char)('a' + choice)); // 'a'부터 'z'까지 선택
+            }
+
+            return selectedChar;
         }
 
         public void ScanEnemy(Enemy enemy)
@@ -277,7 +311,7 @@ namespace _15TextRPG.Source.hn
 
                 // 메인 메뉴로 이동
                 //GameManager.Instance.ChangeState(new MainMenuState());
-                
+
             }
 
             Console.WriteLine("아무키나 입력해주세요");
@@ -315,28 +349,10 @@ namespace _15TextRPG.Source.hn
             // 플레이어 입력 리스트 생성 (5초 제한)
             List<char> playerInputs = GetPlayerAttackInput(5);
 
-            // 입력이 없거나 5개 미만이면 실패 처리
-            if (playerInputs.Count < 5)
-            {
-                Console.WriteLine("\n시간 초과! 공격이 실패했습니다...");
-                Console.WriteLine("아무 키나 입력해주세요.");
-                Console.ReadKey();
-                return;
-            }
-
-            // 정확도 계산 (일치하는 개수)
-            int matchCount = 0;
-            for (int i = 0; i < 5; i++)
-            {
-                if (playerInputs[i] == enemyDirections[i])
-                    matchCount++;
-            }
-
             // 정확도 비례 데미지 계산
-            double accuracy = (double)matchCount / 5;
-            int baseDamage = (int)player.AttackDamage;
-            int totalDamage = (int)(baseDamage * accuracy);
-            if (totalDamage < 1) totalDamage = 1; // 최소 1 데미지 보장
+            double accuracy = CalculateAttackAccuracy(playerInputs, enemyDirections);
+
+            int totalDamage = CalculateDamage(player.AttackDamage, enemy.DefensePoint, accuracy);
 
             enemy.Health -= totalDamage;
             Console.WriteLine($"\n공격 정확도: {accuracy * 100:F1}%");
@@ -344,6 +360,28 @@ namespace _15TextRPG.Source.hn
 
             Console.WriteLine("아무 키나 입력해주세요.");
             Console.ReadKey();
+            DefendAttack(player, enemy);
+        }
+
+        private double CalculateAttackAccuracy(List<char> input, List<char> target)
+        {
+            // 5개 미만 입력시 0 넣어줌
+            while (input.Count < 5)
+            {
+                input.Add('0');
+            }
+
+            // 정확도 계산 (일치하는 개수)
+            int matchCount = 0;
+            for (int i = 0; i < 5; i++)
+            {
+                if (input[i] == target[i])
+                    matchCount++;
+            }
+
+            double accuracy = (double)matchCount / 5;
+
+            return accuracy;
         }
 
         private List<char> GenerateRandomDirections(int count)
@@ -389,7 +427,55 @@ namespace _15TextRPG.Source.hn
 
             return inputs;
         }
+
+
+        public void DefendAttack(Player player, Enemy enemy)
+        {
+            Console.WriteLine("플레이어 방어 구현");
+
+            // 적의 랜덤 방향 리스트 생성
+            List<char> enemyDirections = GenerateRandomDirections(5);
+            Console.WriteLine($"(적이 선택한 방향: {string.Join(" ", enemyDirections)})");
+
+            // 플레이어 입력 리스트 생성 (5초 제한)
+            List<char> playerInputs = GetPlayerAttackInput(5);
+
+            // 정확도 비례 데미지 계산
+            double accuracy = CalculateAttackAccuracy(playerInputs, enemyDirections);
+            int totalDamage = CalculateDamage(enemy.DefensePoint, player.AttackDamage, accuracy);
+            Console.WriteLine($"\n방어 정확도: {accuracy * 100:F1}%");
+
+            player.Health -= totalDamage;
+            Console.WriteLine($"{GetRevealedEnemyName(enemy)}이(가) {player.Name}에게 {totalDamage}만큼 데미지를 주었습니다");
+
+            // 플레이어 체력 확인
+            if (player.Health <= 0)
+            {
+                Console.WriteLine("\n방어 실패! 플레이어가 쓰러집니다...");
+                Console.WriteLine("아무 키나 입력하면 메인 화면으로 돌아갑니다.");
+                Console.ReadKey();
+
+                // 메인 메뉴로 이동
+                //GameManager.Instance.ChangeState(new MainMenuState());
+
+            }
+
+            Console.WriteLine("아무키나 입력해주세요");
+            Console.ReadKey();
+
+        }
+
+        private int CalculateDamage(double attackerPower, double defenderDefense, double accuracy)
+        {
+            // 방어력 비례 데미지 감소 적용
+            double attackDefenseRatio = attackerPower / defenderDefense;
+            int baseDamage = (int)(attackerPower * attackDefenseRatio);
+
+            // 정확도에 따른 최종 데미지 적용
+            int totalDamage = (int)(baseDamage * accuracy);
+
+            // 최소 1 데미지 보장
+            return totalDamage < 1 ? 1 : totalDamage;
+        }
     }
-
-
 }

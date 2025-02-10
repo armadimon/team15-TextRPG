@@ -14,7 +14,13 @@ namespace _15TextRPG.Source
 
     public enum TileType
     {
-        Empty, Wall, ChangeStage, Battle, NPC, Password
+        Empty,
+        Wall,
+        ChangeStage,
+        Battle,
+        NPC,
+        Password,
+        Boss
     }
 
     public class Tile
@@ -29,44 +35,12 @@ namespace _15TextRPG.Source
         }
     }
 
-    public class ChangeStage : IInteractableObject
-    {
-        private string nextStage;
-
-        public ChangeStage(string nextStage)
-        {
-            this.nextStage = nextStage;
-        }
-
-        public void Interact(GameManager gameManager)
-        {
-            Console.WriteLine($"당신은 {nextStage}로 이동했다.");
-            gameManager.GameData.ChangeStage(nextStage);
-        }
-    }
-
     public class EnemyTrigger : IInteractableObject
     {
         public void Interact(GameManager gameManager)
         {
             Console.WriteLine("적이 나타났다! 전투 시작!");
-            gameManager.ChangeState(new CombatState());
-        }
-    }
-
-    public class NPC : IInteractableObject
-    {
-        private string message;
-
-        public NPC(string msg)
-        {
-            message = msg;
-        }
-
-        public void Interact(GameManager gameManager)
-        {
-            Console.WriteLine($"NPC: \"{message}\"");
-            Console.ReadLine();
+            gameManager.ChangeState(new BattleMenuState());
         }
     }
 
