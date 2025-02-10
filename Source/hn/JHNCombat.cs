@@ -35,7 +35,7 @@ namespace _15TextRPG.Source.hn
             // 정확하게 맞췄다면 즉시 처치
             if (accuracy == 1.0)
             {
-                Console.WriteLine($"{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
+                Console.WriteLine($"\n{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
                 enemy.Health = 0;
             }
             else
@@ -44,7 +44,7 @@ namespace _15TextRPG.Source.hn
 
 
                 enemy.Health -= totalDamage;
-                Console.WriteLine($"{player.Name}이(가) {GetRevealedEnemyName(enemy)}의 시스템을 해킹하여 {totalDamage}만큼 해킹 데미지를 주었습니다!");
+                Console.WriteLine($"\n{player.Name}이(가) {GetRevealedEnemyName(enemy)}의 시스템을 해킹하여 {totalDamage}만큼 해킹 데미지를 주었습니다!");
                 Console.WriteLine("적의 보안이 약해지고 있습니다...");
             }
 
@@ -72,8 +72,6 @@ namespace _15TextRPG.Source.hn
                 if (input[i] == enemyName[i])
                     matchCount++;
             }
-
-            Console.WriteLine((double)matchCount / enemyName.Length);
             return (double)matchCount / enemyName.Length; // 정확도 비율 반환 -> 0~1
         }
 
@@ -83,7 +81,11 @@ namespace _15TextRPG.Source.hn
 
             // 적의 랜덤 방향 리스트 생성
             List<char> enemyText = GenerateRandomText(5);
-            Console.WriteLine($"(적이 해킹 공격을 시도합니다. {string.Join(" ", enemyText)})");
+            Console.WriteLine($"적이 해킹 공격을 시도합니다. ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{string.Join(" -> ", enemyText)}");
+            Console.ResetColor();
+
             Console.WriteLine("방어하세요: ");
 
             string playerInput = ReadInputWithTimeout(5); // 5초 제한
@@ -94,7 +96,12 @@ namespace _15TextRPG.Source.hn
             Console.WriteLine($"\n방어 정확도: {accuracy * 100:F1}%");
 
             player.Health -= totalDamage;
-            Console.WriteLine($"{GetRevealedEnemyName(enemy)}이(가) {player.Name}에게 {totalDamage}만큼 데미지를 주었습니다");
+            Console.Write($"{GetRevealedEnemyName(enemy)}이(가) {player.Name}에게 ");
+            Console.ForegroundColor = ConsoleColor.Red; 
+            Console.Write($"{totalDamage}");
+            Console.ResetColor(); 
+            Console.WriteLine("만큼 데미지를 주었습니다");
+
 
             // 플레이어 체력 확인
             if (player.Health <= 0)
@@ -140,8 +147,14 @@ namespace _15TextRPG.Source.hn
             }
 
             Console.WriteLine("\n적의 시스템을 스캔합니다...");
-            Console.WriteLine($"적의 보안 설명: \"{enemy.Description}\"");
-            Console.WriteLine($"{combatCount}초 내에 정확히 입력하세요");
+            Console.Write($"적의 보안 설명:");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{enemy.Description}");
+
+            Console.Write($"{combatCount}");
+            Console.ResetColor();
+            Console.WriteLine($"초 내에 정확히 입력하세요");
+
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -171,9 +184,16 @@ namespace _15TextRPG.Source.hn
 
             // revealedAmount만큼 적 이름 공개
             RevealRandomName(revealedAmount, enemy);
+            Console.WriteLine($"\n입력 정확도: ");
+            Console.ForegroundColor = ConsoleColor.Red;
 
-            Console.WriteLine($"\n입력 정확도: {accuracy * 100:F1}%");
-            Console.WriteLine($"일부 정보를 얻었습니다: {GetRevealedEnemyName(enemy)}");
+            Console.WriteLine($"{accuracy * 100:F1}%");
+            Console.ResetColor();
+
+            Console.Write($"일부 정보를 얻었습니다: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{GetRevealedEnemyName(enemy)}");
+            Console.ResetColor();
             Console.WriteLine("아무 키나 입력해주세요");
             Console.ReadKey();
         }
@@ -187,8 +207,11 @@ namespace _15TextRPG.Source.hn
             int remainingTime = timeoutSeconds;
             Console.WriteLine("");
             int timerCurTop = Console.CursorTop;      //타이머 커서 저장
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"{remainingTime}");
+            Console.ResetColor();
+            Console.WriteLine($"초 남음...");
 
-            Console.WriteLine($"{remainingTime}초 남음...");
             int playerCurTop = Console.CursorTop; // 입력 줄 저장
             int playerCurLeft = Console.CursorLeft; // 입력 위치 저장
 
@@ -218,7 +241,9 @@ namespace _15TextRPG.Source.hn
                     else
                     {
                         input += key.KeyChar;
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write(key.KeyChar);
+                        Console.ResetColor();
                     }
 
                     playerCurTop = Console.CursorTop;
@@ -232,7 +257,11 @@ namespace _15TextRPG.Source.hn
                 {
                     remainingTime = newRemainingTime;
                     Console.SetCursorPosition(0, timerCurTop); // 타이머 줄로 이동
-                    Console.WriteLine($"{remainingTime}초 남음...  "); // 기존 글자 덮어써야됨
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write($"{remainingTime}"); // 기존 글자 덮어써야됨
+                    Console.ResetColor();
+                    Console.WriteLine($"초 남음...  "); // 기존 글자 덮어써야됨
+
 
                     // 타이머 갱신 후, 플레이어의 마지막 입력 위치 복구
                     Console.SetCursorPosition(playerCurLeft, playerCurTop);
@@ -273,8 +302,7 @@ namespace _15TextRPG.Source.hn
                 int randomIndex;
                 do
                 {
-                    randomIndex = random.Next(enemy.Name.Length);
-                    Console.WriteLine(randomIndex);
+                    randomIndex = random.Next(enemy.Name.Length); 
                     if (revealedIndex.Count == enemy.Name.Length)
                         break;
                 }
@@ -302,7 +330,11 @@ namespace _15TextRPG.Source.hn
             if (baseDamage < 0) baseDamage = 0; // 최소 데미지 보장
 
             player.Health -= baseDamage;
-            Console.WriteLine($"{GetRevealedEnemyName(enemy)}이(가) {player.Name}의 시스템을 해킹하여 {baseDamage}만큼 해킹 데미지를 주었습니다");
+            Console.Write($"{GetRevealedEnemyName(enemy)}이(가) {player.Name}의 시스템을 해킹하여 ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"{baseDamage}");
+            Console.ResetColor();
+            Console.WriteLine(" 만큼 해킹 데미지를 주었습니다");
 
             // 플레이어 체력 확인
             if (player.Health <= 0)
@@ -346,7 +378,9 @@ namespace _15TextRPG.Source.hn
 
             // 적의 랜덤 방향 리스트 생성
             List<char> enemyDirections = GenerateRandomDirections(5);
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"(적이 선택한 방향: {string.Join(" ", enemyDirections)})");
+            Console.ResetColor();
 
             // 플레이어 입력 리스트 생성 (5초 제한)
             List<char> playerInputs = GetPlayerAttackInput(5);
@@ -358,8 +392,11 @@ namespace _15TextRPG.Source.hn
 
             enemy.Health -= totalDamage;
             Console.WriteLine($"\n공격 정확도: {accuracy * 100:F1}%");
-            Console.WriteLine($"{player.Name}이(가) {GetRevealedEnemyName(enemy)}에게 {totalDamage}의 피해를 입혔습니다!");
-
+            Console.Write($"{player.Name}이(가) {GetRevealedEnemyName(enemy)}에게 ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"{totalDamage}");
+            Console.ResetColor();
+            Console.WriteLine(" 의 피해를 입혔습니다!");
             Console.WriteLine("아무 키나 입력해주세요.");
             Console.ReadKey();
             DefendAttack(player, enemy);
@@ -406,11 +443,14 @@ namespace _15TextRPG.Source.hn
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            Console.WriteLine("\n방향키 입력 중... (5초 안에 5번 입력)");
+            Console.WriteLine("\n방향키 입력 중... (5번 입력하세요)");
             int timerCurTop = Console.CursorTop;  // 타이머 위치 저장
             int remainingTime = 5;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"{remainingTime}"); // 타이머 출력
+            Console.ResetColor();
+            Console.WriteLine($"초 남음..."); // 타이머 출력
 
-            Console.WriteLine($"{remainingTime}초 남음..."); // 타이머 출력
             int inputCurTop = Console.CursorTop; // 입력 위치 저장
 
             while (stopwatch.Elapsed.TotalSeconds < 5 && inputs.Count < count)
@@ -426,7 +466,12 @@ namespace _15TextRPG.Source.hn
 
                     // 입력된 값 표시 (커서를 뒤로 돌려 기존 값 덮어쓰기)
                     Console.SetCursorPosition(0, inputCurTop);
-                    Console.Write("입력: " + string.Join(" ", inputs) + "     "); // 공백 추가해서 덮어쓰기
+                    Console.ResetColor();
+                    Console.Write("입력: ");
+                    Console.ForegroundColor = ConsoleColor.Blue; // 입력 값만 파란색
+                    Console.Write(string.Join(" ", inputs));
+                    Console.ResetColor(); // 색상 초기화
+                    Console.Write("     "); // 기존 값 덮어쓰기 위한 공백 추가
                 }
 
                 // 1초마다 카운트다운 갱신
@@ -435,7 +480,10 @@ namespace _15TextRPG.Source.hn
                 {
                     remainingTime = newRemainingTime;
                     Console.SetCursorPosition(0, timerCurTop);
-                    Console.WriteLine($"{remainingTime}초 남음...  "); // 기존 글자 덮어쓰기
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write($"{remainingTime}"); // 타이머 출력
+                    Console.ResetColor();
+                    Console.WriteLine($"초 남음..."); // 타이머 출력
                     Console.SetCursorPosition(0, inputCurTop); // 입력 위치 복구
                 }
             }
@@ -461,7 +509,10 @@ namespace _15TextRPG.Source.hn
             // 정확도 비례 데미지 계산
             double accuracy = CalculateAttackAccuracy(playerInputs, enemyDirections);
             int totalDamage = CalculateDamage(enemy.AttackDamage, player.DefensePoint, accuracy);
-            Console.WriteLine($"\n방어 정확도: {accuracy * 100:F1}%");
+            Console.Write($"\n방어 정확도: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{accuracy * 100:F1}%");
+            Console.ResetColor();
 
             player.Health -= totalDamage;
             Console.WriteLine($"{GetRevealedEnemyName(enemy)}이(가) {player.Name}에게 {totalDamage}만큼 데미지를 주었습니다");
