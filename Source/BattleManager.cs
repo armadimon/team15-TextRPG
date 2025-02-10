@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using _15TextRPG.Source;
 using _15TextRPG;
+using _15TextRPG.Source.State;
 
 namespace _15TextRPG.Source
 {
@@ -327,15 +328,27 @@ namespace _15TextRPG.Source
                     if (gameManager.BattleManager.defensePose == false)
                     {
                         gameManager.Player.Health -= battleManager.monsters[i].AttackDamage;
+                        if (gameManager.Player.Health < 0)
+                        {
+                            gameManager.Player.Health = 0;
+                        }
                     }
                     else if (battleManager.monsters[i].AttackDamage > gameManager.Player.DefensePoint)
                     {
                         gameManager.Player.Health -= battleManager.monsters[i].AttackDamage + gameManager.Player.DefensePoint;
+                        if (gameManager.Player.Health < 0)
+                        {
+                            gameManager.Player.Health = 0;
+                        }
                     }
-
                     Console.Clear();
                     gameManager.BattleManager.BattleStat(gameManager.Player);
                     gameManager.BattleManager.ShowMonster(false, 0, 9);
+                    if (gameManager.Player.Health == 0)
+                    {
+                        Console.WriteLine("적의 공격으로 쓰러졌습니다. 강제 귀환됩니다.");
+                        gameManager.ChangeState(new MainMenuState());
+                    }
                     Console.ReadLine();
                 }
             }
