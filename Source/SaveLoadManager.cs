@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace _15TextRPG.Source.State
+namespace _15TextRPG.Source
 {
     internal class SaveLoadManager()
     {
@@ -16,7 +16,7 @@ namespace _15TextRPG.Source.State
 
         public void AddSaveableEntity<T>(T target, string fileName)
         {
-            SaveableEntity<T> saveableEntity= new(target, fileName);
+            SaveableEntity<T> saveableEntity = new(target, fileName);
             saveableEntitys.Add(saveableEntity);
         }
 
@@ -63,7 +63,7 @@ namespace _15TextRPG.Source.State
         public bool Load()
         {
             string fileName = FileName + ".json";
-            if(!File.Exists(fileName))
+            if (!File.Exists(fileName))
             {
                 Console.WriteLine($"{fileName}을 불러오는데 실패했습니다.");
             }
