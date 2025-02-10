@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using _15TextRPG.Source.Chapter1;
 
 namespace _15TextRPG.Source.State
 {
@@ -12,7 +13,7 @@ namespace _15TextRPG.Source.State
         public string StageName { get; set; }
         public ExploreState(string stageName)
         {
-            stageName = "stage1";
+            StageName = stageName;
         }
 
         public void DisplayMenu(GameManager gameManager)
@@ -23,26 +24,61 @@ namespace _15TextRPG.Source.State
 
         public void HandleInput(GameManager gameManager)
         {
-            FieldData field = gameManager.GameData.Field;
+            NPC? npc = gameManager.GameData.CurrentChapter.nowPlay;
+            if (npc == null)
+            {
+                Console.WriteLine("nowPlay is null");
+                return;
+            }
+            StageData? stage = gameManager.GameData.CurrentChapter.CurrentStage;
+            if (stage == null)
+            {
+                Console.WriteLine("CurrentStage is null");
+                return;
+            }
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
 
             switch (keyInfo.Key)
             {
                 case ConsoleKey.UpArrow:
-                    field.PositionY -= 1;
-                    field.Dir = 1;
+                    if (npc.posY - 1 < stage.Height - 1 && npc.posY - 1 > 0
+                        && stage.Tiles[npc.posY - 1, npc.posX].Type == TileType.Empty)
+                    {
+                        stage.SetTile(npc.posX, npc.posY, TileType.Empty);
+                        npc.posY -= 1;
+                        stage.SetTile(npc.posX, npc.posY, TileType.NPC, npc);
+                    }
+                    npc.Dir = 1;
                     break;
                 case ConsoleKey.DownArrow:
-                    field.PositionY += 1;
-                    field.Dir = 2;
+                    if (npc.posY + 1 < stage.Height - 1 && npc.posY + 1 > 0
+                         && stage.Tiles[npc.posY + 1, npc.posX].Type == TileType.Empty)
+                    {
+                        stage.SetTile(npc.posX, npc.posY, TileType.Empty);
+                        npc.posY += 1;
+                        stage.SetTile(npc.posX, npc.posY, TileType.NPC, npc);
+                    }
+                    npc.Dir = 2;
                     break;
                 case ConsoleKey.LeftArrow:
-                    field.PositionX -= 1;
-                    field.Dir = 3;
+                    if (npc.posX - 1 < stage.Width - 1 && npc.posX - 1 > 0
+                         && stage.Tiles[npc.posY, npc.posX - 1].Type == TileType.Empty)
+                    {
+                        stage.SetTile(npc.posX, npc.posY, TileType.Empty);
+                        npc.posX -= 1;
+                        stage.SetTile(npc.posX, npc.posY, TileType.NPC, npc);
+                    }
+                    npc.Dir = 3;
                     break;
                 case ConsoleKey.RightArrow:
-                    field.PositionX += 1;
-                    field.Dir = 4;
+                    if (npc.posX + 1 < stage.Width - 1 && npc.posX + 1 > 0
+                         && stage.Tiles[npc.posY, npc.posX + 1].Type == TileType.Empty)
+                    {
+                        stage.SetTile(npc.posX, npc.posY, TileType.Empty);
+                        npc.posX += 1;
+                        stage.SetTile(npc.posX, npc.posY, TileType.NPC, npc);
+                    }
+                    npc.Dir = 4;
                     break;
                 case ConsoleKey.Z:
                     HandleInteraction(gameManager);
@@ -52,30 +88,39 @@ namespace _15TextRPG.Source.State
 
         private void HandleInteraction(GameManager gameManager)
         {
-            FieldData field = gameManager.GameData.Field;
-            StageData stage = gameManager.GameData.CurrentStage;
-
+            ChapterData chapter = gameManager.GameData.CurrentChapter;
+            NPC? npc = gameManager.GameData.CurrentChapter.nowPlay;
+            if (npc == null)
+            {
+                Console.WriteLine("nowPlay is null");
+                return;
+            }
+            if (chapter.CurrentStage == null)
+            {
+                Console.WriteLine("CurrentStage is null");
+                return;
+            }
             (int x, int y) targetPos;
-            switch (field.Dir)
+            switch (npc.Dir)
             {
                 case 1: // 위쪽
-                    targetPos = (field.PositionX, field.PositionY - 1);
+                    targetPos = (npc.posX, npc.posY - 1);
                     break;
                 case 2: // 아래쪽
-                    targetPos = (field.PositionX, field.PositionY + 1);
+                    targetPos = (npc.posX, npc.posY + 1);
                     break;
                 case 3: // 왼쪽
-                    targetPos = (field.PositionX - 1, field.PositionY);
+                    targetPos = (npc.posX - 1, npc.posY);
                     break;
                 case 4: // 오른쪽
-                    targetPos = (field.PositionX + 1, field.PositionY);
+                    targetPos = (npc.posX + 1, npc.posY);
                     break;
                 default:
-                    targetPos = (field.PositionX, field.PositionY);
+                    targetPos = (npc.posX, npc.posY);
                     break;
             }
 
-            Tile targetTile = stage.Tiles[targetPos.y, targetPos.x];
+            Tile targetTile = chapter.CurrentStage.Tiles[targetPos.y, targetPos.x];
 
             if (targetTile.Object != null)
             {
@@ -89,8 +134,8 @@ namespace _15TextRPG.Source.State
 
         public void DisplayMap(GameData gameData)
         {
-            StageData stage = gameData.CurrentStage;
-            (int px, int py) = (gameData.Field.PositionX, gameData.Field.PositionY);
+            StageData stage = gameData.CurrentChapter.CurrentStage;
+            (int px, int py) = (gameData.CurrentChapter.nowPlay.posX, gameData.CurrentChapter.nowPlay.posY);
 
             for (int y = 0; y < stage.Tiles.GetLength(0); y++)
             {
@@ -115,16 +160,25 @@ namespace _15TextRPG.Source.State
 
         private char GetTileChar(Tile tile)
         {
-            return tile.Type switch
+            switch (tile.Type)
             {
-                TileType.Wall => '#',
-                TileType.Empty => ' ',
-                TileType.ChangeStage => 'O',
-                TileType.Battle => 'E',
-                TileType.Password => '*',
-                TileType.NPC => 'N',
-                _ => '?'
-            };
+                case TileType.Wall:
+                    return '#';
+                case TileType.Boss:
+                    return 'B';
+                case TileType.Empty:
+                    return ' ';
+                case TileType.ChangeStage:
+                    return 'O';
+                case TileType.Battle:
+                    return 'E';
+                case TileType.Password:
+                    return '*';
+                case TileType.NPC:
+                    return 'N';
+                default:
+                    return '?';
+            }
         }
     }
 }
