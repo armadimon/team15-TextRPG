@@ -1,4 +1,5 @@
 using System;
+using _15TextRPG.Source.hn;
 
 namespace _15TextRPG.Source.State
 {
@@ -9,7 +10,11 @@ namespace _15TextRPG.Source.State
             Console.Clear();
             Console.WriteLine("\n[캠프 입구]");
             Console.WriteLine("\n1. 상태 보기");
-            Console.WriteLine("\n2. 전투");
+            Console.WriteLine("\n2. 의뢰 수주");
+            Console.WriteLine("\n3. 챕터 선택");
+            Console.WriteLine("\n4. hn전투");
+            Console.WriteLine("\n5. JW전투");
+
             Console.WriteLine("0. 종료");
         }
 
@@ -24,7 +29,16 @@ namespace _15TextRPG.Source.State
                     gameManager.ChangeState(new StatusMenuState());
                     break;
                 case "2":
-                    gameManager.ChangeState(new CombatState());
+                    gameManager.ChangeState(new ContractState());
+                    break;
+                case "3":
+                    gameManager.ChangeState(new ChapterState());
+                    break;
+                case "4":
+                    gameManager.ChangeState(new JHNCombatState());
+                    break;
+                case "5":
+                    gameManager.ChangeState(new BattleMenuState());
                     break;
                 case "0":
                     gameManager.QuitGame();

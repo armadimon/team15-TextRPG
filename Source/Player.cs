@@ -11,8 +11,11 @@ namespace _15TextRPG.Source
         public string Name { get; set; }
         public string Description { get; set; }
         public double AttackDamage { get; set; }
-        public int DefensePoint { get; set; }
+        public double SkillDamage { get; set; }
+        public double DefensePoint { get; set; }
+        public double SkillDefensePoint { get; set; }
         public int Health { get; set; }
+        public int MP { get; set; }
         public int Gold { get; set; }
         public int Level { get; set; }
         public int ClearCount { get; set; }
@@ -29,6 +32,7 @@ namespace _15TextRPG.Source
             AttackDamage = 10;
             DefensePoint = 5;
             Health = 100;
+            MP = 50;
             Gold = 1500;
             Weapon = null;
             Armor = null;
@@ -182,6 +186,34 @@ namespace _15TextRPG.Source
             Console.WriteLine($"방어력 : {DefensePoint} ({dp})");
             Console.WriteLine($"체력 : {Health}");
             Console.WriteLine($"Gold : {Gold} G");
+        }
+
+        public void Attack(GameManager gameManager, int i)
+        {
+            Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(을/를) 공격합니다");
+            Console.ReadLine();
+            gameManager.BattleManager.monsters[i].Health -= gameManager.Player.AttackDamage + gameManager.BattleManager.monsters[i].ArmorRisistence;
+            if (gameManager.BattleManager.monsters[i].Health < 0)
+            {
+                gameManager.BattleManager.monsters[i].Health = 0;
+            }
+        }
+
+        public void UseSkill(GameManager gameManager, int i, ISKill skill)
+        {
+            Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}에게 {skill.SkillName}(을/를) 사용합니다");
+            Console.ReadLine();
+            gameManager.BattleManager.monsters[i].Health -= skill.SkillDamage + gameManager.BattleManager.monsters[i].SkillRisistence;
+            gameManager.Player.MP -= skill.SkillCost;
+            if (gameManager.BattleManager.monsters[i].Health < 0)
+            {
+                gameManager.BattleManager.monsters[i].Health = 0;
+            }
+        }
+
+        public void Defense()
+        {
+
         }
     }
 }
