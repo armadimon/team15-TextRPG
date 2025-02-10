@@ -27,7 +27,7 @@ namespace _15TextRPG.Source.hn
         public void Hack(Player player, Enemy enemy)
         {
             Console.Write("\n해킹을 시도합니다! 적의 이름을 입력하세요: ");
-            string playerInput = Console.ReadLine() ?? "";
+            string playerInput = ReadInputWithTimeout(5); // 5초 제한
 
             // 적의 이름과 유사도를 계산
             double accuracy = CalculateNameSimilarity(playerInput, enemy.Name);
@@ -86,7 +86,7 @@ namespace _15TextRPG.Source.hn
             Console.WriteLine($"(적이 해킹 공격을 시도합니다. {string.Join(" ", enemyText)})");
             Console.WriteLine("방어하세요: ");
 
-            string playerInput = Console.ReadLine() ?? "";
+            string playerInput = ReadInputWithTimeout(5); // 5초 제한
             double accuracy = CalculateNameSimilarity(playerInput, new string(enemyText.ToArray()));
 
             // 정확도 비례 데미지 계산
@@ -407,6 +407,11 @@ namespace _15TextRPG.Source.hn
             stopwatch.Start();
 
             Console.WriteLine("\n방향키 입력 중... (5초 안에 5번 입력)");
+            int timerCurTop = Console.CursorTop;  // 타이머 위치 저장
+            int remainingTime = 5;
+
+            Console.WriteLine($"{remainingTime}초 남음..."); // 타이머 출력
+            int inputCurTop = Console.CursorTop; // 입력 위치 저장
 
             while (stopwatch.Elapsed.TotalSeconds < 5 && inputs.Count < count)
             {
@@ -419,8 +424,19 @@ namespace _15TextRPG.Source.hn
                     else if (key == ConsoleKey.LeftArrow) inputs.Add('←');
                     else if (key == ConsoleKey.RightArrow) inputs.Add('→');
 
-                    // 현재 입력된 값 표시
-                    Console.Write(string.Join(" ", inputs) + "\r");
+                    // 입력된 값 표시 (커서를 뒤로 돌려 기존 값 덮어쓰기)
+                    Console.SetCursorPosition(0, inputCurTop);
+                    Console.Write("입력: " + string.Join(" ", inputs) + "     "); // 공백 추가해서 덮어쓰기
+                }
+
+                // 1초마다 카운트다운 갱신
+                int newRemainingTime = 5 - (int)stopwatch.Elapsed.TotalSeconds;
+                if (newRemainingTime < remainingTime)
+                {
+                    remainingTime = newRemainingTime;
+                    Console.SetCursorPosition(0, timerCurTop);
+                    Console.WriteLine($"{remainingTime}초 남음...  "); // 기존 글자 덮어쓰기
+                    Console.SetCursorPosition(0, inputCurTop); // 입력 위치 복구
                 }
             }
 
@@ -444,7 +460,7 @@ namespace _15TextRPG.Source.hn
 
             // 정확도 비례 데미지 계산
             double accuracy = CalculateAttackAccuracy(playerInputs, enemyDirections);
-            int totalDamage = CalculateDamage(enemy.DefensePoint, player.AttackDamage, accuracy);
+            int totalDamage = CalculateDamage(enemy.AttackDamage, player.DefensePoint, accuracy);
             Console.WriteLine($"\n방어 정확도: {accuracy * 100:F1}%");
 
             player.Health -= totalDamage;
