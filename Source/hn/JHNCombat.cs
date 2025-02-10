@@ -242,7 +242,6 @@ namespace _15TextRPG.Source.hn
             }
 
             stopwatch.Stop();
-            Console.WriteLine();
             return input;
         }
 
@@ -275,6 +274,9 @@ namespace _15TextRPG.Source.hn
                 do
                 {
                     randomIndex = random.Next(enemy.Name.Length);
+                    Console.WriteLine(randomIndex);
+                    if (revealedIndex.Count == enemy.Name.Length)
+                        break;
                 }
                 while (revealedIndex.Contains(randomIndex));
 
