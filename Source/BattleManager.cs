@@ -20,9 +20,20 @@ namespace _15TextRPG.Source
         public bool defensePose = false;
         public List<IMonster> monsters = new List<IMonster>();
         public List<ISKill> skills = new List<ISKill>();
-        public void SpawnMonster(IMonster monster, int x, int y)
+        public void SpawnMonster()
         {
-                monsters.Add(monster);
+            Random random = new Random();
+            int num = random.Next(1, 4);
+            for (int i = 0; i < num; i++)
+            {
+                int percent = random.Next(0, 100);
+                if (percent < 50)
+                    monsters.Add(new Robo());
+                else if (percent < 80)
+                    monsters.Add(new Cybo());
+                else
+                    monsters.Add(new Human());
+            }
         }
 
         public void ShowMonster(bool num, int x, int y)
@@ -51,7 +62,6 @@ namespace _15TextRPG.Source
                     Console.WriteLine("HP " + monsters[i].Health);
                 }
             }
-
         }
 
         public void BattleStat(Player player)
@@ -107,18 +117,8 @@ namespace _15TextRPG.Source
             Console.Clear();
             bool Runable = false;
             bool defensePose = false;
-            Random random = new Random();
-            int num = random.Next(1, 4);
-            for (int i = 0; i < num; i++)
-            {
-                int percent = random.Next(0, 100);
-                if (percent < 50)
-                    gameManager.BattleManager.SpawnMonster(new Robo(), 0 + i * 15, 9);
-                else if (percent < 80)
-                    gameManager.BattleManager.SpawnMonster(new Robo(), 0 + i * 15, 9);
-                else
-                    gameManager.BattleManager.SpawnMonster(new Human(), 0 + i * 15, 9);
-            }
+            gameManager.BattleManager.SpawnMonster();
+            gameManager.BattleManager.ShowMonster(false, 0, 9);
 
             for (int i = 0; i < gameManager.BattleManager.monsters.Count; i++)
             {
@@ -343,6 +343,5 @@ namespace _15TextRPG.Source
             Console.ReadLine();
             gameManager.BattleManager.defensePose = true;
         }
-    }
-    
+    }    
 }
