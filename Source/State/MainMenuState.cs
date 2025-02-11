@@ -1,5 +1,4 @@
 using System;
-using _15TextRPG.Source.hn;
 
 namespace _15TextRPG.Source.State
 {
@@ -35,7 +34,7 @@ namespace _15TextRPG.Source.State
                     gameManager.ChangeState(new ChapterState());
                     break;
                 case "4":
-                    gameManager.ChangeState(new JHNCombatState());
+                    //gameManager.ChangeState(new JHNCombatState());
                     break;
                 case "5":
                     gameManager.ChangeState(new BattleMenuState());

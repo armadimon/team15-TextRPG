@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using _15TextRPG.Source.Combat;
 
 namespace _15TextRPG.Source.State
 {
@@ -16,7 +17,7 @@ namespace _15TextRPG.Source.State
 
         public void HandleInput(GameManager gameManager)
         {
-            gameManager.ChangeState(new MainMenuState());
+            gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
         }        
     }
 }

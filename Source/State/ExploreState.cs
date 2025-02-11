@@ -19,12 +19,13 @@ namespace _15TextRPG.Source.State
         public void DisplayMenu(GameManager gameManager)
         {
             Console.Clear();
-            DisplayMap(gameManager.GameData);
+            DisplayMap(gameManager.GameData, gameManager.GameData.CurrentChapter.CurrentStage);
         }
 
         public void HandleInput(GameManager gameManager)
         {
             NPC? npc = gameManager.GameData.CurrentChapter.nowPlay;
+            Console.WriteLine($"check : {(npc.posX, npc.posY - 1)}");
             if (npc == null)
             {
                 Console.WriteLine("nowPlay is null");
@@ -80,11 +81,56 @@ namespace _15TextRPG.Source.State
                     }
                     npc.Dir = 4;
                     break;
+                case ConsoleKey.Q:
+                    Console.WriteLine($"check : {(npc.posX, npc.posY - 1)}");
+                    HackingMode(gameManager);
+                    break;
                 case ConsoleKey.Z:
+                    Console.WriteLine($"check : {(npc.posX, npc.posY - 1)}");
                     HandleInteraction(gameManager);
                     break;
             }
         }
+
+        private void HackingMode(GameManager gameManager)
+        {
+            Console.WriteLine("해킹 모드로 전환합니다.");
+
+            List<NPC> npcs = gameManager.GameData.CurrentChapter.NPCs;
+            int i = 0;
+
+            void DrawNpcInfo()
+            {
+                Console.SetCursorPosition(0, 2);
+                Console.Write(new string(' ', Console.WindowWidth));
+                Console.SetCursorPosition(0, 2);
+                Console.WriteLine($"{npcs[i].Name}: {npcs[i].Desc} ({npcs[i].posX}, {npcs[i].posY})");
+            }
+
+            DrawNpcInfo();
+
+            while (true)
+            {
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.LeftArrow:
+                        if (i > 0) i--;
+                        DrawNpcInfo();
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (i < npcs.Count - 1) i++;
+                        DrawNpcInfo();
+                        break;
+                    case ConsoleKey.Z:
+                        gameManager.ChangeState(new JHNCombatState(npcs[i]));
+                        return;
+                    case ConsoleKey.Escape:
+                        return;
+                }
+            }
+        }
+
 
         private void HandleInteraction(GameManager gameManager)
         {
@@ -132,9 +178,37 @@ namespace _15TextRPG.Source.State
             }
         }
 
-        public void DisplayMap(GameData gameData)
+        public void enterCCTVMode(GameManager gameManager)
         {
-            StageData stage = gameData.CurrentChapter.CurrentStage;
+            List<StageData> stages = gameManager.GameData.CurrentChapter.Stages;
+
+            ConsoleKeyInfo keyInfo;
+            int i = 0;
+            do
+            {
+                Console.WriteLine($"{i}층 CCTV");
+                keyInfo = Console.ReadKey();
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.LeftArrow:
+                        if (i > stages.Count - 1)
+                            i = 0;
+                        DisplayMap(gameManager.GameData, stages[i]);
+                        i++;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (i > stages.Count - 1)
+                            i = 0;
+                        DisplayMap(gameManager.GameData, stages[i]);
+                        i++;
+                        break;
+                }
+            } while (keyInfo.Key != ConsoleKey.Escape);
+        }
+
+
+        public void DisplayMap(GameData gameData, StageData stage)
+        {
             (int px, int py) = (gameData.CurrentChapter.nowPlay.posX, gameData.CurrentChapter.nowPlay.posY);
 
             for (int y = 0; y < stage.Tiles.GetLength(0); y++)
@@ -142,7 +216,7 @@ namespace _15TextRPG.Source.State
                 for (int x = 0; x < stage.Tiles.GetLength(1); x++)
                 {
                     char displayChar = GetTileChar(stage.Tiles[y, x]);
-                    if (x == px && y == py)
+                    if (x == px && y == py && stage.Name == gameData.CurrentChapter.CurrentStage.Name)
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write('P');
@@ -176,6 +250,8 @@ namespace _15TextRPG.Source.State
                     return '*';
                 case TileType.NPC:
                     return 'N';
+                case TileType.CCTV:
+                    return 'C';
                 default:
                     return '?';
             }

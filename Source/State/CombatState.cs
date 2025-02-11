@@ -1,5 +1,4 @@
-﻿using _15TextRPG.Source.hn;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,10 +28,10 @@ namespace _15TextRPG.Source.State
                 case "1":
                     gameManager.GameData.Player.Health--;
                     Console.WriteLine($"{gameManager.GameData.Player.Health}");
-                    gameManager.ChangeState(new ExploreState("stage1"));
+                    gameManager.ChangeState(new BattleMenuState());
                     break;
                 case "2":
-                    gameManager.ChangeState(new JHNCombatState());
+                    //gameManager.ChangeState(new JHNCombatState());
                     break;
                 case "0":
                     gameManager.ChangeState(new MainMenuState());

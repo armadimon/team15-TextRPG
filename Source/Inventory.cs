@@ -6,6 +6,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace _15TextRPG.Source
 {
@@ -16,15 +17,48 @@ namespace _15TextRPG.Source
         public int GetItemNum(IItem item) => Items[item];
         public bool Use(IItem item)
         {
-            if(Items.ContainsKey(item))
+            if (Items.TryGetValue(item, out int value))
             {
-                if (Items[item] > 0)
+                if (value > 0)
                 {
                     item.Use();
-                    Subtract(item);
                 }
-                
+
                 return true;
+            }
+            return false; // 아이템 사용 실패
+        }
+
+        public bool Use(string name)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Name == name)
+                {
+                    if (_.Value > 0)
+                    {
+                        _.Key.Use();
+                    }
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool Use(int tag)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Tag == tag)
+                {
+                    if (_.Value > 0)
+                    {
+                        _.Key.Use();
+                    }
+
+                    return true;
+                }
             }
             return false;
         }
@@ -50,6 +84,28 @@ namespace _15TextRPG.Source
             }
         }
 
+        public void Add(int tag, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Tag == tag)
+                {
+                    Items[_.Key] += num;
+                }
+            }
+        }
+
+        public void Add(string name, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Name == name)
+                {
+                    Items[_.Key] += num;
+                }
+            }
+        }
+
         public void Add(Inventory inventory)
         {
             foreach (var item in inventory.Items)
@@ -71,9 +127,39 @@ namespace _15TextRPG.Source
             if (Items.ContainsKey(item))
             {
                 Items[item] -= num;
-                if (Items[item] < 1)
+                if (Items[item] < 0)
                 {
                     Items.Remove(item);
+                }
+            }
+        }
+
+        public void Subtract(int tag, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Tag == tag)
+                {
+                    Items[_.Key] += num;
+                    if (Items[_.Key] < 0)
+                    {
+                        Items.Remove(_.Key);
+                    }
+                }
+            }
+        }
+
+        public void Subtract(string name, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Name == name)
+                {
+                    Items[_.Key] += num;
+                    if (Items[_.Key] < 0)
+                    {
+                        Items.Remove(_.Key);
+                    }
                 }
             }
         }

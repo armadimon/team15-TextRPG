@@ -15,6 +15,8 @@ namespace _15TextRPG.Source.State
         {
             Console.Clear();
             Console.WriteLine("\n1. [챕터 : 1] X의 의뢰");
+            Console.WriteLine("\n2. 자유 의뢰");
+            Console.WriteLine("\n3. 해킹 연습");
             Console.WriteLine("0. 나가기");
         }
 
@@ -27,6 +29,12 @@ namespace _15TextRPG.Source.State
             {
                 case "1":
                     CheckContrat1(gameManager);
+                    break;
+                case "2":
+                    gameManager.ChangeState(new BattleMenuState());
+                    break;
+                case "3":
+                    //gameManager.ChangeState(new JHNCombatState());
                     break;
                 case "0":
                     gameManager.ChangeState(new MainMenuState());

@@ -14,7 +14,7 @@ using _15TextRPG.Source;
 using _15TextRPG;
 using _15TextRPG.Source.State;
 
-namespace _15TextRPG.Source
+namespace _15TextRPG.Source.Combat
 {
     public class BattleManager
     {

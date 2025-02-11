@@ -20,7 +20,46 @@ namespace _15TextRPG.Source
         Battle,
         NPC,
         Password,
-        Boss
+        Boss,
+        CCTV,
+    }
+
+    public class NPC : IInteractableObject
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; }
+        public int posX { get; set; }
+        public int posY { get; set; }
+        public int Dir { get; set; }
+        public int DefensePoint { get; set; }
+        public int Health { get; set; }
+        public int AttackDamage { get; set; }
+
+        public NPC(string name, string desc, (int, int) npcPos)
+        {
+            posX = npcPos.Item1;
+            posY = npcPos.Item2;
+            Dir = 1;
+            Name = name;
+            Desc = desc;
+            Health = 100;
+            AttackDamage = 5;
+            DefensePoint = 5;
+        }
+
+        public void Interact(GameManager gameManager)
+        {
+            Console.WriteLine("1. 전투");
+            string input = Console.ReadLine() ?? "";
+
+            switch (input)
+            {
+                case "1":
+                    gameManager.ChangeState(new BattleMenuState());
+                    break;
+            }
+            Console.ReadLine();
+        }
     }
 
     public class Tile
