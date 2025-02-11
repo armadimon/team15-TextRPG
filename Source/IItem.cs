@@ -31,4 +31,11 @@ namespace _15TextRPG.Source
         {
         }
     }
+
+    class OtherItems : IItem
+    {
+        public OtherItems(int tag, int value, string name, Action _action) : base(tag, value, name, _action)
+        {
+        }
+    }
 }

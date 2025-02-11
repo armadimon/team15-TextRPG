@@ -20,6 +20,8 @@ namespace _15TextRPG.Source
         public int MP { get; set; }
         public int Gold { get; set; }
         public int Level { get; set; }
+        public int Exp { get; set; }
+
         public int ClearCount { get; set; }
         public Item? Weapon { get; set; }
         public Item? Armor { get; set; }
@@ -30,6 +32,7 @@ namespace _15TextRPG.Source
         {
             Name = name;
             Level = 1;
+            Exp = 0;
             Description = "용병";
             AttackDamage = 10;
             SkillDamage = 20;

@@ -24,7 +24,36 @@ namespace _15TextRPG.Source.hn
 
         }
 
-        public void Hack(Player player, Enemy enemy)
+        private void HandleMonsterDeath(Player player, IMonster monster)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n{monster.MonsterName}이(가) 쓰러졌다!");
+            Console.ResetColor();
+
+            Reward reward = monster.GetReward();
+            Console.WriteLine($"경험치 {reward.Exp} 획득!");
+            player.Exp += reward.Exp;
+
+            if (reward.Items.Count > 0)
+            {
+                Console.WriteLine("아이템 획득:");
+                foreach (var item in reward.Items)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"{item.Name}");
+                    Console.ResetColor();
+                    player.Inventory.Add(item);
+                }
+            }
+            else
+            {
+                Console.WriteLine("획득한 아이템 없음.");
+            }
+        }
+    
+
+
+        public void Hack(Player player, IMonster enemy)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine();
@@ -52,7 +81,7 @@ namespace _15TextRPG.Source.hn
             string playerInput = ReadInputWithTimeout(5); // 5초 제한
 
             // 적의 이름과 유사도를 계산
-            double accuracy = CalculateNameSimilarity(playerInput, enemy.Name);
+            double accuracy = CalculateNameSimilarity(playerInput, enemy.MonsterName);
 
             // 정확하게 맞췄다면 즉시 처치
             if (accuracy == 1.0)
@@ -64,12 +93,13 @@ namespace _15TextRPG.Source.hn
                 Console.WriteLine("|  적의 보안을 완전히 무너뜨렸다  |");
                 Console.WriteLine("+---------------------------------+\n");
                 Console.ResetColor();
-                Console.WriteLine($"\n{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
+                Console.WriteLine($"\n{player.Name}이(가) {enemy.MonsterName}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
                 enemy.Health = 0;
+                HandleMonsterDeath(player, enemy);
             }
             else
             {
-                int totalDamage = CalculateDamage(player.AttackDamage, enemy.DefensePoint, accuracy);
+                int totalDamage = CalculateDamage(player.AttackDamage, enemy.ArmorRisistence, accuracy);
 
 
                 enemy.Health -= totalDamage;
@@ -82,6 +112,11 @@ namespace _15TextRPG.Source.hn
                 Console.ResetColor();
                 Console.WriteLine($"\n{player.Name}이(가) {GetRevealedEnemyName(enemy)}의 시스템을 해킹하여 {totalDamage}만큼 해킹 데미지를 주었습니다!");
                 Console.WriteLine("적의 보안이 약해지고 있습니다...");
+
+                if (enemy.Health <= 0)
+                {
+                    HandleMonsterDeath(player, enemy);
+                }
             }
 
             Console.WriteLine("아무 키나 입력해주세요");
@@ -111,7 +146,7 @@ namespace _15TextRPG.Source.hn
             return (double)matchCount / enemyName.Length; // 정확도 비율 반환 -> 0~1
         }
 
-        public void DefendHack(Player player, Enemy enemy)
+        public void DefendHack(Player player, IMonster enemy)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine();
@@ -134,7 +169,7 @@ namespace _15TextRPG.Source.hn
             double accuracy = CalculateNameSimilarity(playerInput, new string(enemyText.ToArray()));
 
             // 정확도 비례 데미지 계산
-            int totalDamage = CalculateDamage(enemy.DefensePoint, player.AttackDamage, accuracy);
+            int totalDamage = CalculateDamage(enemy.ArmorRisistence, player.AttackDamage, accuracy);
             Console.WriteLine($"\n방어 정확도: {accuracy * 100:F1}%");
 
             player.Health -= totalDamage;
@@ -185,10 +220,10 @@ namespace _15TextRPG.Source.hn
             return selectedChar;
         }
 
-        public void ScanEnemy(Enemy enemy)
+        public void ScanEnemy(IMonster enemy)
         {
             // 이미 모든 정보를 얻었다면 추가 스캔 불가
-            if (revealedLetters >= enemy.Name.Length)
+            if (revealedLetters >= enemy.MonsterName.Length)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine();
@@ -197,7 +232,7 @@ namespace _15TextRPG.Source.hn
                 Console.WriteLine("|  더이상 얻을 정보가 없다        |");
                 Console.WriteLine("+---------------------------------+\n");
                 Console.ResetColor();
-                Console.WriteLine("이미 모든 정보를 알아냈습니다: " + enemy.Name);
+                Console.WriteLine("이미 모든 정보를 알아냈습니다: " + enemy.MonsterName);
                 Console.WriteLine("아무 키나 입력해주세요");
                 Console.ReadKey();
                 return;
@@ -263,12 +298,12 @@ namespace _15TextRPG.Source.hn
             double accuracy = CalculateTextAccuracy(playerInput, enemy.Description);
 
             // 정확도에 비례하여 적의 이름 공개량 증가
-            int revealedAmount = (int)(accuracy * enemy.Name.Length);
+            int revealedAmount = (int)(accuracy * enemy.MonsterName.Length);
             if (revealedAmount < 1) revealedAmount = 1; // 최소 1글자 공개
 
             revealedLetters += revealedAmount;
-            if (revealedLetters > enemy.Name.Length)
-                revealedLetters = enemy.Name.Length; // 초과 방지
+            if (revealedLetters > enemy.MonsterName.Length)
+                revealedLetters = enemy.MonsterName.Length; // 초과 방지
 
             // revealedAmount만큼 적 이름 공개
             RevealRandomName(revealedAmount, enemy);
@@ -416,7 +451,7 @@ namespace _15TextRPG.Source.hn
             return (double)matchCount / target.Length; // 정확도 비율 (0.0 ~ 1.0)
         }
 
-        private void RevealRandomName(int count, Enemy enemy)
+        private void RevealRandomName(int count, IMonster enemy)
         {
             Random random = new Random();
             for (int i = 0; i < count; i++)
@@ -424,8 +459,8 @@ namespace _15TextRPG.Source.hn
                 int randomIndex;
                 do
                 {
-                    randomIndex = random.Next(enemy.Name.Length); 
-                    if (revealedIndex.Count == enemy.Name.Length)
+                    randomIndex = random.Next(enemy.MonsterName.Length); 
+                    if (revealedIndex.Count == enemy.MonsterName.Length)
                         break;
                 }
                 while (revealedIndex.Contains(randomIndex));
@@ -441,10 +476,10 @@ namespace _15TextRPG.Source.hn
             Console.ReadKey();
         }
 
-        private void EnemyTurn(Player player, Enemy enemy)
+        private void EnemyTurn(Player player, IMonster enemy)
         {
             //기본 데미지 계산(공격력과 방어력의 비율 적용)
-            double attackDefenseRatio = (double)player.AttackDamage / enemy.DefensePoint;
+            double attackDefenseRatio = (double)player.AttackDamage / enemy.ArmorRisistence;
 
             int baseDamage = (int)player.AttackDamage;
             baseDamage = (int)(baseDamage * attackDefenseRatio);
@@ -475,17 +510,17 @@ namespace _15TextRPG.Source.hn
 
         }
 
-        public string GetRevealedEnemyName(Enemy enemy)
+        public string GetRevealedEnemyName(IMonster enemy)
         {
-            if (revealedLetters >= enemy.Name.Length)
-                return enemy.Name; // 모든 문자가 공개됨
+            if (revealedLetters >= enemy.MonsterName.Length)
+                return enemy.MonsterName; // 모든 문자가 공개됨
 
-            char[] maskedName = new string('*', enemy.Name.Length).ToCharArray();
+            char[] maskedName = new string('*', enemy.MonsterName.Length).ToCharArray();
 
             // 이미 공개된 위치만 반영
             foreach (int index in revealedIndex)
             {
-                maskedName[index] = enemy.Name[index];
+                maskedName[index] = enemy.MonsterName[index];
             }
 
             return new string(maskedName);
@@ -494,7 +529,7 @@ namespace _15TextRPG.Source.hn
 
         //===================================================어택
 
-        public void Attack(Player player, Enemy enemy)
+        public void Attack(Player player, IMonster enemy)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\n================== 공격 시작 ==================");
@@ -519,7 +554,7 @@ namespace _15TextRPG.Source.hn
 
             // 정확도 비례 데미지 계산
             double accuracy = CalculateAttackAccuracy(playerInputs, enemyDirections, 5);        
-            int totalDamage = CalculateDamage(player.AttackDamage, enemy.DefensePoint, accuracy);
+            int totalDamage = CalculateDamage(player.AttackDamage, enemy.ArmorRisistence, accuracy);
             enemy.Health -= totalDamage;
 
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -538,6 +573,10 @@ namespace _15TextRPG.Source.hn
             Console.Write($"{totalDamage}");
             Console.ResetColor();
             Console.WriteLine(" 의 피해를 입혔습니다!");
+            if (enemy.Health <= 0)
+            {
+                HandleMonsterDeath(player, enemy);
+            }
 
             Console.WriteLine("아무 키나 입력해주세요.");
             Console.ReadKey();
@@ -666,7 +705,7 @@ namespace _15TextRPG.Source.hn
         }
 
 
-        public void DefendAttack(Player player, Enemy enemy)
+        public void DefendAttack(Player player, IMonster enemy)
         {
             Console.WriteLine("플레이어 방어 구현");
 

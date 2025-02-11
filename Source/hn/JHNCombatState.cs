@@ -20,10 +20,12 @@ namespace _15TextRPG.Source.hn
         public void DisplayMenu(GameManager gameManager)
         {
             Console.Clear();
+            IMonster currentEnemy = gameManager.GameData.monsters[0];   // 여기 그 챕터에 나올 몬스터로 받아오면됨.
+
             Console.WriteLine("[해킹 시작]");
-            //Console.WriteLine($"{gamedata.Player.Name} vs  {combat.GetRevealedEnemyName()} ");
-            //Console.WriteLine($"{gamedata.Player.Name} - HP: {gamedata.Player.Health}");
-            //Console.WriteLine($"{combat.GetRevealedEnemyName()} - HP: {combat.Enemy.Health}");
+            Console.WriteLine($"{gameManager.GameData.Player.Name} vs  {combat.GetRevealedEnemyName(currentEnemy)} ");
+            Console.WriteLine($"{gameManager.GameData.Player.Name} - HP: {gameManager.GameData.Player.Health}");
+            Console.WriteLine($"{combat.GetRevealedEnemyName(currentEnemy)} - HP: {currentEnemy.Health}");
             Console.WriteLine("");
             Console.WriteLine("1. 정보 스캔");
             Console.WriteLine("2. 해킹 공격");
@@ -35,16 +37,17 @@ namespace _15TextRPG.Source.hn
         public void HandleInput(GameManager gameManager)
         {
             string input = Console.ReadLine() ?? "";
+            IMonster currentEnemy = gameManager.GameData.monsters[0];  // 여기 그 챕터에 나올 몬스터로 받아오면됨.
             switch (input)
             {
                 case "1":
-                    combat.ScanEnemy(gameManager.GameData.enemies[0]);
+                    combat.ScanEnemy(currentEnemy);
                     break;
                 case "2":
-                    combat.Hack(gameManager.GameData.Player, gameManager.GameData.enemies[0]);
+                    combat.Hack(gameManager.GameData.Player, currentEnemy);
                     break;
                 case "3":
-                    combat.Attack(gameManager.GameData.Player, gameManager.GameData.enemies[0]);
+                    combat.Attack(gameManager.GameData.Player, currentEnemy);
                     break;
                 case "0":
                     gameManager.ChangeState(new MainMenuState());

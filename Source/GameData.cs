@@ -10,9 +10,9 @@ namespace _15TextRPG.Source
     public class GameData
     {
         public Player Player { get; set; }
-        public List<Enemy> enemies;
         public List<ChapterData> Chapters { get; set; }
         public ChapterData CurrentChapter { get; set; }
+        public List<IMonster> monsters = new List<IMonster>();
 
         public GameData()
         {
@@ -22,13 +22,9 @@ namespace _15TextRPG.Source
 
             ChapterData chapter1 = new ChapterData("Chapter1");
             chapter1.InitailizeChapter1();
+            monsters.Add(new Hana());
 
-            enemies = new List<Enemy>()
-            {
-                new Enemy("Omnic_A", 1, "abc d e f ", 5, 20, 30, new List<Item>()),
-                new Enemy("Omnic_B", 1, "abc d e f ", 5, 20, 30, new List<Item>()),
-                new Enemy("Omnic_C", 1, "abc d e f ", 5, 20, 30, new List<Item>()),
-            };
+
             Chapters = new List<ChapterData> { chapter1 };
             CurrentChapter = chapter1;
         }
