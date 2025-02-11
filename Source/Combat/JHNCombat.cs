@@ -67,6 +67,7 @@ namespace _15TextRPG.Source.Combat
                 Console.WriteLine($"\n{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
                 enemy.Health = 0;
                 chap.nowPlay = enemy;
+                enemy.RevealedName = enemy.Name;
             }
             else
             {
@@ -273,6 +274,7 @@ namespace _15TextRPG.Source.Combat
 
             // revealedAmount만큼 적 이름 공개
             RevealRandomName(revealedAmount, enemy);
+
             Console.WriteLine($"\n입력 정확도: ");
             Console.ForegroundColor = ConsoleColor.Red;
 
@@ -291,7 +293,7 @@ namespace _15TextRPG.Source.Combat
                 Console.WriteLine("\n불완전한 정보를 확보");
                 Console.ResetColor();
             }
-
+            enemy.RevealedName = GetRevealedEnemyName(enemy);
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"{GetRevealedEnemyName(enemy)}");
             Console.ResetColor();

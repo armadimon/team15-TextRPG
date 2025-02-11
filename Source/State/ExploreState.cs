@@ -104,7 +104,7 @@ namespace _15TextRPG.Source.State
                 Console.SetCursorPosition(0, 2);
                 Console.Write(new string(' ', Console.WindowWidth));
                 Console.SetCursorPosition(0, 2);
-                Console.WriteLine($"{npcs[i].Name}: {npcs[i].Desc} ({npcs[i].posX}, {npcs[i].posY})");
+                Console.WriteLine($"{npcs[i].RevealedName}: {npcs[i].Desc} ({npcs[i].posX}, {npcs[i].posY})");
             }
 
             DrawNpcInfo();
