@@ -183,6 +183,8 @@ namespace _15TextRPG.Source.Combat
 
             // 적의 이름과 유사도를 계산
             double accuracy = CalculateNameSimilarity(playerInput, enemy.Name);
+            int totalDamage = CalculateDamage(player.AttackDamage, enemy.DefensePoint, accuracy);
+            enemy.Health -= totalDamage;
 
             // 정확하게 맞췄다면 즉시 처치
             if (accuracy == 1.0)
@@ -199,12 +201,24 @@ namespace _15TextRPG.Source.Combat
                 chap.nowPlay = enemy;
                 enemy.RevealedName = enemy.Name;
             }
-            else
+            else if (enemy.Health < 0)
             {
-                int totalDamage = CalculateDamage(player.AttackDamage, enemy.DefensePoint, accuracy);
+                Console.WriteLine($"\n{player.Name}이(가) {GetRevealedEnemyName(enemy)}의 시스템을 해킹하여 {totalDamage}만큼 해킹 데미지를 주었습니다!");
 
-
-                enemy.Health -= totalDamage;
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine();
+                Console.WriteLine("+---------------------------------+");
+                Console.WriteLine("|  해킹 성공!                     |");
+                Console.WriteLine("|  적의 보안을 완전히 무너뜨렸다  |");
+                Console.WriteLine("+---------------------------------+\n");
+                Console.ResetColor();
+                Console.WriteLine($"\n{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
+                enemy.Health = 0;
+                chap.nowPlay = enemy;
+                enemy.RevealedName = enemy.Name;
+            }
+            else
+            { 
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine();
                 Console.WriteLine("+---------------------------------+");
