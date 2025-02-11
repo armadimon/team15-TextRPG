@@ -111,7 +111,7 @@ namespace _15TextRPG.Source.Combat
             Console.SetCursorPosition(60, 0);
             Console.WriteLine($"Stat");
             Console.SetCursorPosition(60, 1);
-            Console.WriteLine($"{player.Name} ({player.Description})");
+            Console.WriteLine($"{player.Name} ({GameData.JobDescriptions[player.Job]})");
             Console.SetCursorPosition(60, 2);
             Console.WriteLine($"Lv . {player.Level}");
             Console.SetCursorPosition(60, 3);

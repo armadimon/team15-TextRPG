@@ -12,7 +12,7 @@ namespace _15TextRPG.Source
     public class Player : IInventoryOwner
     {
         public string Name { get; set; }
-        public string Description { get; set; }
+        public Job Job { get; set; }
         public double AttackDamage { get; set; }
         public double SkillDamage { get; set; }
         public int Intelligence { get; set; }
@@ -33,13 +33,13 @@ namespace _15TextRPG.Source
         public Inventory Inventory { get; set; }
 
 
-        public Player(string name)
+        public Player(string name, Job job)
         {
             Name = name;
             Level = 1;
             Exp = 0;
             MaxExp = 5;
-            Description = "용병";
+            Job = job;
             AttackDamage = 50;
             SkillDamage = 50;
             Intelligence = 0;
@@ -66,7 +66,7 @@ namespace _15TextRPG.Source
             Console.WriteLine($"캐릭터의 정보가 표시됩니다.\n");
 
             Console.WriteLine($"Lv . {Level:D2}");
-            Console.WriteLine($"{Name} ({Description})");
+            Console.WriteLine($"{Name} ({GameData.JobDescriptions[Job]})");
             Console.WriteLine($"공격력 : {AttackDamage} ({ap})");
             Console.WriteLine($"방어력 : {DefensePoint} ({dp})");
             Console.WriteLine($"체력 : {Health}");
