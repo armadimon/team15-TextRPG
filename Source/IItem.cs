@@ -4,31 +4,33 @@ using System.Reflection.Metadata;
 namespace _15TextRPG.Source
 {
     //[Serializable]
-    public abstract class IItem(int tag, int value, string name, Action _action)
-    {
+    public interface IItem 
+    { 
         // Tag 1 = AttackPoint, Tag 2 = DeffencePoint
-        public int Tag { get; } = tag;
+        public int Tag { get; }
         public int Stat { get; }
-        public int Value { get; } = value;
-        public string Name { get; } = name;
-        public string Desc { get; } = string.Empty;
-        public Action action = _action;
+        public int Value { get; }
+        public string Name { get; }
+        public string Desc { get; }
+
+        public void Use();
+    }
+
+    class Example() : IItem
+    {
+        public int Tag => throw new NotImplementedException();
+
+        public int Stat => throw new NotImplementedException();
+
+        public int Value => throw new NotImplementedException();
+
+        public string Name => throw new NotImplementedException();
+
+        public string Desc => throw new NotImplementedException();
 
         public void Use()
         {
-            action();
-        }
-
-        public override string ToString()
-        {
-            return $"{Name}: {Tag}";
-        }
-    }
-
-    class ICEBreaker : IItem
-    {
-        public ICEBreaker(int tag, int value, string name, Action _action) : base(tag, value, name, _action)
-        {
+            throw new NotImplementedException();
         }
     }
 }
