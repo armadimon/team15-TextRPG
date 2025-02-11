@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _15TextRPG.Source
+namespace _15TextRPG.Source.Combat
 {
     public interface IMonster
     {
@@ -32,7 +32,7 @@ namespace _15TextRPG.Source
 
     }
 
-     public class Robo : IMonster
+    public class Robo : IMonster
     {
         public string Type { get; set; } = "robo";
         public string MonsterName { get; set; } = "경비로봇";

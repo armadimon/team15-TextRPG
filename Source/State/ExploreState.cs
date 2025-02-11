@@ -19,7 +19,7 @@ namespace _15TextRPG.Source.State
         public void DisplayMenu(GameManager gameManager)
         {
             Console.Clear();
-            DisplayMap(gameManager.GameData);
+            DisplayMap(gameManager.GameData, gameManager.GameData.CurrentChapter.CurrentStage);
         }
 
         public void HandleInput(GameManager gameManager)
@@ -132,9 +132,40 @@ namespace _15TextRPG.Source.State
             }
         }
 
-        public void DisplayMap(GameData gameData)
+        public void enterCCTVMode(GameManager gameManager)
         {
-            StageData stage = gameData.CurrentChapter.CurrentStage;
+            List<StageData> stages = gameManager.GameData.CurrentChapter.Stages;
+
+            ConsoleKeyInfo keyInfo;
+            int i = 0;
+            do
+            {
+                Console.WriteLine($"{i}층 CCTV");
+                keyInfo = Console.ReadKey();
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.LeftArrow:
+                        if (i > stages.Count - 1)
+                            i = 0;
+                        DisplayMap(gameManager.GameData, stages[i]);
+                        i++;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        if (i > stages.Count - 1)
+                            i = 0;
+                        DisplayMap(gameManager.GameData, stages[i]);
+                        i++;
+                        break;
+                    //case ConsoleKey.Z:
+                    //    gameManager.ChangeState(new HackState(CCTV.HackingProcess));
+                    //    return ;
+                }
+            } while (keyInfo.Key != ConsoleKey.Escape);
+        }
+
+
+        public void DisplayMap(GameData gameData, StageData stage)
+        {
             (int px, int py) = (gameData.CurrentChapter.nowPlay.posX, gameData.CurrentChapter.nowPlay.posY);
 
             for (int y = 0; y < stage.Tiles.GetLength(0); y++)
@@ -142,7 +173,7 @@ namespace _15TextRPG.Source.State
                 for (int x = 0; x < stage.Tiles.GetLength(1); x++)
                 {
                     char displayChar = GetTileChar(stage.Tiles[y, x]);
-                    if (x == px && y == py)
+                    if (x == px && y == py && stage.Name == gameData.CurrentChapter.CurrentStage.Name)
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write('P');
@@ -176,6 +207,8 @@ namespace _15TextRPG.Source.State
                     return '*';
                 case TileType.NPC:
                     return 'N';
+                case TileType.CCTV:
+                    return 'C';
                 default:
                     return '?';
             }

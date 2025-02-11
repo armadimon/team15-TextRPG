@@ -13,7 +13,7 @@ using System.Xml.Linq;
 using _15TextRPG.Source;
 using _15TextRPG;
 
-namespace _15TextRPG.Source
+namespace _15TextRPG.Source.Combat
 {
     public class BattleManager
     {
@@ -22,7 +22,7 @@ namespace _15TextRPG.Source
         public List<ISKill> skills = new List<ISKill>();
         public void SpawnMonster(IMonster monster, int x, int y)
         {
-                monsters.Add(monster);
+            monsters.Add(monster);
         }
 
         public void ShowMonster(bool num, int x, int y)

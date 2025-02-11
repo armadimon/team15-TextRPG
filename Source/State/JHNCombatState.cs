@@ -4,9 +4,9 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using _15TextRPG.Source.State;
+using _15TextRPG.Source.Combat;
 
-namespace _15TextRPG.Source.hn
+namespace _15TextRPG.Source.State
 {
     public class JHNCombatState : IGameState
     {
@@ -14,7 +14,7 @@ namespace _15TextRPG.Source.hn
         public JHNCombat combat;
         public JHNCombatState()
         {
-            this.combat = new JHNCombat();
+            combat = new JHNCombat();
         }
 
         public void DisplayMenu(GameManager gameManager)

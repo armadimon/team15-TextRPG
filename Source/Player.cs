@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using _15TextRPG.Source.Combat;
 
 namespace _15TextRPG.Source
 {

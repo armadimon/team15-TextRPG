@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _15TextRPG.Source
+namespace _15TextRPG.Source.Combat
 {
     public interface ISKill
     {
