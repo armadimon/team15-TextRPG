@@ -10,6 +10,7 @@ using System.Xml.Linq;
 
 namespace _15TextRPG.Source
 {
+    // Action을 serialize하기 위해 string으로 변환하는 것에 이점이 있을까?
     public class VolatilityInventory(IInventoryOwner _owner)
     {
         private Dictionary<IItem, int> Items { get; set; } = [];

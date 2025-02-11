@@ -10,16 +10,42 @@ using System.Xml.Linq;
 
 namespace _15TextRPG.Source
 {
+    public readonly struct ItemIdentifier
+    {
+        public string ItemType { get; init; }
+        public int Tag { get; init; }
+        public string Name { get; init; }
+    }
+
     public class Inventory(IInventoryOwner _owner)
     {
-        private Dictionary<IItem, int> Items { get; set; } = [];
+        private Dictionary<ItemIdentifier, int> Items { get; set; } = [];
         private readonly IInventoryOwner owner = _owner;
-        public int GetItemNum(IItem item) => Items[item];
+
+        public int GetItemNum(IItem item)
+        {
+            ItemIdentifier II = new()
+            {
+                ItemType = typeof(IItem).ToString(),
+                Tag = item.Tag,
+                Name = item.Name,
+            };
+
+            return Items[II];
+        }
+
         public bool Use(IItem item)
         {
-            if (Items.TryGetValue(item, out int value))
+            ItemIdentifier II = new()
             {
-                if (value > 0)
+                ItemType = typeof(IItem).ToString(),
+                Tag = item.Tag,
+                Name = item.Name,
+            };
+
+            if (Items.ContainsKey(II))
+            {
+                if (Items[II] > 0)
                 {
                     item.Use();
                 }
@@ -37,7 +63,7 @@ namespace _15TextRPG.Source
                 {
                     if (_.Value > 0)
                     {
-                        _.Key.Use();
+                        
                     }
 
                     return true;
@@ -54,7 +80,6 @@ namespace _15TextRPG.Source
                 {
                     if (_.Value > 0)
                     {
-                        _.Key.Use();
                     }
 
                     return true;
@@ -63,7 +88,7 @@ namespace _15TextRPG.Source
             return false;
         }
 
-        public IEnumerable<KeyValuePair<IItem, int>> Find(IItem _item)
+        public IEnumerable<KeyValuePair<ItemIdentifier, int>> Find(IItem _item)
         {
             var query = from item in Items
                         where item.Key.GetType() == _item.GetType()
@@ -74,13 +99,20 @@ namespace _15TextRPG.Source
 
         public void Add(IItem item, int num = 1) 
         {
-            if (Items.ContainsKey(item))
+            ItemIdentifier II = new()
             {
-                Items[item] += num;
+                ItemType = typeof(IItem).ToString(),
+                Tag = item.Tag,
+                Name = item.Name,
+            };
+
+            if (Items.ContainsKey(II))
+            {
+                Items[II] += num;
             }
             else
             {
-                Items[item] = num;
+                Items[II] = num;
             }
         }
 
@@ -121,15 +153,30 @@ namespace _15TextRPG.Source
             }
         }
 
-        public void Remove(IItem item) => Items.Remove(item);
+        public void Remove(IItem item)
+        {
+            ItemIdentifier II = new()
+            {
+                ItemType = typeof(IItem).ToString(),
+                Tag = item.Tag,
+                Name = item.Name,
+            };
+            Items.Remove(II);
+        }
         public void Subtract(IItem item, int num = 1)
         {
-            if (Items.ContainsKey(item))
+            ItemIdentifier II = new()
             {
-                Items[item] -= num;
-                if (Items[item] < 0)
+                ItemType = typeof(IItem).ToString(),
+                Tag = item.Tag,
+                Name = item.Name,
+            };
+            if (Items.ContainsKey(II))
+            {
+                Items[II] -= num;
+                if (Items[II] < 0)
                 {
-                    Items.Remove(item);
+                    Items.Remove(II);
                 }
             }
         }
@@ -186,13 +233,20 @@ namespace _15TextRPG.Source
         {
             Inventory result = new(a.owner);
 
+            ItemIdentifier II = new()
+            {
+                ItemType = typeof(IItem).ToString(),
+                Tag = b.Tag,
+                Name = b.Name,
+            };
+
             foreach (var kvp in a.Items)
                 result.Items[kvp.Key] = kvp.Value;
 
-            if (result.Items.ContainsKey(b))
-                result.Items[b] += 1;
+            if (result.Items.ContainsKey(II))
+                result.Items[II] += 1;
             else
-                result.Items[b] = 1;
+                result.Items[II] = 1;
 
             return result;
         }
@@ -201,13 +255,20 @@ namespace _15TextRPG.Source
         {
             Inventory result = new(a.owner);
 
+            ItemIdentifier II = new()
+            {
+                ItemType = typeof(IItem).ToString(),
+                Tag = b.Tag,
+                Name = b.Name,
+            };
+
             foreach (var kvp in a.Items)
                 result.Items[kvp.Key] = kvp.Value;
 
-            if (result.Items.ContainsKey(b))
+            if (result.Items.ContainsKey(II))
                 result.Remove(b);
             else
-                result.Items[b] = 1;
+                result.Items[II] = 1;
 
             return result;
         }
