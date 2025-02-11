@@ -24,7 +24,7 @@ namespace _15TextRPG.Source.Combat
 
         }
 
-        public void Hack(Player player, Enemy enemy)
+        public void Hack(Player player, ChapterData chap, NPC enemy)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine();
@@ -66,6 +66,7 @@ namespace _15TextRPG.Source.Combat
                 Console.ResetColor();
                 Console.WriteLine($"\n{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
                 enemy.Health = 0;
+                chap.nowPlay = enemy;
             }
             else
             {
@@ -111,7 +112,7 @@ namespace _15TextRPG.Source.Combat
             return (double)matchCount / enemyName.Length; // 정확도 비율 반환 -> 0~1
         }
 
-        public void DefendHack(Player player, Enemy enemy)
+        public void DefendHack(Player player, NPC enemy)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine();
@@ -185,7 +186,7 @@ namespace _15TextRPG.Source.Combat
             return selectedChar;
         }
 
-        public void ScanEnemy(Enemy enemy)
+        public void ScanEnemy(NPC enemy)
         {
             // 이미 모든 정보를 얻었다면 추가 스캔 불가
             if (revealedLetters >= enemy.Name.Length)
@@ -229,7 +230,7 @@ namespace _15TextRPG.Source.Combat
 
             Console.Write($"\n적의 보안 설명:");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{enemy.Description}");
+            Console.WriteLine($"{enemy.Desc}");
 
             Console.Write($"{combatCount}");
             Console.ResetColor();
@@ -260,7 +261,7 @@ namespace _15TextRPG.Source.Combat
             }
 
             // 입력 정확도를 계산
-            double accuracy = CalculateTextAccuracy(playerInput, enemy.Description);
+            double accuracy = CalculateTextAccuracy(playerInput, enemy.Desc);
 
             // 정확도에 비례하여 적의 이름 공개량 증가
             int revealedAmount = (int)(accuracy * enemy.Name.Length);
@@ -416,7 +417,7 @@ namespace _15TextRPG.Source.Combat
             return (double)matchCount / target.Length; // 정확도 비율 (0.0 ~ 1.0)
         }
 
-        private void RevealRandomName(int count, Enemy enemy)
+        private void RevealRandomName(int count, NPC enemy)
         {
             Random random = new Random();
             for (int i = 0; i < count; i++)
@@ -441,7 +442,7 @@ namespace _15TextRPG.Source.Combat
             Console.ReadKey();
         }
 
-        private void EnemyTurn(Player player, Enemy enemy)
+        private void EnemyTurn(Player player, NPC enemy)
         {
             //기본 데미지 계산(공격력과 방어력의 비율 적용)
             double attackDefenseRatio = (double)player.AttackDamage / enemy.DefensePoint;
@@ -475,7 +476,7 @@ namespace _15TextRPG.Source.Combat
 
         }
 
-        public string GetRevealedEnemyName(Enemy enemy)
+        public string GetRevealedEnemyName(NPC enemy)
         {
             if (revealedLetters >= enemy.Name.Length)
                 return enemy.Name; // 모든 문자가 공개됨
@@ -494,7 +495,7 @@ namespace _15TextRPG.Source.Combat
 
         //===================================================어택
 
-        public void Attack(Player player, Enemy enemy)
+        public void Attack(Player player, NPC enemy)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\n================== 공격 시작 ==================");
@@ -666,7 +667,7 @@ namespace _15TextRPG.Source.Combat
         }
 
 
-        public void DefendAttack(Player player, Enemy enemy)
+        public void DefendAttack(Player player, NPC enemy)
         {
             Console.WriteLine("플레이어 방어 구현");
 

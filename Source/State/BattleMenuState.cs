@@ -17,7 +17,7 @@ namespace _15TextRPG.Source.State
 
         public void HandleInput(GameManager gameManager)
         {
-            gameManager.ChangeState(new MainMenuState());
+            gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
         }        
     }
 }

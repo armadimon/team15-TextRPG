@@ -31,7 +31,7 @@ namespace _15TextRPG.Source.State
                     gameManager.ChangeState(new BattleMenuState());
                     break;
                 case "2":
-                    gameManager.ChangeState(new JHNCombatState());
+                    //gameManager.ChangeState(new JHNCombatState());
                     break;
                 case "0":
                     gameManager.ChangeState(new MainMenuState());
