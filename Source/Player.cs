@@ -21,6 +21,8 @@ namespace _15TextRPG.Source
         public int MP { get; set; }
         public int Gold { get; set; }
         public int Level { get; set; }
+        public int Exp {  get; set; }
+        public int MaxExp { get; set; }
         public int ClearCount { get; set; }
         public Item? Weapon { get; set; }
         public Item? Armor { get; set; }
@@ -31,9 +33,11 @@ namespace _15TextRPG.Source
         {
             Name = name;
             Level = 1;
+            Exp = 0;
+            MaxExp = 5;
             Description = "용병";
-            AttackDamage = 10;
-            SkillDamage = 20;
+            AttackDamage = 50;
+            SkillDamage = 50;
             DefensePoint = 5;
             MaxHP = 100;
             Health = MaxHP;
@@ -53,7 +57,6 @@ namespace _15TextRPG.Source
             string dp = Armor != null
                 ? $"{Armor.Stat:+#;-#;0}"
                 : "0";
-
             Console.WriteLine($"상태 보기");
             Console.WriteLine($"캐릭터의 정보가 표시됩니다.\n");
 
@@ -67,12 +70,29 @@ namespace _15TextRPG.Source
 
         public void Attack(GameManager gameManager, int i)
         {
+            Random random = new Random();
+            int j = random.Next(90, 111);
             Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(을/를) 공격합니다");
             Console.ReadLine();
-            gameManager.BattleManager.monsters[i].Health -= gameManager.Player.AttackDamage + gameManager.BattleManager.monsters[i].ArmorRisistence;
-            if (gameManager.BattleManager.monsters[i].Health < 0)
+            gameManager.BattleManager.monsters[i].Health -= Math.Round(gameManager.GameData.Player.AttackDamage * j / 100) + gameManager.BattleManager.monsters[i].ArmorRisistence;
+
+            if (gameManager.BattleManager.monsters[i].Health <= 0)
             {
                 gameManager.BattleManager.monsters[i].Health = 0;
+                gameManager.GameData.Player.Exp += gameManager.BattleManager.monsters[i].Level;
+
+                if (gameManager.GameData.Player.Exp >= gameManager.GameData.Player.MaxExp)
+                {
+                    gameManager.GameData.Player.Level += gameManager.GameData.Player.Exp / gameManager.GameData.Player.MaxExp;
+                    gameManager.GameData.Player.Exp %= gameManager.GameData.Player.MaxExp;
+                }
+
+                Console.Clear();
+                gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
+                gameManager.BattleManager.ShowMonster(false, 0, 9);
+                Console.WriteLine();
+                Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(이/가) 쓰러졌습니다.");
+                Console.ReadLine();
             }
         }
 
@@ -82,17 +102,32 @@ namespace _15TextRPG.Source
             Console.ReadLine();
             if(skill.SkillType == monster.Type)
             {
-                gameManager.BattleManager.monsters[i].Health -= (gameManager.Player.SkillDamage + skill.BonusDamage) - gameManager.BattleManager.monsters[i].SkillRisistence;
+                gameManager.BattleManager.monsters[i].Health -= (gameManager.GameData.Player.SkillDamage + skill.BonusDamage) - gameManager.BattleManager.monsters[i].SkillRisistence;
             }
             else
             {
-                gameManager.BattleManager.monsters[i].Health -= gameManager.Player.SkillDamage - gameManager.BattleManager.monsters[i].SkillRisistence;
+                gameManager.BattleManager.monsters[i].Health -= gameManager.GameData.Player.SkillDamage - gameManager.BattleManager.monsters[i].SkillRisistence;
             }
 
-            gameManager.Player.MP -= skill.SkillCost;
-            if (gameManager.BattleManager.monsters[i].Health < 0)
+            gameManager.GameData.Player.MP -= skill.SkillCost;
+
+            if (gameManager.BattleManager.monsters[i].Health <= 0)
             {
                 gameManager.BattleManager.monsters[i].Health = 0;
+                gameManager.GameData.Player.Exp += gameManager.BattleManager.monsters[i].Level;
+
+                if (gameManager.GameData.Player.Exp >= gameManager.GameData.Player.MaxExp)
+                {
+                    gameManager.GameData.Player.Level += gameManager.GameData.Player.Exp / gameManager.GameData.Player.MaxExp;
+                    gameManager.GameData.Player.Exp %= gameManager.GameData.Player.MaxExp;
+                }
+
+                Console.Clear();
+                gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
+                gameManager.BattleManager.ShowMonster(false, 0, 9);
+                Console.WriteLine();
+                Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(이/가) 쓰러졌습니다.");
+                Console.ReadLine();
             }
         }
     }

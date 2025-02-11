@@ -13,12 +13,12 @@ namespace _15TextRPG.Source.State
             Console.WriteLine("\n3. 챕터 선택");
             Console.WriteLine("\n4. hn전투");
             Console.WriteLine("\n5. JW전투");
-
             Console.WriteLine("0. 종료");
         }
 
         public void HandleInput(GameManager gameManager)
         {
+            gameManager.GameData.CurrentChapter = null;
             Console.Write("\n원하시는 행동을 입력해주세요. >> ");
             string input = Console.ReadLine() ?? "";
 
@@ -34,7 +34,7 @@ namespace _15TextRPG.Source.State
                     gameManager.ChangeState(new ChapterState());
                     break;
                 case "4":
-                    gameManager.ChangeState(new JHNCombatState());
+                    //gameManager.ChangeState(new JHNCombatState());
                     break;
                 case "5":
                     gameManager.ChangeState(new BattleMenuState());

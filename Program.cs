@@ -22,7 +22,6 @@ namespace _15TextRPG
         private IGameState currentState;
         private bool isRunning = true;
         public GameData GameData { get; private set; }
-        public Player Player { get; private set; }
         public BattleManager BattleManager { get; private set; }
 
         public GameManager()
@@ -31,7 +30,6 @@ namespace _15TextRPG
             currentState = new TitleMenuState();
             Console.WriteLine(currentState);
             Console.ReadLine();
-            Player = new Player("Agent Ahn");
             BattleManager = new BattleManager();
         }
 

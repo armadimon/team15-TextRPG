@@ -13,7 +13,7 @@ namespace _15TextRPG.Source
         public Player Player { get; set; }
         public List<Enemy> enemies;
         public List<ChapterData> Chapters { get; set; }
-        public ChapterData CurrentChapter { get; set; }
+        public ChapterData? CurrentChapter { get; set; }
 
         public GameData()
         {
