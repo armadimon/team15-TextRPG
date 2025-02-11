@@ -140,40 +140,6 @@ namespace _15TextRPG.Source.Chapter1
         }
     }
 
-    public class NPC : IInteractableObject
-    {
-        private string message;
-        public int posX { get; set; }
-        public int posY { get; set; }
-        public int Dir { get; set; }
-        public NPC(string msg, (int, int) npcPos)
-        {
-            posX = npcPos.Item1;
-            posY = npcPos.Item2;
-            Dir = 1;
-            message = msg;
-        }
-
-        public void Interact(GameManager gameManager)
-        {
-            Console.WriteLine("1. 대화하기");
-            Console.WriteLine("2. 해킹");
-            string input = Console.ReadLine() ?? "";
-
-            switch (input)
-            {
-                case "1":
-                    Console.WriteLine($"NPC: \"{message}\"");
-                    break;
-                case "2":
-                    gameManager.ChangeState(new CombatState());
-                    gameManager.GameData.CurrentChapter.nowPlay = this;
-                    break;
-            }
-            Console.ReadLine();
-        }
-    }
-
     public class PasswordForStage1 : IInteractableObject
     {
         private string password;

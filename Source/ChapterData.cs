@@ -32,8 +32,8 @@ namespace _15TextRPG.Source
             stage1.SetTile(10, 10, TileType.Battle, new EnemyTrigger());
             stage1.SetTile(29, 5, TileType.ChangeStage, new ChangeStage2("Stage2", false));
             stage1.SetTile(20, 15, TileType.Password, new PasswordForStage1("password"));
-            NPC npc1 = new NPC("무슨일이지?", (12, 12));
-            NPC npc2 = new NPC("비밀번호는 내가 들고있어", (15, 15));
+            NPC npc1 = new NPC("니콜라스", "메가코프사 경비. 메가코프사의 다양한 '지원'을 받아서 강한 전투력을 얻었지만, 수명은 얼마 남지않았다.", (12, 12));
+            NPC npc2 = new NPC("헥터 ", "메가코프사 경비. 메가코프사의 다양한 '지원'을 받아서 강한 전투력을 얻었지만, 수명은 얼마 남지않았다.", (15, 15));
             nowPlay = npc1;
             NPCs.Add(npc1);
             NPCs.Add(npc2);
