@@ -12,10 +12,10 @@ namespace _15TextRPG.Source.State
 
         public Cyborg() 
         { 
-            HackState = new HackState(HackingProcess);
+            HackState = new HackState(HackingProcess, 10);
         }
 
-        public void HackingProcess(string command)
+        public bool HackingProcess(string command)
         {
             if (command == "ITEM ICE_NO_33")
             {
@@ -44,6 +44,7 @@ namespace _15TextRPG.Source.State
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.Green;
             }
+            return false;
         }
     }
 }

@@ -41,6 +41,7 @@ namespace _15TextRPG.Source
         public void Interact(GameManager gameManager)
         {
             Console.WriteLine("적이 나타났다! 전투 시작!");
+            Console.ReadLine();
             gameManager.ChangeState(new BattleMenuState());
         }
     }

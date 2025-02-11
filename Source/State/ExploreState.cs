@@ -8,7 +8,7 @@ using _15TextRPG.Source.Chapter1;
 
 namespace _15TextRPG.Source.State
 {
-    internal class ExploreState : IGameState
+    public class ExploreState : IGameState
     {
         public string StageName { get; set; }
         public ExploreState(string stageName)
