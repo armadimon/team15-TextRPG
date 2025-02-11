@@ -194,7 +194,8 @@ namespace _15TextRPG.Source.Combat
                 Console.ResetColor();
                 Console.WriteLine($"\n{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
                 enemy.Health = 0;
-                chap.nowPlay = enemy;
+                // npc의 isHack을 true로 변경
+                enemy.IsHacked = true;
                 enemy.RevealedName = enemy.Name;
             }
             else

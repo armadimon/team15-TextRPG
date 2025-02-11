@@ -123,7 +123,12 @@ namespace _15TextRPG.Source.State
                         DrawNpcInfo();
                         break;
                     case ConsoleKey.Z:
-                        gameManager.ChangeState(new JHNCombatState(npcs[i]));
+                        if (npcs[i].Name == "player" || npcs[i].IsHacked == true)
+                        {
+                            gameManager.GameData.CurrentChapter.nowPlay = npcs[i];
+                        }
+                        else
+                            gameManager.ChangeState(new JHNCombatState(npcs[i]));
                         return;
                     case ConsoleKey.Escape:
                         return;

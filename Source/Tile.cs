@@ -35,6 +35,7 @@ namespace _15TextRPG.Source
         public int DefensePoint { get; set; }
         public int Health { get; set; }
         public int AttackDamage { get; set; }
+        public bool IsHacked { get; set; }
 
         public NPC(string name, string desc, (int, int) npcPos)
         {
@@ -47,6 +48,7 @@ namespace _15TextRPG.Source
             Health = 100;
             AttackDamage = 5;
             DefensePoint = 5;
+            IsHacked = false;
         }
 
         public void Interact(GameManager gameManager)
