@@ -37,7 +37,7 @@ namespace _15TextRPG.Source
         public Inventory Inventory { get; set; }
 
 
-        public Player(string name, int description) // 힘캐
+        public Player(string name, string description) // 힘캐
         {
             Name = name;
             Level = 1;

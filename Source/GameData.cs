@@ -19,7 +19,7 @@ namespace _15TextRPG.Source
 
         public GameData()
         {
-            Player = new Player("Default");
+            Player = new Player("Default", "");
             Chapters = new List<ChapterData>();
 
             ChapterData chapter1 = new ChapterData("Chapter1");

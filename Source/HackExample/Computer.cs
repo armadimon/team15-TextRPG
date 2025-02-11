@@ -35,16 +35,16 @@ namespace _15TextRPG.Source.State
                     
                default:
 
-                   Console.WriteLine(JsonSerializer.Serialize(ex));
+                   //Console.WriteLine(JsonSerializer.Serialize());
                    Console.Write("없는 명령어입니다.");
                    break;
            }
            return false;
        }
 
-       public void Interact(GameManager gameManager)
+       public void Interact()
        {
-           gameManager.ChangeState(HackState);
+           GameManager.Instance.ChangeState(HackState);
        }
     }
 }
