@@ -9,7 +9,7 @@ namespace _15TextRPG.Source
 {
     public interface IInteractableObject
     {
-        void Interact(GameManager gameManager);
+        void Interact();
     }
 
     public enum TileType
@@ -35,6 +35,7 @@ namespace _15TextRPG.Source
         public int DefensePoint { get; set; }
         public int Health { get; set; }
         public int AttackDamage { get; set; }
+        public bool IsHacked { get; set; }
 
         public NPC(string name, string desc, (int, int) npcPos)
         {
@@ -47,9 +48,10 @@ namespace _15TextRPG.Source
             Health = 100;
             AttackDamage = 5;
             DefensePoint = 5;
+            IsHacked = false;
         }
 
-        public void Interact(GameManager gameManager)
+        public void Interact()
         {
             Console.WriteLine("1. 전투");
             string input = Console.ReadLine() ?? "";
@@ -57,7 +59,7 @@ namespace _15TextRPG.Source
             switch (input)
             {
                 case "1":
-                    gameManager.ChangeState(new BattleMenuState());
+                    GameManager.Instance.ChangeState(new BattleMenuState());
                     break;
             }
             Console.ReadLine();
@@ -78,11 +80,11 @@ namespace _15TextRPG.Source
 
     public class EnemyTrigger : IInteractableObject
     {
-        public void Interact(GameManager gameManager)
+        public void Interact()
         {
             Console.WriteLine("적이 나타났다! 전투 시작!");
             Console.ReadLine();
-            gameManager.ChangeState(new BattleMenuState());
+            GameManager.Instance.ChangeState(new BattleMenuState());
         }
     }
 
@@ -95,7 +97,7 @@ namespace _15TextRPG.Source
             this.password = password;
         }
 
-        public void Interact(GameManager gameManager)
+        public void Interact()
         {
             Console.WriteLine($"패스워드를 입력하세요.");
             string pass = Console.ReadLine() ?? "";

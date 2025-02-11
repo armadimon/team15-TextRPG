@@ -23,17 +23,19 @@ namespace _15TextRPG.Source.Combat
         void Attack(Player player)
         {
             Console.WriteLine($"{MonsterName}(이/가) 공격합니다.");
-            Console.ReadLine();
+            Thread.Sleep(1500);
             player.Health -= AttackDamage;
         }
 
         void UseSkill(Player player)
         {
             Console.WriteLine($"{MonsterName}(이/가) {SkillName}(을/를) 사용합니다.");
-            Console.ReadLine();
+            Thread.Sleep(1500);
             player.Health -= SkillDamage;
         }
+
         Reward GetReward();
+
 
     }
 
@@ -95,6 +97,7 @@ namespace _15TextRPG.Source.Combat
         {
             return new Reward(Items);
         }
+
     }
 
     public class Human : IMonster
@@ -102,8 +105,8 @@ namespace _15TextRPG.Source.Combat
         public string Type { get; set; } = "human";
         public string MonsterName { get; set; } = "경찰";
         public int Level { get; set; } = 3;
-        public double MaxHealth { get; set; } = 100;
-        public double Health { get; set; } = 100;
+        public double MaxHealth { get; set; } = 75;
+        public double Health { get; set; } = 75;
         public string SkillName { get; set; } = "스턴건";
         public int AttackDamage { get; set; } = 10;
         public int SkillDamage { get; set; } = 12;

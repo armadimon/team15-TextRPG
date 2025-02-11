@@ -9,22 +9,33 @@ namespace _15TextRPG
     {
         private static void Main()
         {
-            GameManager gameManager = new GameManager();
 
-            gameManager.Run();
+            GameManager.Instance.Run();
         }
     }
 
-
-
     public class GameManager
     {
+
+        private static GameManager instance;
+        public static GameManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new GameManager();
+                return instance;
+            }
+        }
+
+
+
         private IGameState currentState;
         private bool isRunning = true;
         public GameData GameData { get; private set; }
         public BattleManager BattleManager { get; private set; }
 
-        public GameManager()
+        private GameManager()
         {
             GameData = new GameData();
             currentState = new TitleMenuState();
@@ -37,8 +48,8 @@ namespace _15TextRPG
         {
             while (isRunning)
             {
-                currentState.DisplayMenu(this);
-                currentState.HandleInput(this);
+                currentState.DisplayMenu();
+                currentState.HandleInput();
             }
         }
 

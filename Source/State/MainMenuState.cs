@@ -4,7 +4,7 @@ namespace _15TextRPG.Source.State
 {
     public class MainMenuState : IGameState
     {
-        public void DisplayMenu(GameManager gameManager)
+        public void DisplayMenu()
         {
             Console.Clear();
             Console.WriteLine("\n[캠프 입구]");
@@ -16,31 +16,31 @@ namespace _15TextRPG.Source.State
             Console.WriteLine("0. 종료");
         }
 
-        public void HandleInput(GameManager gameManager)
+        public void HandleInput()
         {
-            gameManager.GameData.CurrentChapter = null;
+            GameManager.Instance.GameData.CurrentChapter = null;
             Console.Write("\n원하시는 행동을 입력해주세요. >> ");
             string input = Console.ReadLine() ?? "";
 
             switch (input)
             {
                 case "1":
-                    gameManager.ChangeState(new StatusMenuState());
+                    GameManager.Instance.ChangeState(new StatusMenuState());
                     break;
                 case "2":
-                    gameManager.ChangeState(new ContractState());
+                    GameManager.Instance.ChangeState(new ContractState());
                     break;
                 case "3":
-                    gameManager.ChangeState(new ChapterState());
+                    GameManager.Instance.ChangeState(new ChapterState());
                     break;
                 case "4":
-                    //gameManager.ChangeState(new JHNCombatState());
+                    //GameManager.Instance.ChangeState(new JHNCombatState());
                     break;
                 case "5":
-                    gameManager.ChangeState(new BattleMenuState());
+                    GameManager.Instance.ChangeState(new BattleMenuState());
                     break;
                 case "0":
-                    gameManager.QuitGame();
+                    GameManager.Instance.QuitGame();
                     break;
             }
         }

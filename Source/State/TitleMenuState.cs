@@ -17,7 +17,7 @@ namespace _15TextRPG.Source.State
         private int curLeft = 0;
 
 
-        public void DisplayMenu(GameManager gameManager)
+        public void DisplayMenu()
         {
             Console.Clear();
 
@@ -37,7 +37,7 @@ namespace _15TextRPG.Source.State
             Task.Run(() => AnimateAsciiArt(ascii));
         }
 
-        public void HandleInput(GameManager gameManager)
+        public void HandleInput()
         {
             // 콘솔크기 고정되면 이거 쓸 수 있음
             //Console.SetCursorPosition(0, Console.WindowHeight - 1);
@@ -49,8 +49,8 @@ namespace _15TextRPG.Source.State
             switch (input)
             {
                 case "1":
-                    NewGame(gameManager);
-                    gameManager.ChangeState(new MainMenuState()); // 메인메뉴로
+                    NewGame(GameManager.Instance);
+                    GameManager.Instance.ChangeState(new MainMenuState()); // 메인메뉴로
                     break;
                 case "2":
                     Console.WriteLine("이어하기");
@@ -59,7 +59,7 @@ namespace _15TextRPG.Source.State
                     Console.WriteLine("크레딧");
                     break;
                 case "0":
-                    gameManager.QuitGame();
+                    GameManager.Instance.QuitGame();
                     break;
                 default:
                     isRunning = true;
