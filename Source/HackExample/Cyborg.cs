@@ -11,7 +11,7 @@ namespace _15TextRPG.Source.State
         public HackState HackState { get; }
 
         public Cyborg() 
-        { 
+        {   
             HackState = new HackState(HackingProcess, 10);
         }
 
