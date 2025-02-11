@@ -15,7 +15,7 @@ namespace _15TextRPG.Source.State
             HackState = new HackState(HackingProcess, 10);
         }
 
-        public void HackingProcess(string userCommand)
+        public bool HackingProcess(string userCommand)
         {
             throw new NotImplementedException();
         }
