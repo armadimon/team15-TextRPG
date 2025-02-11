@@ -33,4 +33,33 @@ namespace _15TextRPG.Source
             throw new NotImplementedException();
         }
     }
+
+    class RecoveryItem : IItem
+    {
+        public int Tag { get; }
+        public int Stat { get; }
+        public int Value { get; }
+        public string Name { get; }
+        public string Desc { get; }
+        public int RecoveryAmount { get; }
+       
+
+        public RecoveryItem(int tag, int stat, int value, string name, string desc, int recoveryAmount)
+        {
+            Tag = tag;
+            Stat = stat;
+            Value = value;
+            Name = name;
+            Desc = desc;
+            RecoveryAmount = recoveryAmount;
+        }
+        public void Use()
+        {
+            throw new NotImplementedException();
+        }
+        public void Use(Player player)
+        {
+            player.Health += RecoveryAmount;
+        }
+    }
 }

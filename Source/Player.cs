@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using _15TextRPG.Source.Combat;
 
@@ -29,6 +31,7 @@ namespace _15TextRPG.Source
         public Item? Armor { get; set; }
 
         public Inventory Inventory { get; set; }
+
 
         public Player(string name)
         {
@@ -94,6 +97,24 @@ namespace _15TextRPG.Source
                 gameManager.BattleManager.ShowMonster(false, 0, 9);
                 Console.WriteLine();
                 Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(이/가) 쓰러졌습니다.");
+
+                Reward reward = gameManager.BattleManager.monsters[i].GetReward();
+                if (reward.Items.Count > 0)
+                {
+                    Console.WriteLine("아이템 획득:");
+                    foreach (var item in reward.Items)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine($"{item.Name}");
+                        Console.ResetColor();
+                        gameManager.GameData.Player.Inventory.Add(item);
+                    }
+                }
+                //else
+                //{
+                //    Console.WriteLine("획득한 아이템 없음.");
+                //}
+
                 Console.ReadLine();
             }
         }
@@ -124,11 +145,31 @@ namespace _15TextRPG.Source
                     gameManager.GameData.Player.Exp %= gameManager.GameData.Player.MaxExp;
                 }
 
+                
+
                 Console.Clear();
                 gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
                 gameManager.BattleManager.ShowMonster(false, 0, 9);
                 Console.WriteLine();
                 Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(이/가) 쓰러졌습니다.");
+
+                Reward reward = gameManager.BattleManager.monsters[i].GetReward();
+                if (reward.Items.Count > 0)
+                {
+                    Console.WriteLine("아이템 획득:");
+                    foreach (var item in reward.Items)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine($"{item.Name}");
+                        Console.ResetColor();
+                        gameManager.GameData.Player.Inventory.Add(item);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("획득한 아이템 없음.");
+                }
+
                 Console.ReadLine();
             }
         }
