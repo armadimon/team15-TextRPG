@@ -6,15 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using _15TextRPG.Source.Combat;
 
+
 namespace _15TextRPG.Source.State
 {
     public class JHNCombatState : IGameState
     {
         public NPC Npc { get; set; }
         public JHNCombat combat;
+        public JHNCombatPhysical combatPhy;
+
         public JHNCombatState(NPC npc)
         {
             combat = new JHNCombat();
+            combatPhy = new JHNCombatPhysical();
+
             Npc = npc;
         }
 
@@ -53,7 +58,7 @@ namespace _15TextRPG.Source.State
                     combat.Hack(gameManager.GameData.Player, gameManager.GameData.CurrentChapter, Npc);
                     break;
                 case "3":
-                    combat.Attack(gameManager.GameData.Player, Npc);
+                    combatPhy.Attack(gameManager.GameData.Player, Npc);
                     break;
                 case "0":
                     gameManager.ChangeState(new MainMenuState());
