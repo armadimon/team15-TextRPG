@@ -6,6 +6,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace _15TextRPG.Source
 {
@@ -83,6 +84,28 @@ namespace _15TextRPG.Source
             }
         }
 
+        public void Add(int tag, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Tag == tag)
+                {
+                    Items[_.Key] += num;
+                }
+            }
+        }
+
+        public void Add(string name, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Name == name)
+                {
+                    Items[_.Key] += num;
+                }
+            }
+        }
+
         public void Add(Inventory inventory)
         {
             foreach (var item in inventory.Items)
@@ -107,6 +130,36 @@ namespace _15TextRPG.Source
                 if (Items[item] < 1)
                 {
                     Items.Remove(item);
+                }
+            }
+        }
+
+        public void Subtract(int tag, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Tag == tag)
+                {
+                    Items[_.Key] += num;
+                    if (Items[_.Key] < 1)
+                    {
+                        Items.Remove(_.Key);
+                    }
+                }
+            }
+        }
+
+        public void Subtract(string name, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Name == name)
+                {
+                    Items[_.Key] += num;
+                    if (Items[_.Key] < 1)
+                    {
+                        Items.Remove(_.Key);
+                    }
                 }
             }
         }
