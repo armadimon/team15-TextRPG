@@ -31,14 +31,21 @@ namespace _15TextRPG.Source
             AddStage(stage1);
             stage1.SetTile(10, 10, TileType.Battle, new EnemyTrigger());
             stage1.SetTile(29, 5, TileType.ChangeStage, new ChangeStage2("Stage2", false));
-            stage1.SetTile(20, 15, TileType.Password, new PasswordForStage1("password"));
+            for (int i = 0; i < 29; i++)
+            {
+                    stage1.SetTile(i, 17, TileType.Wall);
+            }
+            NPC p = new NPC("player", "당신 그 자체.", (3, 3));
             NPC npc1 = new NPC("니콜라스", "메가코프사 경비. 메가코프사의 다양한 '지원'을 받아서 강한 전투력을 얻었지만, 수명은 얼마 남지않았다.", (12, 12));
-            NPC npc2 = new NPC("헥터 ", "메가코프사 경비. 메가코프사의 다양한 '지원'을 받아서 강한 전투력을 얻었지만, 수명은 얼마 남지않았다.", (15, 15));
-            nowPlay = npc1;
+            NPC npc2 = new NPC("Hector", "보안실 직원. 항상 과로에 힘들어하고 있다. ", (17, 18));
+            nowPlay = p;
+            NPCs.Add(p);
             NPCs.Add(npc1);
             NPCs.Add(npc2);
-            stage1.SetTile(12, 12, TileType.NPC, npc1);
-            stage1.SetTile(15, 15, TileType.NPC, npc2);
+            stage1.SetTile(3, 3, TileType.NPC, p);
+            stage1.SetTile(npc1.posX, npc1.posY, TileType.NPC, npc1);
+            stage1.SetTile(npc2.posX, npc2.posY, TileType.NPC, npc2);
+            stage1.SetTile(2, 18, TileType.Password, new PasswordForStage1("password"));
             stage1.SetTile(15, 0, TileType.CCTV, new CCTV());
             AddStage(stage2);
             CurrentStage = stage1;

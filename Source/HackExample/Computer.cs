@@ -16,34 +16,35 @@ namespace _15TextRPG.Source.State
         {
         }
 
-        public bool HackingProcess(string userCommand)
-        {
-            string[] command = userCommand.Split(' ');
-            switch(command[0])
-            {
-                case "item":
-                    if(command.Count() == 1)
-                    {
-                        Console.Write(Player.Inventory);
-                    }
-                    else
-                    {
-                        Player.Inventory.Use(command[1]);
-                        Player.Inventory.Subtract(command[1]);
-                    }
-                    break;
+       public bool HackingProcess(string userCommand)
+       {
+           string[] command = userCommand.Split(' ');
+           switch(command[0])
+           {
+               case "item":
+                   if(command.Count() == 1)
+                   {
+                       Console.Write(Player.Inventory);
+                   }
+                   else
+                   {
+                       Player.Inventory.Use(command[1]);
+                       Player.Inventory.Subtract(command[1]);
+                   }
+                   break;
                     
-                default:
+               default:
 
-                    Console.Write("없는 명령어입니다.");
-                    break;
-            }
-            return false;
-        }
+                   //Console.WriteLine(JsonSerializer.Serialize());
+                   Console.Write("없는 명령어입니다.");
+                   break;
+           }
+           return false;
+       }
 
-        public void Interact(GameManager gameManager)
-        {
-            gameManager.ChangeState(HackState);
-        }
+       public void Interact()
+       {
+           GameManager.Instance.ChangeState(HackState);
+       }
     }
 }

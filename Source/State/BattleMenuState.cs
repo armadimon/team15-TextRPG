@@ -10,14 +10,14 @@ namespace _15TextRPG.Source.State
 {
     public class BattleMenuState() : IGameState
     {
-        public void DisplayMenu(GameManager gameManager)
+        public void DisplayMenu()
         {
         }
 
-        public void HandleInput(GameManager gameManager)
+        public void HandleInput()
         {
-            gameManager.BattleManager.InBattle(gameManager);
-            //gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
+            GameManager.Instance.BattleManager.InBattle();
+            //GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
         }        
     }
 }
