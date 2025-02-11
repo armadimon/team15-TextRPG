@@ -180,7 +180,7 @@ namespace _15TextRPG.Source
                 //    Console.WriteLine("획득한 아이템 없음.");
                 //}
 
-                Console.ReadLine();
+                Thread.Sleep(1500);
 
             }
         }
@@ -236,7 +236,7 @@ namespace _15TextRPG.Source
                     Console.WriteLine("획득한 아이템 없음.");
                 }
 
-                Console.ReadLine();
+                Thread.Sleep(1500);
             }
         }
     }
