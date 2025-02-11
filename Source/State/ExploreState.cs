@@ -82,11 +82,9 @@ namespace _15TextRPG.Source.State
                     npc.Dir = 4;
                     break;
                 case ConsoleKey.Q:
-                    Console.WriteLine($"check : {(npc.posX, npc.posY - 1)}");
                     HackingMode();
                     break;
                 case ConsoleKey.Z:
-                    Console.WriteLine($"check : {(npc.posX, npc.posY - 1)}");
                     HandleInteraction();
                     break;
             }
@@ -94,9 +92,22 @@ namespace _15TextRPG.Source.State
 
         private void HackingMode()
         {
-            List<NPC> npcs = GameManager.Instance.GameData.CurrentChapter.NPCs;
+            List<NPC> npcs = GameManager.Instance.GameData.CurrentChapter.NPCs.Where(n =>
+            n.StageName == GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name
+            || n.StageName == "Free").ToList();
+
+            foreach(NPC npc in GameManager.Instance.GameData.CurrentChapter.NPCs)
+            {
+                Console.WriteLine($"{npc.Name} : {npc.StageName} : {GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name}");
+            }
             int i = 0;
 
+            if (npcs.Count == 1)
+            {
+                Console.WriteLine("해킹할 NPC가 없습니다.");
+                Console.ReadLine();
+                return;
+            }
             void DrawNpcInfo()
             {
                 Console.Clear();
@@ -104,22 +115,23 @@ namespace _15TextRPG.Source.State
                 Console.WriteLine("해킹 모드로 전환합니다.");
                 Console.WriteLine("키보드 좌우 화살표로 목표를 전환. 'Z' 키를 눌러 결정하세요. 나가기 : ESC");
                 Console.SetCursorPosition(npcs[i].posX, npcs[i].posY);
-                Console.WriteLine($"{npcs[i].Name}: {npcs[i].Desc} ({npcs[i].posX}, {npcs[i].posY})");
+                Console.WriteLine($"{npcs[i].RevealedName}: ({npcs[i].posX}, {npcs[i].posY})");
             }
 
             DrawNpcInfo();
-
             while (true)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.LeftArrow:
-                        if (i > 0) i--;
+                        if (i > 0)
+                            i--;
                         DrawNpcInfo();
                         break;
                     case ConsoleKey.RightArrow:
-                        if (i < npcs.Count - 1) i++;
+                        if (i < npcs.Count - 1)
+                            i++;
                         DrawNpcInfo();
                         break;
                     case ConsoleKey.Z:

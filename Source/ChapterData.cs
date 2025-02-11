@@ -7,6 +7,11 @@ using _15TextRPG.Source.Chapter1;
 
 namespace _15TextRPG.Source
 {
+    public enum ChapterID
+    {
+        Chapter1
+    }
+
     public class ChapterData
     {
         public string Name { get; set; }
@@ -26,18 +31,26 @@ namespace _15TextRPG.Source
 
         public void InitailizeChapter1()
         {
+            // 스테이지 데이터 생성
             StageData stage1 = new StageData("Stage1", 30, 20);
             StageData stage2 = new StageData("Stage2", 30, 20);
+
             AddStage(stage1);
-            stage1.SetTile(10, 10, TileType.Battle, new EnemyTrigger());
-            stage1.SetTile(29, 5, TileType.ChangeStage, new ChangeStage2("Stage2", false));
+            AddStage(stage2);
+
+            //스테이지 1 설정
+            stage1.SetTile(10, 10, TileType.Battle, new EnemyTrigger((10, 10)));
+            stage1.SetTile(29, 5, TileType.ChangeStage, new ChangeStage(stage2, false));
+            stage1.SetTile(0, 5, TileType.ChangeStage, new Exit());
+
             for (int i = 0; i < 29; i++)
             {
                     stage1.SetTile(i, 17, TileType.Wall);
             }
-            NPC p = new NPC("player", "당신 그 자체.", (3, 3));
-            NPC npc1 = new NPC("니콜라스", "메가코프사 경비. 메가코프사의 다양한 '지원'을 받아서 강한 전투력을 얻었지만, 수명은 얼마 남지않았다.", (12, 12));
-            NPC npc2 = new NPC("Hector", "보안실 직원. 항상 과로에 힘들어하고 있다. ", (17, 18));
+
+            NPC p = new NPC("player", "Free", "당신 그 자체.", (3, 3));
+            NPC npc1 = new NPC("Nicolas", "Stage1", "메가코프사 경비. 메가코프사의 다양한 '지원'을 받아서 강한 전투력을 얻었지만, 수명은 얼마 남지않았다.", (12, 12));
+            NPC npc2 = new NPC("Hector", "Stage1", "보안실 직원. 항상 과로에 힘들어하고 있다. ", (17, 18));
             nowPlay = p;
             NPCs.Add(p);
             NPCs.Add(npc1);
@@ -47,10 +60,21 @@ namespace _15TextRPG.Source
             stage1.SetTile(npc2.posX, npc2.posY, TileType.NPC, npc2);
             stage1.SetTile(2, 18, TileType.Password, new PasswordForStage1("password"));
             stage1.SetTile(15, 0, TileType.CCTV, new CCTV());
-            AddStage(stage2);
-            CurrentStage = stage1;
-            BossMob boss = new BossMob();
+
+            //스테이지 2 설정
+            BossMob boss = new BossMob("Boss");
+
             stage2.SetTile(15, 15, TileType.Boss, boss);
+            stage2.SetTile(29, 5, TileType.ChangeStage, new ChangeStage(stage1, true));
+
+            // 현재 스테이지 설정
+            CurrentStage = stage1;
+
+            // 퀘스트 추가
+            Quest killQuest = new Quest("보스를 처치하라", ChapterID.Chapter1, "보스를 처치하세요.");
+            killQuest.Object.Add(new KillEnemyQuest(boss.Name, 1));
+            QuestManager.Instance.AddQuest(killQuest);
+
             AddQuestEvent("FindPass", "패스워드를 찾으세요.");
             AddQuestEvent("DefeatBoss", "보스를 처치하세요.");
         }
@@ -60,7 +84,6 @@ namespace _15TextRPG.Source
             for (int x = 0; x < stage.Width; x++)
             {
                 stage.SetTile(x, 0, TileType.Wall);
-                Console.WriteLine("check   " + x);
                 stage.SetTile(x, stage.Height - 1, TileType.Wall);
             }
             for (int y = 0; y < stage.Height; y++)
@@ -132,23 +155,6 @@ namespace _15TextRPG.Source
         {
             Tiles[y, x] = new Tile(type, obj);
         }
-
-        //public void AddQuestEvent(string questName, string questDesc)
-        //{
-        //    QuestItems.Add(new QuestItem(questName, questDesc, false));
-        //}
-
-        //public void SetQuestEvent(string questName)
-        //{
-        //    for (int i = 0; i < QuestItems.Count; i++)
-        //    {
-        //        if (QuestItems[i].Name == questName)
-        //        {
-        //            QuestItems[i].IsGet = true;
-        //            break;
-        //        }
-        //    }
-        //}
 
     }
 }

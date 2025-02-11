@@ -24,8 +24,6 @@ namespace _15TextRPG.Source.State
             //string imagePath = "D:\\csprac\\15TextRPG\\image\\4.bmp"; // BMP 이미지 파일
 
             string imagePath = "..\\..\\..\\image\\4.bmp"; // BMP 이미지 파일
-            Console.WriteLine(imagePath);
-            Console.ReadLine();
             int width = 50; // 출력할 너비
 
             string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);

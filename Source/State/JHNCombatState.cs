@@ -61,7 +61,7 @@ namespace _15TextRPG.Source.State
                     combatPhy.Attack(GameManager.Instance.GameData.Player, Npc);
                     break;
                 case "0":
-                    GameManager.Instance.ChangeState(new MainMenuState());
+                    GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
                     return;
             }
         }

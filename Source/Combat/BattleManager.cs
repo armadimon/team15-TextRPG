@@ -151,7 +151,7 @@ namespace _15TextRPG.Source.Combat
                 Console.WriteLine($"{i + 1} {skills[0].SkillName}: {skills[0].Description}");
             }
         }
-        public void InBattle()
+        public void InBattle(EnemyTrigger enemy)
         {
             Console.Clear();
             bool Runable = false;
@@ -250,6 +250,10 @@ namespace _15TextRPG.Source.Combat
                 }
                 else
                 {
+                    if (enemy != null)
+                    {
+                        enemy.Defeat();
+                    }
                     GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
                 }
             }

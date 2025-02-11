@@ -36,15 +36,17 @@ namespace _15TextRPG.Source
         public int Health { get; set; }
         public int AttackDamage { get; set; }
         public bool IsHacked { get; set; }
+        public string StageName { get; set; }
 
-        public NPC(string name, string desc, (int, int) npcPos)
+        public NPC(string name, string stageName, string desc, (int, int) npcPos)
         {
             posX = npcPos.Item1;
             posY = npcPos.Item2;
             Dir = 1;
             Name = name;
-            RevealedName = new string('*', name.Length);
+            StageName = stageName;
             Desc = desc;
+            RevealedName = new string('*', name.Length);
             Health = 100;
             AttackDamage = 5;
             DefensePoint = 5;
@@ -80,11 +82,23 @@ namespace _15TextRPG.Source
 
     public class EnemyTrigger : IInteractableObject
     {
+        public int posX { get; set; }
+        public int posY { get; set; }
+
+        public EnemyTrigger((int, int) enemyPos)
+        {
+            posX = enemyPos.Item1;
+            posY = enemyPos.Item2;
+        }
         public void Interact()
         {
-            Console.WriteLine("적이 나타났다! 전투 시작!");
             Console.ReadLine();
-            GameManager.Instance.ChangeState(new BattleMenuState());
+            GameManager.Instance.ChangeState(new BattleMenuState(this));
+        }
+
+        public void Defeat()
+        {
+            GameManager.Instance.GameData.CurrentChapter.CurrentStage.SetTile(posX, posY, TileType.Empty);
         }
     }
 

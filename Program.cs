@@ -16,7 +16,6 @@ namespace _15TextRPG
 
     public class GameManager
     {
-
         private static GameManager instance;
         public static GameManager Instance
         {
@@ -28,8 +27,6 @@ namespace _15TextRPG
             }
         }
 
-
-
         private IGameState currentState;
         private bool isRunning = true;
         public GameData GameData { get; private set; }
@@ -39,8 +36,6 @@ namespace _15TextRPG
         {
             GameData = new GameData();
             currentState = new TitleMenuState();
-            Console.WriteLine(currentState);
-            Console.ReadLine();
             BattleManager = new BattleManager();
         }
 

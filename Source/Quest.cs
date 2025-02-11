@@ -6,42 +6,45 @@ using System.Threading.Tasks;
 
 namespace _15TextRPG.Source
 {
+    public enum QuestStatus
+    {
+        NotStarted,
+        InProgress,
+        Completed
+    }
+
+    public interface IQuestObject
+    {
+        bool IsCompleted { get; }
+        void UpdateProgress();
+    }
+
     public class Quest
     {
-        int ID { get; set; }
-        string Name { get; set; }
-        string Description { get; set; }
-        int Exp { get; set; }
-        int Gold { get; set; }
-        bool IsCompleted { get; set; }
-        bool IsRewarded { get; set; }
+        public string Name { get; }
+        public string Description { get; }
+        public ChapterID ChapterName { get; set; }
+        public List<IQuestObject> Object { get; } = new List<IQuestObject>();
+        public QuestStatus Status { get; private set; }
 
-        public Quest(int id, string name, string description, int exp, int gold)
+        public Quest(string name, ChapterID chapterName, string description)
         {
-            ID = id;
             Name = name;
+            ChapterName = chapterName;
             Description = description;
-            Exp = exp;
-            Gold = gold;
-            IsCompleted = false;
-            IsRewarded = false;
+            Status = QuestStatus.NotStarted;
         }
 
-        public void ShowQuest()
+        public void Start()
         {
-            Console.WriteLine($"[{Name}]");
-            Console.WriteLine($"의뢰 내용 : {Description}");
-            Console.WriteLine($"퀘스트 보상: 경험치 {Exp}, 크레딧 {Gold}");
+            if (Status == QuestStatus.NotStarted)
+                Status = QuestStatus.InProgress;
         }
 
-        public void Complete()
+        public void CheckComplete()
         {
-            IsCompleted = true;
-        }
-
-        public void Reward()
-        {
-            IsRewarded = true;
+            if (Status == QuestStatus.InProgress && Object.All(o => o.IsCompleted))
+                Status = QuestStatus.Completed;
         }
     }
 }
