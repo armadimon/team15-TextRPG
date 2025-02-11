@@ -16,22 +16,22 @@ namespace _15TextRPG.Source.State
             StageName = stageName;
         }
 
-        public void DisplayMenu(GameManager gameManager)
+        public void DisplayMenu()
         {
             Console.Clear();
-            DisplayMap(gameManager.GameData, gameManager.GameData.CurrentChapter.CurrentStage);
+            DisplayMap(GameManager.Instance.GameData, GameManager.Instance.GameData.CurrentChapter.CurrentStage);
         }
 
-        public void HandleInput(GameManager gameManager)
+        public void HandleInput()
         {
-            NPC? npc = gameManager.GameData.CurrentChapter.nowPlay;
+            NPC? npc = GameManager.Instance.GameData.CurrentChapter.nowPlay;
             Console.WriteLine($"check : {(npc.posX, npc.posY - 1)}");
             if (npc == null)
             {
                 Console.WriteLine("nowPlay is null");
                 return;
             }
-            StageData? stage = gameManager.GameData.CurrentChapter.CurrentStage;
+            StageData? stage = GameManager.Instance.GameData.CurrentChapter.CurrentStage;
             if (stage == null)
             {
                 Console.WriteLine("CurrentStage is null");
@@ -83,24 +83,24 @@ namespace _15TextRPG.Source.State
                     break;
                 case ConsoleKey.Q:
                     Console.WriteLine($"check : {(npc.posX, npc.posY - 1)}");
-                    HackingMode(gameManager);
+                    HackingMode();
                     break;
                 case ConsoleKey.Z:
                     Console.WriteLine($"check : {(npc.posX, npc.posY - 1)}");
-                    HandleInteraction(gameManager);
+                    HandleInteraction();
                     break;
             }
         }
 
-        private void HackingMode(GameManager gameManager)
+        private void HackingMode()
         {
-            List<NPC> npcs = gameManager.GameData.CurrentChapter.NPCs;
+            List<NPC> npcs = GameManager.Instance.GameData.CurrentChapter.NPCs;
             int i = 0;
 
             void DrawNpcInfo()
             {
                 Console.Clear();
-                DisplayMap(gameManager.GameData, gameManager.GameData.CurrentChapter.CurrentStage);
+                DisplayMap(GameManager.Instance.GameData, GameManager.Instance.GameData.CurrentChapter.CurrentStage);
                 Console.WriteLine("해킹 모드로 전환합니다.");
                 Console.WriteLine("키보드 좌우 화살표로 목표를 전환. 'Z' 키를 눌러 결정하세요. 나가기 : ESC");
                 Console.SetCursorPosition(npcs[i].posX, npcs[i].posY);
@@ -125,10 +125,10 @@ namespace _15TextRPG.Source.State
                     case ConsoleKey.Z:
                         if (npcs[i].Name == "player" || npcs[i].IsHacked == true)
                         {
-                            gameManager.GameData.CurrentChapter.nowPlay = npcs[i];
+                            GameManager.Instance.GameData.CurrentChapter.nowPlay = npcs[i];
                         }
                         else
-                            gameManager.ChangeState(new JHNCombatState(npcs[i]));
+                            GameManager.Instance.ChangeState(new JHNCombatState(npcs[i]));
                         return;
                     case ConsoleKey.Escape:
                         return;
@@ -137,10 +137,10 @@ namespace _15TextRPG.Source.State
         }
 
 
-        private void HandleInteraction(GameManager gameManager)
+        private void HandleInteraction()
         {
-            ChapterData chapter = gameManager.GameData.CurrentChapter;
-            NPC? npc = gameManager.GameData.CurrentChapter.nowPlay;
+            ChapterData chapter = GameManager.Instance.GameData.CurrentChapter;
+            NPC? npc = GameManager.Instance.GameData.CurrentChapter.nowPlay;
             if (npc == null)
             {
                 Console.WriteLine("nowPlay is null");
@@ -175,7 +175,7 @@ namespace _15TextRPG.Source.State
 
             if (targetTile.Object != null)
             {
-                targetTile.Object.Interact(gameManager);
+                targetTile.Object.Interact();
             }
             else
             {
@@ -183,9 +183,9 @@ namespace _15TextRPG.Source.State
             }
         }
 
-        public void CCTVMode(GameManager gameManager)
+        public void CCTVMode()
         {
-            List<StageData> stages = gameManager.GameData.CurrentChapter.Stages;
+            List<StageData> stages = GameManager.Instance.GameData.CurrentChapter.Stages;
 
             ConsoleKeyInfo keyInfo;
             int i = 0;
@@ -198,13 +198,13 @@ namespace _15TextRPG.Source.State
                     case ConsoleKey.LeftArrow:
                         if (i > stages.Count - 1)
                             i = 0;
-                        DisplayMap(gameManager.GameData, stages[i]);
+                        DisplayMap(GameManager.Instance.GameData, stages[i]);
                         i++;
                         break;
                     case ConsoleKey.RightArrow:
                         if (i > stages.Count - 1)
                             i = 0;
-                        DisplayMap(gameManager.GameData, stages[i]);
+                        DisplayMap(GameManager.Instance.GameData, stages[i]);
                         i++;
                         break;
                 }

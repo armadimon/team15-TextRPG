@@ -23,7 +23,7 @@ namespace _15TextRPG.Source.State
             Npc = npc;
         }
 
-        public void DisplayMenu(GameManager gameManager)
+        public void DisplayMenu()
         {
             Console.Clear();
             Console.WriteLine("[해킹 시작]");
@@ -41,11 +41,11 @@ namespace _15TextRPG.Source.State
             Console.WriteLine("0. 도망");
         }
 
-        public void HandleInput(GameManager gameManager)
+        public void HandleInput()
         {
             if (Npc.Health <= 0)
             {
-                gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
+                GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
                 return;
             }
             string input = Console.ReadLine() ?? "";
@@ -55,13 +55,13 @@ namespace _15TextRPG.Source.State
                     combat.ScanEnemy(Npc);
                     break;
                 case "2":
-                    combat.Hack(gameManager.GameData.Player, gameManager.GameData.CurrentChapter, Npc);
+                    combat.Hack(GameManager.Instance.GameData.Player, GameManager.Instance.GameData.CurrentChapter, Npc);
                     break;
                 case "3":
-                    combatPhy.Attack(gameManager.GameData.Player, Npc);
+                    combatPhy.Attack(GameManager.Instance.GameData.Player, Npc);
                     break;
                 case "0":
-                    gameManager.ChangeState(new MainMenuState());
+                    GameManager.Instance.ChangeState(new MainMenuState());
                     return;
             }
         }

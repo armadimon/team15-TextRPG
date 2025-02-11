@@ -12,7 +12,7 @@ namespace _15TextRPG.Source.State
         int commandIndex = -1;
         bool isHacked = false;
 
-        public void DisplayMenu(GameManager gameManager)
+        public void DisplayMenu()
         {
             Console.OutputEncoding = Encoding.UTF8;
             Console.BackgroundColor = ConsoleColor.Black;
@@ -31,7 +31,7 @@ namespace _15TextRPG.Source.State
         }
 
 
-        public void HandleInput(GameManager gameManager)
+        public void HandleInput()
         {
             int totalTime = limitTimeSec * 100; // 해킹 제한 시간 (초)
             int barLength = 3000; // 진행 바 길이
@@ -66,7 +66,7 @@ namespace _15TextRPG.Source.State
                         if (HackingProcess(command))
                         {
                             Console.WriteLine("Hacking Success!");
-                            gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
+                            GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
                             return;
                         }
                         commands.Add(command);

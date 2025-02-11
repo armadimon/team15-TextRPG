@@ -15,6 +15,8 @@ namespace _15TextRPG.Source
         public List<ChapterData> Chapters { get; set; }
         public ChapterData? CurrentChapter { get; set; }
 
+        public List<Quest> Quests { get; set; }
+
         public GameData()
         {
             Player = new Player("Default");
@@ -30,7 +32,14 @@ namespace _15TextRPG.Source
                 new Enemy("Omnic_C", 1, "abc d e f ", 5, 20, 30, new List<Item>()),
             };
             Chapters = new List<ChapterData> { chapter1 };
+
+            Quests = new List<Quest>();
             CurrentChapter = chapter1;
+        }
+
+        public void AddQuest(Quest quest)
+        {
+            Quests.Add(quest);
         }
 
         public void ChangeChapter(string chapterName)

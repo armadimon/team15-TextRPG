@@ -22,7 +22,7 @@ namespace _15TextRPG.Source.Chapter1
             this.nextStage = nextStage;
         }
 
-        public void Interact(GameManager gameManager)
+        public void Interact()
         {
             Console.WriteLine("보안이 걸린 문이다.");
             Console.WriteLine("1. 억지로 연다");
@@ -31,10 +31,10 @@ namespace _15TextRPG.Source.Chapter1
             switch (input)
             {
                 case "1":
-                    if (gameManager.GameData.Player.AttackDamage > 5)
+                    if (GameManager.Instance.GameData.Player.AttackDamage > 5)
                     {
                         Console.WriteLine("문을 열었습니다.");
-                        gameManager.GameData.CurrentChapter.CurrentStage = gameManager.GameData.CurrentChapter.Stages[1];
+                        GameManager.Instance.GameData.CurrentChapter.CurrentStage = GameManager.Instance.GameData.CurrentChapter.Stages[1];
                     }
                     else
                     {
@@ -43,11 +43,11 @@ namespace _15TextRPG.Source.Chapter1
                     Console.ReadLine();
                     break;
                 case "2":
-                    if (gameManager.GameData.CurrentChapter.QuestItems.Find(q => q.Name == "FindPass").IsGet == true)
+                    if (GameManager.Instance.GameData.CurrentChapter.QuestItems.Find(q => q.Name == "FindPass").IsGet == true)
                     {
                         Console.WriteLine("문이 열렸습니다.");
                         Console.ReadLine();
-                        gameManager.GameData.CurrentChapter.CurrentStage = gameManager.GameData.CurrentChapter.Stages[1];
+                        GameManager.Instance.GameData.CurrentChapter.CurrentStage = GameManager.Instance.GameData.CurrentChapter.Stages[1];
                     }
                     else
                     {
@@ -72,19 +72,19 @@ namespace _15TextRPG.Source.Chapter1
             HackState = new HackState(HackingProcess, 20);
         }
 
-        public void Interact(GameManager gameManager)
+        public void Interact()
         {
             if (IsHacked == true)
             {
                 Console.WriteLine("1. 살펴보기");
                 Console.WriteLine("2. 그만두기");
                 string input = Console.ReadLine() ?? "";
-                ExploreState temp = new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name);
+                ExploreState temp = new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name);
 
                 switch (input)
                 {
                     case "1":
-                        temp.CCTVMode(gameManager);
+                        temp.CCTVMode();
                         break;
                     case "2":
                         break;
@@ -95,12 +95,12 @@ namespace _15TextRPG.Source.Chapter1
                 Console.WriteLine("1. 접근 권한 얻기");
                 Console.WriteLine("2. 그만두기");
                 string input = Console.ReadLine() ?? "";
-                ExploreState temp = new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name);
+                ExploreState temp = new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name);
 
                 switch (input)
                 {
                     case "1":
-                        gameManager.ChangeState(HackState);
+                        GameManager.Instance.ChangeState(HackState);
                         break;
                     case "2":
                         break;
@@ -133,10 +133,10 @@ namespace _15TextRPG.Source.Chapter1
 
     public class EnemyTrigger : IInteractableObject
     {
-        public void Interact(GameManager gameManager)
+        public void Interact()
         {
             Console.WriteLine("적이 나타났다! 전투 시작!");
-            gameManager.ChangeState(new CombatState());
+            GameManager.Instance.ChangeState(new CombatState());
         }
     }
 
@@ -149,14 +149,14 @@ namespace _15TextRPG.Source.Chapter1
             this.password = password;
         }
 
-        public void Interact(GameManager gameManager)
+        public void Interact()
         {
             Console.WriteLine($"패스워드를 입력하세요.");
             string pass = Console.ReadLine() ?? "";
             if (pass == password)
             {
                 Console.WriteLine("권한을 획득하였습니다!");
-                gameManager.GameData.CurrentChapter.CompleteQuest("FindPass");
+                GameManager.Instance.GameData.CurrentChapter.CompleteQuest("FindPass");
                 Console.ReadLine();
             }
         }
@@ -174,7 +174,7 @@ namespace _15TextRPG.Source.Chapter1
             HackState = new HackState(HackingProcess, 20);
         }
 
-        public void Interact(GameManager gameManager)
+        public void Interact()
         {
             if (IsHacked == true)
             {
@@ -185,7 +185,7 @@ namespace _15TextRPG.Source.Chapter1
                     case "1":
                         Console.WriteLine($"미션 완료!!");
                         Console.ReadLine();
-                        gameManager.ChangeState(new MainMenuState());
+                        GameManager.Instance.ChangeState(new MainMenuState());
                         break;
                 }
             }
@@ -199,13 +199,13 @@ namespace _15TextRPG.Source.Chapter1
                         case "1":
                             Console.WriteLine($"NPC: 죽인다!!");
                             Console.ReadLine();
-                            gameManager.ChangeState(new BattleMenuState());
+                            GameManager.Instance.ChangeState(new BattleMenuState());
                             break;
                         case "2":
-                            gameManager.ChangeState(HackState);
+                            GameManager.Instance.ChangeState(HackState);
                             if (IsHacked == true)
                             {
-                                gameManager.GameData.CurrentChapter.CompleteQuest("DefeatBoss");
+                                GameManager.Instance.GameData.CurrentChapter.CompleteQuest("DefeatBoss");
                             }
                             break;
                     }

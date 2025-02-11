@@ -9,7 +9,7 @@ namespace _15TextRPG.Source.State
     internal class CombatState : IGameState
     {
 
-        public void DisplayMenu(GameManager gameManager)
+        public void DisplayMenu()
         {
             Console.Clear();
             Console.WriteLine("\n1. 승리");
@@ -18,7 +18,7 @@ namespace _15TextRPG.Source.State
             Console.WriteLine("0. 나가기");
         }
 
-        public void HandleInput(GameManager gameManager)
+        public void HandleInput()
         {
             Console.Write("\n원하시는 행동을 입력해주세요. >> ");
             string input = Console.ReadLine() ?? "";
@@ -26,15 +26,15 @@ namespace _15TextRPG.Source.State
             switch (input)
             {
                 case "1":
-                    gameManager.GameData.Player.Health--;
-                    Console.WriteLine($"{gameManager.GameData.Player.Health}");
-                    gameManager.ChangeState(new BattleMenuState());
+                    GameManager.Instance.GameData.Player.Health--;
+                    Console.WriteLine($"{GameManager.Instance.GameData.Player.Health}");
+                    GameManager.Instance.ChangeState(new BattleMenuState());
                     break;
                 case "2":
-                    //gameManager.ChangeState(new JHNCombatState());
+                    //GameManager.Instance.ChangeState(new JHNCombatState());
                     break;
                 case "0":
-                    gameManager.ChangeState(new MainMenuState());
+                    GameManager.Instance.ChangeState(new MainMenuState());
                     break;
             }
         }

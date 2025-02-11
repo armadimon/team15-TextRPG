@@ -37,7 +37,7 @@ namespace _15TextRPG.Source
             }
             NPC p = new NPC("player", "당신 그 자체.", (3, 3));
             NPC npc1 = new NPC("니콜라스", "메가코프사 경비. 메가코프사의 다양한 '지원'을 받아서 강한 전투력을 얻었지만, 수명은 얼마 남지않았다.", (12, 12));
-            NPC npc2 = new NPC("헥터 ", "메가코프사 경비. 메가코프사의 다양한 '지원'을 받아서 강한 전투력을 얻었지만, 수명은 얼마 남지않았다.", (17, 18));
+            NPC npc2 = new NPC("Hector", "보안실 직원. 항상 과로에 힘들어하고 있다. ", (17, 18));
             nowPlay = p;
             NPCs.Add(p);
             NPCs.Add(npc1);
