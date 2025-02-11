@@ -10,42 +10,17 @@ using System.Xml.Linq;
 
 namespace _15TextRPG.Source
 {
-    public readonly struct ItemIdentifier
+    // Action을 serialize하기 위해 string으로 변환하는 것에 이점이 있을까?
+    public class VolatilityInventory(IInventoryOwner _owner)
     {
-        public string ItemType { get; init; }
-        public int Tag { get; init; }
-        public string Name { get; init; }
-    }
-
-    public class Inventory(IInventoryOwner _owner)
-    {
-        private Dictionary<ItemIdentifier, int> Items { get; set; } = [];
+        private Dictionary<IItem, int> Items { get; set; } = [];
         private readonly IInventoryOwner owner = _owner;
-
-        public int GetItemNum(IItem item)
-        {
-            ItemIdentifier II = new()
-            {
-                ItemType = typeof(IItem).ToString(),
-                Tag = item.Tag,
-                Name = item.Name,
-            };
-
-            return Items[II];
-        }
-
+        public int GetItemNum(IItem item) => Items[item];
         public bool Use(IItem item)
         {
-            ItemIdentifier II = new()
+            if (Items.TryGetValue(item, out int value))
             {
-                ItemType = typeof(IItem).ToString(),
-                Tag = item.Tag,
-                Name = item.Name,
-            };
-
-            if (Items.ContainsKey(II))
-            {
-                if (Items[II] > 0)
+                if (value > 0)
                 {
                     item.Use();
                 }
@@ -63,7 +38,7 @@ namespace _15TextRPG.Source
                 {
                     if (_.Value > 0)
                     {
-                        
+                        _.Key.Use();
                     }
 
                     return true;
@@ -80,6 +55,7 @@ namespace _15TextRPG.Source
                 {
                     if (_.Value > 0)
                     {
+                        _.Key.Use();
                     }
 
                     return true;
@@ -88,7 +64,7 @@ namespace _15TextRPG.Source
             return false;
         }
 
-        public IEnumerable<KeyValuePair<ItemIdentifier, int>> Find(IItem _item)
+        public IEnumerable<KeyValuePair<IItem, int>> Find(IItem _item)
         {
             var query = from item in Items
                         where item.Key.GetType() == _item.GetType()
@@ -99,20 +75,13 @@ namespace _15TextRPG.Source
 
         public void Add(IItem item, int num = 1) 
         {
-            ItemIdentifier II = new()
+            if (Items.ContainsKey(item))
             {
-                ItemType = typeof(IItem).ToString(),
-                Tag = item.Tag,
-                Name = item.Name,
-            };
-
-            if (Items.ContainsKey(II))
-            {
-                Items[II] += num;
+                Items[item] += num;
             }
             else
             {
-                Items[II] = num;
+                Items[item] = num;
             }
         }
 
@@ -138,7 +107,7 @@ namespace _15TextRPG.Source
             }
         }
 
-        public void Add(Inventory inventory)
+        public void Add(VolatilityInventory inventory)
         {
             foreach (var item in inventory.Items)
             {
@@ -153,30 +122,15 @@ namespace _15TextRPG.Source
             }
         }
 
-        public void Remove(IItem item)
-        {
-            ItemIdentifier II = new()
-            {
-                ItemType = typeof(IItem).ToString(),
-                Tag = item.Tag,
-                Name = item.Name,
-            };
-            Items.Remove(II);
-        }
+        public void Remove(IItem item) => Items.Remove(item);
         public void Subtract(IItem item, int num = 1)
         {
-            ItemIdentifier II = new()
+            if (Items.ContainsKey(item))
             {
-                ItemType = typeof(IItem).ToString(),
-                Tag = item.Tag,
-                Name = item.Name,
-            };
-            if (Items.ContainsKey(II))
-            {
-                Items[II] -= num;
-                if (Items[II] < 0)
+                Items[item] -= num;
+                if (Items[item] < 0)
                 {
-                    Items.Remove(II);
+                    Items.Remove(item);
                 }
             }
         }
@@ -211,9 +165,9 @@ namespace _15TextRPG.Source
             }
         }
 
-        public static Inventory operator +(Inventory a, Inventory b)
+        public static VolatilityInventory operator +(VolatilityInventory a, VolatilityInventory b)
         {
-            Inventory result = new(a.owner);
+            VolatilityInventory result = new(a.owner);
 
             foreach (var kvp in a.Items)
                 result.Items[kvp.Key] = kvp.Value;
@@ -229,46 +183,32 @@ namespace _15TextRPG.Source
             return result;
         }
 
-        public static Inventory operator +(Inventory a, IItem b)
+        public static VolatilityInventory operator +(VolatilityInventory a, IItem b)
         {
-            Inventory result = new(a.owner);
-
-            ItemIdentifier II = new()
-            {
-                ItemType = typeof(IItem).ToString(),
-                Tag = b.Tag,
-                Name = b.Name,
-            };
+            VolatilityInventory result = new(a.owner);
 
             foreach (var kvp in a.Items)
                 result.Items[kvp.Key] = kvp.Value;
 
-            if (result.Items.ContainsKey(II))
-                result.Items[II] += 1;
+            if (result.Items.ContainsKey(b))
+                result.Items[b] += 1;
             else
-                result.Items[II] = 1;
+                result.Items[b] = 1;
 
             return result;
         }
 
-        public static Inventory operator -(Inventory a, IItem b)
+        public static VolatilityInventory operator -(VolatilityInventory a, IItem b)
         {
-            Inventory result = new(a.owner);
-
-            ItemIdentifier II = new()
-            {
-                ItemType = typeof(IItem).ToString(),
-                Tag = b.Tag,
-                Name = b.Name,
-            };
+            VolatilityInventory result = new(a.owner);
 
             foreach (var kvp in a.Items)
                 result.Items[kvp.Key] = kvp.Value;
 
-            if (result.Items.ContainsKey(II))
+            if (result.Items.ContainsKey(b))
                 result.Remove(b);
             else
-                result.Items[II] = 1;
+                result.Items[b] = 1;
 
             return result;
         }

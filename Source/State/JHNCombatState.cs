@@ -52,7 +52,7 @@ namespace _15TextRPG.Source.State
             switch (input)
             {
                 case "1":
-                    combat.ScanEnemy(Npc);
+                    combat.ScanEnemy(gameManager.GameData.Player, Npc);
                     break;
                 case "2":
                     combat.Hack(gameManager.GameData.Player, gameManager.GameData.CurrentChapter, Npc);

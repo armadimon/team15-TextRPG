@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using _15TextRPG.Source.Combat;
 
@@ -14,6 +15,7 @@ namespace _15TextRPG.Source
         public string Description { get; set; }
         public double AttackDamage { get; set; }
         public double SkillDamage { get; set; }
+        public int Intelligence { get; set; }
         public int DefensePoint { get; set; }
         public int SkillDefensePoint { get; set; }
         public int Str { get; set; }
@@ -33,6 +35,7 @@ namespace _15TextRPG.Source
         public Item? Armor { get; set; }
 
         public Inventory Inventory { get; set; }
+
 
         public Player(string name, int description) // 힘캐
         {
@@ -159,7 +162,26 @@ namespace _15TextRPG.Source
                 gameManager.BattleManager.ShowMonster(false, 0, 9);
                 Console.WriteLine();
                 Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(이/가) 쓰러졌습니다.");
-                Thread.Sleep(1500);
+
+                Reward reward = gameManager.BattleManager.monsters[i].GetReward();
+                if (reward.Items.Count > 0)
+                {
+                    Console.WriteLine("아이템 획득:");
+                    foreach (var item in reward.Items)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine($"{item.Name}");
+                        Console.ResetColor();
+                        gameManager.GameData.Player.Inventory.Add(item);
+                    }
+                }
+                //else
+                //{
+                //    Console.WriteLine("획득한 아이템 없음.");
+                //}
+
+                Console.ReadLine();
+
             }
         }
 
@@ -189,12 +211,32 @@ namespace _15TextRPG.Source
                     gameManager.GameData.Player.Exp %= gameManager.GameData.Player.MaxExp;
                 }
 
+                
+
                 Console.Clear();
                 gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
                 gameManager.BattleManager.ShowMonster(false, 0, 9);
                 Console.WriteLine();
                 Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(이/가) 쓰러졌습니다.");
-                Thread.Sleep(1500);
+
+                Reward reward = gameManager.BattleManager.monsters[i].GetReward();
+                if (reward.Items.Count > 0)
+                {
+                    Console.WriteLine("아이템 획득:");
+                    foreach (var item in reward.Items)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine($"{item.Name}");
+                        Console.ResetColor();
+                        gameManager.GameData.Player.Inventory.Add(item);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("획득한 아이템 없음.");
+                }
+
+                Console.ReadLine();
             }
         }
     }
