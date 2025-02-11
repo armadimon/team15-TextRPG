@@ -281,7 +281,7 @@ namespace _15TextRPG.Source.Combat
             Console.WriteLine($"{accuracy * 100:F1}%");
             Console.ResetColor();
 
-            if (accuracy > 0.7)
+            if (accuracy > 0.6)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("\n정보 확보 완료!");
@@ -297,8 +297,22 @@ namespace _15TextRPG.Source.Combat
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"{GetRevealedEnemyName(enemy)}");
             Console.ResetColor();
+
+            Console.WriteLine("\n엔터를 눌러 정보를 저장합니다.");
+            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine();
+            Console.WriteLine("+---------------------------------+");
+            Console.WriteLine("|  정보를 저장합니다...           |");
+            Console.WriteLine("|  시스템에서 빠져나오는중...     |");
+            Console.WriteLine("+---------------------------------+\n");
+            Console.ResetColor();
+
             Console.WriteLine("아무 키나 입력해주세요");
             Console.ReadKey();
+
         }
 
         private string ReadInputWithTimeout(int timeoutSeconds)
