@@ -9,6 +9,6 @@ namespace _15TextRPG.Source.State
     internal interface IHackable
     {
         HackState HackState { get; }
-        void HackingProcess(string userCommand);
+        bool HackingProcess(string userCommand);
     }
 }
