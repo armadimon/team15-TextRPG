@@ -67,7 +67,7 @@ namespace _15TextRPG.Source.Chapter1
         public CCTV()
         {
             IsHacked = false;
-            HackState = new HackState(HackingProcess);
+            HackState = new HackState(HackingProcess, 20);
         }
 
         public void Interact(GameManager gameManager)
@@ -106,7 +106,7 @@ namespace _15TextRPG.Source.Chapter1
             }
         }
 
-        public void HackingProcess(string command)
+        public bool HackingProcess(string command)
         {
             Console.WriteLine($"Executing command: {command}");
             if (command == "ITEM ICE")
@@ -122,8 +122,9 @@ namespace _15TextRPG.Source.Chapter1
                     Thread.Sleep(50);
                 }
                 IsHacked = true;
-                HackState.checkHacked();
+                return (true);
             }
+            return (false);
         }
     }
 

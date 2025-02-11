@@ -59,7 +59,12 @@ namespace _15TextRPG.Source.State
 
                     if (key.Key == ConsoleKey.Enter)
                     {
-                        if (HackingProcess(command)) return;
+                        if (HackingProcess(command))
+                        {
+                            Console.WriteLine("Hacking Success!");
+                            gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
+                            return;
+                        }
                         commands.Add(command);
                         Console.WriteLine();
                         command = "";
