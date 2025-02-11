@@ -111,8 +111,7 @@ namespace _15TextRPG.Source.Chapter1
             Console.WriteLine($"Executing command: {command}");
             if (command == "ITEM ICE")
             {
-                string msg = "아이스 브레이커를 사용하셨습니다.";
-                foreach (char c in msg)
+                foreach (char c in "아이스 브레이커를 사용하셨습니다.")
                 {
                     Console.Write(c);
                     Thread.Sleep(50);
