@@ -43,9 +43,11 @@ namespace _15TextRPG.Source.Chapter1
                     Console.ReadLine();
                     break;
                 case "2":
-                    if (isOpen)
+                    if (gameManager.GameData.CurrentChapter.QuestItems.Find(q => q.Name == "FindPass").IsGet == true)
                     {
-                        //ChangeStage(gameManager);
+                        Console.WriteLine("문이 열렸습니다.");
+                        Console.ReadLine();
+                        gameManager.GameData.CurrentChapter.CurrentStage = gameManager.GameData.CurrentChapter.Stages[1];
                     }
                     else
                     {
