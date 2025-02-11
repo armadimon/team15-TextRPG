@@ -4,13 +4,13 @@ using System.Reflection.Metadata;
 namespace _15TextRPG.Source
 {
     //[Serializable]
-    public abstract class IItem(Action _action)
+    public abstract class IItem(int tag, int value, string name, Action _action)
     {
         // Tag 1 = AttackPoint, Tag 2 = DeffencePoint
-        public int Tag { get; }
+        public int Tag { get; } = tag;
         public int Stat { get; }
-        public int Value { get; }
-        public string Name { get; } = string.Empty;
+        public int Value { get; } = value;
+        public string Name { get; } = name;
         public string Desc { get; } = string.Empty;
         public Action action = _action;
 
@@ -25,9 +25,9 @@ namespace _15TextRPG.Source
         }
     }
 
-    class ICEBreaker : IItem 
+    class ICEBreaker : IItem
     {
-        public ICEBreaker(Action _action) : base(_action)
+        public ICEBreaker(int tag, int value, string name, Action _action) : base(tag, value, name, _action)
         {
         }
     }

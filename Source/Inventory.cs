@@ -16,15 +16,48 @@ namespace _15TextRPG.Source
         public int GetItemNum(IItem item) => Items[item];
         public bool Use(IItem item)
         {
-            if(Items.ContainsKey(item))
+            if (Items.TryGetValue(item, out int value))
             {
-                if (Items[item] > 0)
+                if (value > 0)
                 {
                     item.Use();
-                    Subtract(item);
                 }
-                
+
                 return true;
+            }
+            return false; // 아이템 사용 실패
+        }
+
+        public bool Use(string name)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Name == name)
+                {
+                    if (_.Value > 0)
+                    {
+                        _.Key.Use();
+                    }
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool Use(int tag)
+        {
+            foreach (var _ in Items)
+            {
+                if (_.Key.Tag == tag)
+                {
+                    if (_.Value > 0)
+                    {
+                        _.Key.Use();
+                    }
+
+                    return true;
+                }
             }
             return false;
         }
