@@ -13,6 +13,7 @@ namespace _15TextRPG.Source
         public string Description { get; set; }
         public double AttackDamage { get; set; }
         public double SkillDamage { get; set; }
+        public int Intelligence { get; set; }
         public int DefensePoint { get; set; }
         public int SkillDefensePoint { get; set; }
         public int MaxHP { get; set; }
@@ -38,6 +39,7 @@ namespace _15TextRPG.Source
             Description = "용병";
             AttackDamage = 50;
             SkillDamage = 50;
+            Intelligence = 0;
             DefensePoint = 5;
             MaxHP = 100;
             Health = MaxHP;
