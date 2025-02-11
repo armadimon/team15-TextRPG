@@ -12,12 +12,12 @@ namespace _15TextRPG.Source.State
     {
         public void DisplayMenu(GameManager gameManager)
         {
-            gameManager.BattleManager.InBattle(gameManager);
         }
 
         public void HandleInput(GameManager gameManager)
         {
-            gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
+            gameManager.BattleManager.InBattle(gameManager);
+            //gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
         }        
     }
 }

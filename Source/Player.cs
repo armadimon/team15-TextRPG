@@ -74,21 +74,21 @@ namespace _15TextRPG.Source
             int j = random.Next(90, 111);
             Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(을/를) 공격합니다");
             Console.ReadLine();
-            gameManager.BattleManager.monsters[i].Health -= Math.Round(gameManager.Player.AttackDamage * j / 100) + gameManager.BattleManager.monsters[i].ArmorRisistence;
+            gameManager.BattleManager.monsters[i].Health -= Math.Round(gameManager.GameData.Player.AttackDamage * j / 100) + gameManager.BattleManager.monsters[i].ArmorRisistence;
 
             if (gameManager.BattleManager.monsters[i].Health <= 0)
             {
                 gameManager.BattleManager.monsters[i].Health = 0;
-                gameManager.Player.Exp += gameManager.BattleManager.monsters[i].Level;
+                gameManager.GameData.Player.Exp += gameManager.BattleManager.monsters[i].Level;
 
-                if (gameManager.Player.Exp >= gameManager.Player.MaxExp)
+                if (gameManager.GameData.Player.Exp >= gameManager.GameData.Player.MaxExp)
                 {
-                    gameManager.Player.Level += gameManager.Player.Exp / gameManager.Player.MaxExp;
-                    gameManager.Player.Exp %= gameManager.Player.MaxExp;
+                    gameManager.GameData.Player.Level += gameManager.GameData.Player.Exp / gameManager.GameData.Player.MaxExp;
+                    gameManager.GameData.Player.Exp %= gameManager.GameData.Player.MaxExp;
                 }
 
                 Console.Clear();
-                gameManager.BattleManager.BattleStat(gameManager.Player);
+                gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
                 gameManager.BattleManager.ShowMonster(false, 0, 9);
                 Console.WriteLine();
                 Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(이/가) 쓰러졌습니다.");
@@ -102,28 +102,28 @@ namespace _15TextRPG.Source
             Console.ReadLine();
             if(skill.SkillType == monster.Type)
             {
-                gameManager.BattleManager.monsters[i].Health -= (gameManager.Player.SkillDamage + skill.BonusDamage) - gameManager.BattleManager.monsters[i].SkillRisistence;
+                gameManager.BattleManager.monsters[i].Health -= (gameManager.GameData.Player.SkillDamage + skill.BonusDamage) - gameManager.BattleManager.monsters[i].SkillRisistence;
             }
             else
             {
-                gameManager.BattleManager.monsters[i].Health -= gameManager.Player.SkillDamage - gameManager.BattleManager.monsters[i].SkillRisistence;
+                gameManager.BattleManager.monsters[i].Health -= gameManager.GameData.Player.SkillDamage - gameManager.BattleManager.monsters[i].SkillRisistence;
             }
 
-            gameManager.Player.MP -= skill.SkillCost;
+            gameManager.GameData.Player.MP -= skill.SkillCost;
 
             if (gameManager.BattleManager.monsters[i].Health <= 0)
             {
                 gameManager.BattleManager.monsters[i].Health = 0;
-                gameManager.Player.Exp += gameManager.BattleManager.monsters[i].Level;
+                gameManager.GameData.Player.Exp += gameManager.BattleManager.monsters[i].Level;
 
-                if (gameManager.Player.Exp >= gameManager.Player.MaxExp)
+                if (gameManager.GameData.Player.Exp >= gameManager.GameData.Player.MaxExp)
                 {
-                    gameManager.Player.Level += gameManager.Player.Exp / gameManager.Player.MaxExp;
-                    gameManager.Player.Exp %= gameManager.Player.MaxExp;
+                    gameManager.GameData.Player.Level += gameManager.GameData.Player.Exp / gameManager.GameData.Player.MaxExp;
+                    gameManager.GameData.Player.Exp %= gameManager.GameData.Player.MaxExp;
                 }
 
                 Console.Clear();
-                gameManager.BattleManager.BattleStat(gameManager.Player);
+                gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
                 gameManager.BattleManager.ShowMonster(false, 0, 9);
                 Console.WriteLine();
                 Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(이/가) 쓰러졌습니다.");
