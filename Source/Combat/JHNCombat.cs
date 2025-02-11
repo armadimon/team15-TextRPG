@@ -24,6 +24,134 @@ namespace _15TextRPG.Source.Combat
 
         }
 
+        public void ScanEnemy(NPC enemy)
+        {
+            // 이미 모든 정보를 얻었다면 추가 스캔 불가
+            if (revealedLetters >= enemy.Name.Length)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine();
+                Console.WriteLine("+---------------------------------+");
+                Console.WriteLine("|  이미 모든 정보 알아냄!         |");
+                Console.WriteLine("|  더이상 얻을 정보가 없다        |");
+                Console.WriteLine("+---------------------------------+\n");
+                Console.ResetColor();
+                Console.WriteLine("이미 모든 정보를 알아냈습니다: " + enemy.Name);
+                Console.WriteLine("아무 키나 입력해주세요");
+                Console.ReadKey();
+                return;
+            }
+
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine();
+            Console.WriteLine("+---------------------------------+");
+            Console.WriteLine("|  적 탐지됨!                     |");
+            Console.WriteLine("|  암호 시스템에 접근 중...       |");
+            Console.WriteLine("+---------------------------------+\n");
+            Console.ResetColor();
+
+
+            Console.Write("\n적의 시스템을 스캔합니다...[");
+            Console.ForegroundColor = ConsoleColor.Green;
+
+            int scanTime = 1; // 스캔 시간
+            int barLength = 10; // 게이지 길이
+            for (int i = 0; i <= barLength; i++)
+            {
+
+                Console.Write("■"); // 게이지 증가
+                Thread.Sleep(scanTime * 100);
+            }
+            Console.ResetColor();
+            Console.WriteLine("]\n완료!");
+
+            Console.Write($"\n적의 보안 설명:");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{enemy.Desc}");
+
+            Console.Write($"{combatCount}");
+            Console.ResetColor();
+            Console.WriteLine($"초 내에 정확히 입력하세요");
+
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            Console.Write("\n보안 키 입력: ");
+            string playerInput = ReadInputWithTimeout(combatCount); // combatCount동안 입력 받기
+
+
+            if (string.IsNullOrWhiteSpace(playerInput))
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine();
+                Console.WriteLine("+---------------------------------+");
+                Console.WriteLine("|  스캔 실패!                     |");
+                Console.WriteLine("|  시스템에서 빠져나오는중...     |");
+                Console.WriteLine("+---------------------------------+\n");
+                Console.ResetColor();
+
+                Console.WriteLine("\n시간을 초과했습니다! 스캔 실패...");
+                Console.WriteLine("아무 키나 입력해주세요");
+                Console.ReadKey();
+                return;
+            }
+
+            // 입력 정확도를 계산
+            double accuracy = CalculateTextAccuracy(playerInput, enemy.Desc);
+
+            // 정확도에 비례하여 적의 이름 공개량 증가
+            int revealedAmount = (int)(accuracy * enemy.Name.Length);
+            if (revealedAmount < 1) revealedAmount = 1; // 최소 1글자 공개
+
+            revealedLetters += revealedAmount;
+            if (revealedLetters > enemy.Name.Length)
+                revealedLetters = enemy.Name.Length; // 초과 방지
+
+            // revealedAmount만큼 적 이름 공개
+            RevealRandomName(revealedAmount, enemy);
+
+            Console.WriteLine($"\n입력 정확도: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+
+            Console.WriteLine($"{accuracy * 100:F1}%");
+            Console.ResetColor();
+
+            if (accuracy > 0.6)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("\n정보 확보 완료!");
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\n불완전한 정보를 확보");
+                Console.ResetColor();
+            }
+            enemy.RevealedName = GetRevealedEnemyName(enemy);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{GetRevealedEnemyName(enemy)}");
+            Console.ResetColor();
+
+            Console.WriteLine("\n엔터를 눌러 정보를 저장합니다.");
+            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine();
+            Console.WriteLine("+---------------------------------+");
+            Console.WriteLine("|  정보를 저장합니다...           |");
+            Console.WriteLine("|  시스템에서 빠져나오는중...     |");
+            Console.WriteLine("+---------------------------------+\n");
+            Console.ResetColor();
+
+            Console.WriteLine("아무 키나 입력해주세요");
+            Console.ReadKey();
+
+        }
+
         public void Hack(Player player, ChapterData chap, NPC enemy)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -67,6 +195,7 @@ namespace _15TextRPG.Source.Combat
                 Console.WriteLine($"\n{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
                 enemy.Health = 0;
                 chap.nowPlay = enemy;
+                enemy.RevealedName = enemy.Name;
             }
             else
             {
@@ -185,120 +314,7 @@ namespace _15TextRPG.Source.Combat
 
             return selectedChar;
         }
-
-        public void ScanEnemy(NPC enemy)
-        {
-            // 이미 모든 정보를 얻었다면 추가 스캔 불가
-            if (revealedLetters >= enemy.Name.Length)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine();
-                Console.WriteLine("+---------------------------------+");
-                Console.WriteLine("|  이미 모든 정보 알아냄!         |");
-                Console.WriteLine("|  더이상 얻을 정보가 없다        |");
-                Console.WriteLine("+---------------------------------+\n");
-                Console.ResetColor();
-                Console.WriteLine("이미 모든 정보를 알아냈습니다: " + enemy.Name);
-                Console.WriteLine("아무 키나 입력해주세요");
-                Console.ReadKey();
-                return;
-            }
-
-          
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine();
-            Console.WriteLine("+---------------------------------+");
-            Console.WriteLine("|  적 탐지됨!                     |");
-            Console.WriteLine("|  암호 시스템에 접근 중...       |");
-            Console.WriteLine("+---------------------------------+\n");
-            Console.ResetColor();
-
-
-            Console.Write("\n적의 시스템을 스캔합니다...[");
-            Console.ForegroundColor = ConsoleColor.Green;
-
-            int scanTime = 1; // 스캔 시간
-            int barLength = 10; // 게이지 길이
-            for (int i = 0; i <= barLength; i++)
-            {
-                
-                Console.Write("■"); // 게이지 증가
-                Thread.Sleep(scanTime * 100);
-            }
-            Console.ResetColor();
-            Console.WriteLine("]\n완료!");
-
-            Console.Write($"\n적의 보안 설명:");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{enemy.Desc}");
-
-            Console.Write($"{combatCount}");
-            Console.ResetColor();
-            Console.WriteLine($"초 내에 정확히 입력하세요");
-
-
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            Console.Write("\n보안 키 입력: ");
-            string playerInput = ReadInputWithTimeout(combatCount); // combatCount동안 입력 받기
-
-
-            if (string.IsNullOrWhiteSpace(playerInput))
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine();
-                Console.WriteLine("+---------------------------------+");
-                Console.WriteLine("|  스캔 실패!                     |");
-                Console.WriteLine("|  시스템에서 빠져나오는중...     |");
-                Console.WriteLine("+---------------------------------+\n");
-                Console.ResetColor();
-
-                Console.WriteLine("\n시간을 초과했습니다! 스캔 실패...");
-                Console.WriteLine("아무 키나 입력해주세요");
-                Console.ReadKey();
-                return;
-            }
-
-            // 입력 정확도를 계산
-            double accuracy = CalculateTextAccuracy(playerInput, enemy.Desc);
-
-            // 정확도에 비례하여 적의 이름 공개량 증가
-            int revealedAmount = (int)(accuracy * enemy.Name.Length);
-            if (revealedAmount < 1) revealedAmount = 1; // 최소 1글자 공개
-
-            revealedLetters += revealedAmount;
-            if (revealedLetters > enemy.Name.Length)
-                revealedLetters = enemy.Name.Length; // 초과 방지
-
-            // revealedAmount만큼 적 이름 공개
-            RevealRandomName(revealedAmount, enemy);
-            Console.WriteLine($"\n입력 정확도: ");
-            Console.ForegroundColor = ConsoleColor.Red;
-
-            Console.WriteLine($"{accuracy * 100:F1}%");
-            Console.ResetColor();
-
-            if (accuracy > 0.7)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("\n정보 확보 완료!");
-                Console.ResetColor();
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\n불완전한 정보를 확보");
-                Console.ResetColor();
-            }
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{GetRevealedEnemyName(enemy)}");
-            Console.ResetColor();
-            Console.WriteLine("아무 키나 입력해주세요");
-            Console.ReadKey();
-        }
-
+    
         private string ReadInputWithTimeout(int timeoutSeconds)
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -491,246 +507,7 @@ namespace _15TextRPG.Source.Combat
 
             return new string(maskedName);
         }
-
-
-        //===================================================어택
-
-        public void Attack(Player player, NPC enemy)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\n================== 공격 시작 ==================");
-            Console.ResetColor();
-            Console.WriteLine("방향키를 5개 입력하세요!\n");
-
-            // 적의 랜덤 방향 리스트 생성
-            List<char> enemyDirections = GenerateRandomDirections(5);
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("+-----------------------------------+");
-            Console.Write("| 적이 선택한 방향: ");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(string.Join(" ", enemyDirections));
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(" |");
-            Console.WriteLine("+-----------------------------------+");
-            Console.ResetColor();
-
-            // 플레이어 입력 리스트 생성 (5초 제한)
-            List<char> playerInputs = GetPlayerAttackInput(5);
-
-            // 정확도 비례 데미지 계산
-            double accuracy = CalculateAttackAccuracy(playerInputs, enemyDirections, 5);        
-            int totalDamage = CalculateDamage(player.AttackDamage, enemy.DefensePoint, accuracy);
-            enemy.Health -= totalDamage;
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("\n=============== 공격 결과 ===============");
-            Console.ResetColor();
-            Console.WriteLine($"\n공격 정확도: {accuracy * 100:F1}%");
-            Console.ResetColor();
-
-            Console.Write($"{player.Name}이(가) ");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(GetRevealedEnemyName(enemy));
-            Console.ResetColor();
-            Console.Write("에게 ");
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"{totalDamage}");
-            Console.ResetColor();
-            Console.WriteLine(" 의 피해를 입혔습니다!");
-
-            Console.WriteLine("아무 키나 입력해주세요.");
-            Console.ReadKey();
-            DefendAttack(player, enemy);
-        }
-
-        private double CalculateAttackAccuracy(List<char> input, List<char> target, int maxCnt)
-        {
-            // 5개 미만 입력시 0 넣어줌
-            while (input.Count < maxCnt)
-            {
-                input.Add('0');
-            }
-
-            // 정확도 계산 (일치하는 개수)
-            int matchCount = 0;
-            for (int i = 0; i < maxCnt; i++)
-            {
-                if (input[i] == target[i])
-                    matchCount++;
-            }
-
-            double accuracy = (double)matchCount / maxCnt;
-
-            return accuracy;
-        }
-
-        private List<char> GenerateRandomDirections(int count)
-        {
-            char[] possibleDirections = { '↑', '↓', '←', '→' };
-            Random random = new Random();
-            List<char> selectedDirections = new List<char>();
-
-            for (int i = 0; i < count; i++)
-            {
-                selectedDirections.Add(possibleDirections[random.Next(possibleDirections.Length)]);
-            }
-
-            return selectedDirections;
-        }
-
-        private List<char> GetPlayerAttackInput(int count)
-        {
-            List<char> inputs = new List<char>();
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            int timerBarLength = count; // 타이머 게이지 바 길이
-            int remainingTime = count; // 총 5초 제한
-
-            Console.WriteLine($"\n공격 대기 중... ({count}번 입력하세요)");
-
-            // 타이머 UI 출력
-            Console.Write("타이머: [");
-            Console.ForegroundColor = ConsoleColor.Green;
-            for (int i = 0; i < timerBarLength; i++)
-                Console.Write("■");
-            Console.ResetColor();
-            Console.WriteLine("]");
-
-            int timerCurTop = Console.CursorTop - 1;  // 타이머 줄 위치 저장
-            Console.Write("\n방향키 입력: ");
-            int inputCurLeft = Console.CursorLeft; 
-            int inputCurTop = Console.CursorTop;   
-
-            while (stopwatch.Elapsed.TotalSeconds < count && inputs.Count < count)
-            {
-                if (Console.KeyAvailable)
-                {
-                    ConsoleKey key = Console.ReadKey(true).Key;
-
-                    if (key == ConsoleKey.UpArrow) inputs.Add('↑');
-                    else if (key == ConsoleKey.DownArrow) inputs.Add('↓');
-                    else if (key == ConsoleKey.LeftArrow) inputs.Add('←');
-                    else if (key == ConsoleKey.RightArrow) inputs.Add('→');
-
-                    // 입력된 값 표시 (커서를 뒤로 돌려 기존 값 덮어쓰기)
-                    Console.SetCursorPosition(0, inputCurTop);
-                    Console.ResetColor();
-                    Console.Write("방향키 입력: ");
-                    Console.ForegroundColor = ConsoleColor.Blue; // 입력 값만 파란색
-                    Console.Write(string.Join(" ", inputs));
-                    Console.ResetColor(); // 색상 초기화
-                    Console.Write("     "); // 기존 값 덮어쓰기 위한 공백 추가
-                }
-
-                // 1초마다 카운트다운 갱신
-                int newRemainingTime = count - (int)stopwatch.Elapsed.TotalSeconds;
-                if (newRemainingTime < remainingTime)
-                {
-                    remainingTime = newRemainingTime;
-
-                    Console.SetCursorPosition(0, timerCurTop);
-                    Console.Write("타이머: [");
-
-                    for (int i = 0; i < timerBarLength; i++)
-                    {
-                        if (i < (remainingTime * timerBarLength / count))
-                        {
-                            if (remainingTime > 3)
-                                Console.ForegroundColor = ConsoleColor.Green;
-                            else if (remainingTime > 1)
-                                Console.ForegroundColor = ConsoleColor.Yellow;
-                            else
-                                Console.ForegroundColor = ConsoleColor.Red;
-
-                            Console.Write("■");
-                        }
-                        else
-                        {
-                            Console.ResetColor();
-                            Console.Write("□");
-                        }
-                    }
-                    Console.ResetColor();
-                    Console.WriteLine("]");
-
-                    Console.SetCursorPosition(0, inputCurTop); // 입력 위치 복구
-                }
-            }
-
-            stopwatch.Stop();
-            Console.WriteLine();
-
-            return inputs;
-        }
-
-
-        public void DefendAttack(Player player, NPC enemy)
-        {
-            Console.WriteLine("플레이어 방어 구현");
-
-            // 적의 랜덤 방향 리스트 생성
-            List<char> enemyDirections = GenerateRandomDirections(5);
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("+-----------------------------------+");
-            Console.Write("| 적이 선택한 방향: ");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(string.Join(" ", enemyDirections));
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(" |");
-            Console.WriteLine("+-----------------------------------+");
-            Console.ResetColor();
-
-            // 플레이어 입력 리스트 생성 (5초 제한)
-            List<char> playerInputs = GetPlayerAttackInput(5);
-
-            // 정확도 비례 데미지 계산
-            double accuracy = CalculateAttackAccuracy(playerInputs, enemyDirections, 5);
-            int totalDamage = CalculateDamage(enemy.AttackDamage, player.DefensePoint, accuracy);
-            player.Health -= totalDamage;
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("\n=============== 공격 결과 ===============");
-            Console.ResetColor();
-
-            Console.Write($"\n방어 정확도: ");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{accuracy * 100:F1}%");
-            Console.ResetColor();
-
-
-            Console.Write($"{player.Name}이(가) ");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(GetRevealedEnemyName(enemy));
-            Console.ResetColor();
-            Console.Write("에게 ");
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"{totalDamage}");
-            Console.ResetColor();
-            Console.WriteLine(" 의 피해를 입혔습니다!");
-
-            // 플레이어 체력 확인
-            if (player.Health <= 0)
-            {
-                Console.WriteLine("\n방어 실패! 플레이어가 쓰러집니다...");
-                Console.WriteLine("아무 키나 입력하면 메인 화면으로 돌아갑니다.");
-                Console.ReadKey();
-
-                // 메인 메뉴로 이동
-                //GameManager.Instance.ChangeState(new MainMenuState());
-
-            }
-
-            Console.WriteLine("아무키나 입력해주세요");
-            Console.ReadKey();
-
-        }
-
-        private int CalculateDamage(double attackerPower, double defenderDefense, double accuracy)
+        public int CalculateDamage(double attackerPower, double defenderDefense, double accuracy)
         {
             // 방어력 비례 데미지 감소 적용
             double attackDefenseRatio = attackerPower / defenderDefense;
