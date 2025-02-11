@@ -127,7 +127,7 @@ namespace _15TextRPG.Source
             if (Items.ContainsKey(item))
             {
                 Items[item] -= num;
-                if (Items[item] < 1)
+                if (Items[item] < 0)
                 {
                     Items.Remove(item);
                 }
@@ -141,7 +141,7 @@ namespace _15TextRPG.Source
                 if (_.Key.Tag == tag)
                 {
                     Items[_.Key] += num;
-                    if (Items[_.Key] < 1)
+                    if (Items[_.Key] < 0)
                     {
                         Items.Remove(_.Key);
                     }
@@ -156,7 +156,7 @@ namespace _15TextRPG.Source
                 if (_.Key.Name == name)
                 {
                     Items[_.Key] += num;
-                    if (Items[_.Key] < 1)
+                    if (Items[_.Key] < 0)
                     {
                         Items.Remove(_.Key);
                     }
