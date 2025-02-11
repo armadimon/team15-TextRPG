@@ -84,7 +84,7 @@ namespace _15TextRPG.Source.Chapter1
                 switch (input)
                 {
                     case "1":
-                        temp.enterCCTVMode(gameManager);
+                        temp.CCTVMode(gameManager);
                         break;
                     case "2":
                         break;
@@ -162,32 +162,98 @@ namespace _15TextRPG.Source.Chapter1
         }
     }
 
-    public class BossMob : IInteractableObject
+    public class BossMob : IInteractableObject, IHackable
     {
+
+        public bool IsHacked { get; set; }
+        internal HackState HackState { get; private set; }
+
+        HackState IHackable.HackState => throw new NotImplementedException();
 
         public BossMob()
         {
+            IsHacked = false;
+            HackState = new HackState(HackingProcess, 20);
         }
 
         public void Interact(GameManager gameManager)
         {
-            Console.WriteLine($"1. 전투");
-            Console.WriteLine($"2. 해킹");
-            string input = Console.ReadLine() ?? "";
-            switch (input)
+            if (IsHacked == true)
             {
-                case "1":
-                    Console.WriteLine($"NPC: 죽인다!!");
-                    Console.ReadLine();
-                    gameManager.ChangeState(new CombatState());
-                    break;
-                case "2":
-                    Console.WriteLine($"해킹완료");
-                    Console.ReadLine();
-                    gameManager.GameData.CurrentChapter.CompleteQuest("DefeatBoss");
-                    gameManager.ChangeState(new MainMenuState());
-                    break;
+                Console.WriteLine($"1. 기밀문서 획득");
+                string input = Console.ReadLine() ?? "";
+
+                switch (input)
+                {
+                    case "1":
+                        Console.WriteLine($"미션 완료!!");
+                        Console.ReadLine();
+                        gameManager.ChangeState(new MainMenuState());
+                        break;
+                }
             }
+            else
+            {
+                Console.WriteLine($"1. 전투");
+                Console.WriteLine($"2. 해킹");
+                string input = Console.ReadLine() ?? "";
+                switch (input)
+                {
+                    case "1":
+                        Console.WriteLine($"NPC: 죽인다!!");
+                        Console.ReadLine();
+                        gameManager.ChangeState(new BattleMenuState());
+                        break;
+                    case "2":
+                        gameManager.ChangeState(HackState);
+                        if (IsHacked == true)
+                        {
+                            gameManager.GameData.CurrentChapter.CompleteQuest("DefeatBoss");
+                        }
+                        break;
+                }
+            }
+        }
+
+        public bool HackingProcess(string command)
+        {
+            Console.WriteLine($"Executing command: {command}");
+
+            if (command == "search")
+            {
+                foreach (char c in "전뇌 데이터 베이스 확인중...")
+                {
+                    Console.Write(c);
+                    Thread.Sleep(50);
+                }
+                Console.WriteLine($"아래와 같은 파일을 확인하였습니다.");
+                Console.WriteLine($"[1] 업무 이메일");
+                Console.WriteLine($"[2] 2077/12/10");
+            }
+            if (command == "1")
+            {
+                Console.WriteLine($"내용 1");
+            }
+            if (command == "2")
+            {
+                Console.WriteLine($"내용 2");
+            }
+            if (command == "ITEM ICE")
+            {
+                foreach (char c in "아이스 브레이커를 사용하셨습니다.")
+                {
+                    Console.Write(c);
+                    Thread.Sleep(50);
+                }
+                foreach (char c in "시스템 방화벽 해제...")
+                {
+                    Console.Write(c);
+                    Thread.Sleep(50);
+                }
+                IsHacked = true;
+                return (true);
+            }
+            return (false);
         }
     }
 }

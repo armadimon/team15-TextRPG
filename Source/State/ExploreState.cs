@@ -94,21 +94,21 @@ namespace _15TextRPG.Source.State
 
         private void HackingMode(GameManager gameManager)
         {
-            Console.WriteLine("해킹 모드로 전환합니다.");
 
             List<NPC> npcs = gameManager.GameData.CurrentChapter.NPCs;
             int i = 0;
 
             void DrawNpcInfo()
             {
-                Console.SetCursorPosition(0, 2);
-                Console.Write(new string(' ', Console.WindowWidth));
-                Console.SetCursorPosition(0, 2);
+                Console.Clear();
+                DisplayMap(gameManager.GameData, gameManager.GameData.CurrentChapter.CurrentStage);
+                Console.WriteLine("해킹 모드로 전환합니다.");
+                Console.WriteLine("키보드 좌우 화살표로 목표를 전환. 'Z' 키를 눌러 결정하세요. 나가기 : ESC");
+                Console.SetCursorPosition(npcs[i].posX, npcs[i].posY);
                 Console.WriteLine($"{npcs[i].Name}: {npcs[i].Desc} ({npcs[i].posX}, {npcs[i].posY})");
             }
 
             DrawNpcInfo();
-
             while (true)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
@@ -178,7 +178,7 @@ namespace _15TextRPG.Source.State
             }
         }
 
-        public void enterCCTVMode(GameManager gameManager)
+        public void CCTVMode(GameManager gameManager)
         {
             List<StageData> stages = gameManager.GameData.CurrentChapter.Stages;
 
