@@ -48,9 +48,9 @@ namespace _15TextRPG.Source
                     stage1.SetTile(i, 17, TileType.Wall);
             }
 
-            NPC p = new NPC("player", "Free", "당신 그 자체.", (3, 3));
-            NPC npc1 = new NPC("Nicolas", "Stage1", "메가코프사 경비. 메가코프사의 다양한 '지원'을 받아서 강한 전투력을 얻었지만, 수명은 얼마 남지않았다.", (12, 12));
-            NPC npc2 = new NPC("Hector", "Stage1", "보안실 직원. 항상 과로에 힘들어하고 있다. ", (17, 18));
+            NPC p = new NPC("player", "Free", "당신 그 자체.", "당신은 침묵을 지켰다.", (3, 3));
+            NPC npc1 = new NPC("Nicolas", "Stage1", "메가코프의 연구실 직원. 연구 말고 다른 일에는 관심이 없다.", "처음보는 복장인데...", (12, 12));
+            NPC npc2 = new NPC("Hector", "Stage1", "보안실 직원. 보안 권한에 대한 비밀번호를 'password'로 해놓는다.", "무슨일이지?", (17, 18));
             nowPlay = p;
             NPCs.Add(p);
             NPCs.Add(npc1);

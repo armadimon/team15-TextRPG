@@ -32,14 +32,14 @@ namespace _15TextRPG.Source.Chapter1
                 switch (input)
                 {
                     case "1":
-                        if (GameManager.Instance.GameData.Player.AttackDamage > 5)
+                        if (GameManager.Instance.GameData.Player.Str >= 3)
                         {
                             Console.WriteLine("문을 열었습니다.");
                             GameManager.Instance.GameData.CurrentChapter.CurrentStage = nextStage;
                         }
                         else
                         {
-                            Console.WriteLine("문을 열기에는 힘이 부족합니다.");
+                            Console.WriteLine("문을 열기에는 힘이 부족합니다. 필요 STR : 3");
                         }
                         Console.ReadLine();
                         break;
