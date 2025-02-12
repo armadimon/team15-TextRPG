@@ -26,10 +26,9 @@ namespace _15TextRPG.Source.State
             Console.WriteLine("Time Remaining:");
 
             Console.SetCursorPosition(0, 2);
-            Console.WriteLine("ss");
-            Console.WriteLine($" {30} sec remaining");
+            Console.WriteLine("?!@##$$%");
+            Console.WriteLine($" ?@!#$ sec remaining");
             Console.WriteLine("==========================================");
-            Console.Write(">> ");
         }
 
 
@@ -39,6 +38,94 @@ namespace _15TextRPG.Source.State
             int barLength = 3000; // 진행 바 길이
 
             int cursorTop, cursorLeft;
+
+            foreach (char c in "사이버테크 멀웨어 작동 중...")
+            {
+                Console.Write(c);
+                Thread.Sleep(50);
+            }
+            Console.WriteLine();
+            for(int i = 0; i < 5; ++i)
+            {
+                foreach (char c in "------")
+                {
+                    Console.Write(c);
+                    Thread.Sleep(50);
+                }
+                Console.SetCursorPosition(0, Console.CursorTop);
+                Console.Write(new String(' ', Console.WindowWidth));
+                Console.SetCursorPosition(0, Console.CursorTop);
+            }
+            Console.WriteLine();
+            foreach (char c in "실행 완료. 슈퍼 베이비 시팅 모드가 필요하면 help를 입력하세요.\n\n해킹을 시작하시겠습니까? [y/n]")
+            {
+                Console.Write(c);
+                Thread.Sleep(50);
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.Write(">> ");
+            command = Console.ReadLine();
+            if (command == "y")
+            {
+            }
+            else if(command == "help")
+            {
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                foreach (char c in "슈퍼 베이비 시팅 모드를 시작합니다. 사람으로 태어나 기계보다 못 한 주인님을 위해 제가 모든 걸 해결할게요.")
+                {
+                    Console.Write(c);
+                    Thread.Sleep(50);
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                foreach (char c in "열려 있는 포트 확인, 서비스 버전 탐색, 취약한 웹 애플리케이션 찾기")
+                {
+                    Console.Write(c);
+                    Thread.Sleep(20);
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+                foreach (char c in "패스워드 크래킹, SQL 인젝션, 피싱 공격")
+                {
+                    Console.Write(c);
+                    Thread.Sleep(10);
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+                foreach (char c in "관리자 권한 획득, 백도어 설치, 루트킷 배포")
+                {
+                    Console.Write(c);
+                    Thread.Sleep(20);
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                foreach (char c in "완료했어요. 7살 강아지 정도는 되야 풀 수 있는 수준이니 상심하지 마세요.")
+                {
+                    Console.Write(c);
+                    Thread.Sleep(50);
+                }
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.ReadLine();
+                GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
+                return;
+            }
+            else
+            {
+                Console.WriteLine();
+                foreach (char c in "해킹을 중단합니다.")
+                {
+                    Console.Write(c);
+                    Thread.Sleep(50);
+                }
+                Console.ReadLine();
+                GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
+                return;
+            }
+            command = "";
 
             for (int timeLeft = totalTime; timeLeft >= 0; timeLeft--)
             {
@@ -56,7 +143,6 @@ namespace _15TextRPG.Source.State
                 Console.WriteLine($" {timeLeft}                                                    ");
                 Console.WriteLine("==========================================");
                 Console.SetCursorPosition(cursorLeft, cursorTop);
-
 
                 ConsoleKeyInfo key;
                 if (Console.KeyAvailable)
