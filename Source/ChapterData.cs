@@ -79,6 +79,7 @@ namespace _15TextRPG.Source
             stage2.SetTile(3, 7, TileType.Wall);
             Database database = new Database();
             stage2.SetTile(2, 5, TileType.ETC, database);
+            stage2.SetTile(5, 5, TileType.Battle, new EnemyTrigger((5, 5)));
             stage2.SetTile(29, 5, TileType.ChangeStage, new ChangeStage(stage1, true));
 
             // 현재 스테이지 설정
