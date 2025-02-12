@@ -358,9 +358,9 @@ namespace _15TextRPG.Source.Combat
                                 break;
                             case "5":
                                 Random random = new Random();
-                                int k = random.Next(0, 100);
+                                int l = random.Next(0, 100);
 
-                                if(k + GameManager.Instance.GameData.Player.Intelligence < 75)
+                                if(l + GameManager.Instance.GameData.Player.Intelligence < 75)
                                 {
                                     Runable = true;
                                     goto Runable;
