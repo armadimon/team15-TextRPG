@@ -56,7 +56,7 @@ namespace _15TextRPG.Source
             DefensePoint = 5 + Str;
             SkillDefensePoint = 5 + Str;
             MaxHP = 100;
-            Health = MaxHP;
+            Health = 50;
             MaxMP = 25;
             MP = MaxMP;
             Gold = 1500;

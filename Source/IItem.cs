@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Reflection.Metadata;
 
 namespace _15TextRPG.Source
@@ -57,10 +58,13 @@ namespace _15TextRPG.Source
             Name = name;
             Desc = desc;
             RecoveryAmount = recoveryAmount;
+
+            Player = GameManager.Instance.GameData.Player;
         }
         public void Use()
         {
             Player.Health = Math.Min(Player.Health + RecoveryAmount, Player.MaxHP);
+            Console.WriteLine($"{RecoveryAmount}만큼 플레이어 회복함 -> {Player.Health}");
             
         }
 

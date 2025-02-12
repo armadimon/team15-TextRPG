@@ -52,10 +52,14 @@ namespace _15TextRPG.Source.Combat
         public double ArmorRisistence { get; set; } = 0;
         public double SkillRisistence { get; set; } = 0;
 
-        public List<IItem> Items { get; } = new List<IItem>
-        {
-            new RecoveryItem((int)ItemList.HpRecovery, 1, 1, "Hp포션", "체력을 회복시켜주는 포션이다.",50)
-        };
+        public List<IItem> Items { get; } = ItemData.RecoveryItems;
+
+        //private static readonly Random random = new Random();
+        //public List<IItem> ItemRandom { get; } = new List<IItem> //랜덤으로 넣고싶으면 이렇게 하면 될듯
+        //{
+        //    ItemData.RecoveryItems[random.Next(ItemData.RecoveryItems.Count)]
+        //};
+
         public Reward GetReward()
         {
             return new Reward(Items);
@@ -89,10 +93,7 @@ namespace _15TextRPG.Source.Combat
         public double ArmorRisistence { get; set; } = 1;
         public double SkillRisistence { get; set; } = 1;
 
-        public List<IItem> Items { get; } = new List<IItem>
-        {
-            new RecoveryItem(1, 1, 1, "Hp포션", "체력을 회복시켜주는 포션이다.",50)
-        };
+        public List<IItem> Items { get; } = ItemData.RecoveryItems;
         public Reward GetReward()
         {
             return new Reward(Items);
@@ -113,10 +114,7 @@ namespace _15TextRPG.Source.Combat
         public double ArmorRisistence { get; set; } = 2;
         public double SkillRisistence { get; set; } = 2;
 
-        public List<IItem> Items { get; } = new List<IItem>
-        {
-            new RecoveryItem(1, 1, 1, "Hp포션", "체력을 회복시켜주는 포션이다.",50)
-        };
+        public List<IItem> Items { get; } = ItemData.RecoveryItems;
         public Reward GetReward()
         {
             return new Reward(Items);
