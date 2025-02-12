@@ -1,69 +1,193 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace _15TextRPG.Source
 {
-    public readonly struct ItemIdentifier
-    {
-        public string ItemType { get; init; }
-        public int Tag { get; init; }
-        public string Name { get; init; }
-    }
 
-    public class Inventory(IInventoryOwner _owner)
+    public class Inventory
     {
-        private Dictionary<ItemIdentifier, int> Items { get; set; } = [];
-        private readonly IInventoryOwner owner = _owner;
+        public List<ItemIdentifier> Items { get; set; } = [];
+
+        public class ItemIdentifier
+        {
+            public ItemIdentifier(string itemType, int tag, string name, int count)
+            {
+                ItemType = itemType;
+                Tag = tag;
+                Name = name;
+                Count = count;
+            }
+
+            // Properties of an item
+            public string ItemType { get; }
+            public int Tag { get; }
+            public string Name { get; }
+            public int Count { get; set; }
+        }
 
         public int GetItemNum(IItem item)
         {
-            ItemIdentifier II = new()
+            foreach (var _ in Items)
             {
-                ItemType = typeof(IItem).ToString(),
-                Tag = item.Tag,
-                Name = item.Name,
-            };
-
-            return Items[II];
+                if(item.GetType() == Type.GetType(_.ItemType))
+                {
+                    return _.Count;
+                }
+            }
+            return 0;
         }
 
         public bool Use(IItem item)
         {
-            ItemIdentifier II = new()
+            foreach (var _ in Items)
             {
-                ItemType = typeof(IItem).ToString(),
-                Tag = item.Tag,
-                Name = item.Name,
-            };
-
-            if (Items.ContainsKey(II))
-            {
-                if (Items[II] > 0)
+                if (item.GetType() == Type.GetType(_.ItemType))
                 {
                     item.Use();
+                    return true;
                 }
-
-                return true;
             }
-            return false; // 아이템 사용 실패
+            return false;
         }
 
+        public void Add(IItem item, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (item.GetType() == Type.GetType(_.ItemType))
+                {
+                    _.Count += num;
+                    return;
+                }
+            }
+            Items.Add(new ItemIdentifier(item.GetType().ToString(), item.Tag, item.Name, num));
+        }
+
+        public void Add(int tag, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (tag == _.Tag)
+                {
+                    _.Count += num;
+                }
+            }
+        }
+
+        public void Add(string name, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (name == _.Name)
+                {
+                    _.Count += num;
+                }
+            }
+        }
+
+        public void Add(Inventory inventory) => Items = [.. Items, .. inventory.Items];
+
+        public void Remove(IItem item)
+        {
+            foreach (var _ in Items)
+            {
+                if (item.GetType() == Type.GetType(_.ItemType))
+                {
+                    Items.Remove(_);
+                }
+            }
+        }
+        public void Subtract(IItem item, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (item.GetType() == Type.GetType(_.ItemType))
+                {
+                    _.Count -= num;
+                    if(_.Count < 0)
+                    {
+                        Items.Remove(_);
+                    }
+                }
+            }
+        }
+
+        public void Subtract(int tag, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (tag == _.Tag)
+                {
+                    _.Count -= num;
+                    if (_.Count < 0)
+                    {
+                        Items.Remove(_);
+                    }
+                }
+            }
+        }
+
+        public void Subtract(string name, int num = 1)
+        {
+            foreach (var _ in Items)
+            {
+                if (name == _.Name)
+                {
+                    _.Count -= num;
+                    if (_.Count < 0)
+                    {
+                        Items.Remove(_);
+                    }
+                }
+            }
+        }
+
+        //public static Inventory operator +(Inventory a, Inventory b) => new Inventory(a.owner) { Items = [..a.Items,..b.Items] };
+
+        //public static Inventory operator +(Inventory a, IItem b) => new Inventory(a.owner) { Items = [.. a.Items, b] };
+
+        //public static Inventory operator -(Inventory a, IItem b) => new Inventory(a.owner) { Items = a.Remove(b) };
+
+        public override string ToString()
+        {
+            string result = string.Empty;
+            foreach(var _ in Items)
+            {
+                result += $"{_.Name}: {_.Count} 개                        \n";
+            }
+            return result;
+        }
+
+        // 테스트 중-----
+        // 에라 모르겠다 함수들
+        // 권장되지 않음
         public bool Use(string name)
         {
             foreach (var _ in Items)
             {
-                if (_.Key.Name == name)
+                if (_.Name == name)
                 {
-                    if (_.Value > 0)
+                    if (_.Count > 0)
                     {
-                        
+                        Type? type = Type.GetType(_.ItemType);
+
+                        if(type is not null)
+                        {
+                            object? instance = Activator.CreateInstance(type);
+
+                            MethodInfo? method = type.GetMethod("Use");
+
+                            method?.Invoke(instance, null);
+                        }
                     }
 
                     return true;
@@ -76,10 +200,20 @@ namespace _15TextRPG.Source
         {
             foreach (var _ in Items)
             {
-                if (_.Key.Tag == tag)
+                if (_.Tag == tag)
                 {
-                    if (_.Value > 0)
+                    if (_.Count > 0)
                     {
+                        Type? type = Type.GetType(_.ItemType);
+
+                        if (type is not null)
+                        {
+                            object? instance = Activator.CreateInstance(type);
+
+                            MethodInfo? method = type.GetMethod("Use");
+
+                            method?.Invoke(instance, null);
+                        }
                     }
 
                     return true;
@@ -88,194 +222,13 @@ namespace _15TextRPG.Source
             return false;
         }
 
-        public IEnumerable<KeyValuePair<ItemIdentifier, int>> Find(IItem _item)
+        public IEnumerable<ItemIdentifier> Find(IItem _item)
         {
             var query = from item in Items
-                        where item.Key.GetType() == _item.GetType()
+                        where item.GetType() == _item.GetType()
                         select item;
 
             return query;
         }       
-
-        public void Add(IItem item, int num = 1) 
-        {
-            ItemIdentifier II = new()
-            {
-                ItemType = typeof(IItem).ToString(),
-                Tag = item.Tag,
-                Name = item.Name,
-            };
-
-            if (Items.ContainsKey(II))
-            {
-                Items[II] += num;
-            }
-            else
-            {
-                Items[II] = num;
-            }
-        }
-
-        public void Add(int tag, int num = 1)
-        {
-            foreach (var _ in Items)
-            {
-                if (_.Key.Tag == tag)
-                {
-                    Items[_.Key] += num;
-                }
-            }
-        }
-
-        public void Add(string name, int num = 1)
-        {
-            foreach (var _ in Items)
-            {
-                if (_.Key.Name == name)
-                {
-                    Items[_.Key] += num;
-                }
-            }
-        }
-
-        public void Add(Inventory inventory)
-        {
-            foreach (var item in inventory.Items)
-            {
-                if (Items.ContainsKey(item.Key))
-                {
-                    Items[item.Key] += 1;
-                }
-                else
-                {
-                    Items[item.Key] = 1;
-                }
-            }
-        }
-
-        public void Remove(IItem item)
-        {
-            ItemIdentifier II = new()
-            {
-                ItemType = typeof(IItem).ToString(),
-                Tag = item.Tag,
-                Name = item.Name,
-            };
-            Items.Remove(II);
-        }
-        public void Subtract(IItem item, int num = 1)
-        {
-            ItemIdentifier II = new()
-            {
-                ItemType = typeof(IItem).ToString(),
-                Tag = item.Tag,
-                Name = item.Name,
-            };
-            if (Items.ContainsKey(II))
-            {
-                Items[II] -= num;
-                if (Items[II] < 0)
-                {
-                    Items.Remove(II);
-                }
-            }
-        }
-
-        public void Subtract(int tag, int num = 1)
-        {
-            foreach (var _ in Items)
-            {
-                if (_.Key.Tag == tag)
-                {
-                    Items[_.Key] += num;
-                    if (Items[_.Key] < 0)
-                    {
-                        Items.Remove(_.Key);
-                    }
-                }
-            }
-        }
-
-        public void Subtract(string name, int num = 1)
-        {
-            foreach (var _ in Items)
-            {
-                if (_.Key.Name == name)
-                {
-                    Items[_.Key] += num;
-                    if (Items[_.Key] < 0)
-                    {
-                        Items.Remove(_.Key);
-                    }
-                }
-            }
-        }
-
-        public static Inventory operator +(Inventory a, Inventory b)
-        {
-            Inventory result = new(a.owner);
-
-            foreach (var kvp in a.Items)
-                result.Items[kvp.Key] = kvp.Value;
-
-            foreach (var kvp in b.Items)
-            {
-                if (result.Items.ContainsKey(kvp.Key))
-                    result.Items[kvp.Key] += kvp.Value;
-                else
-                    result.Items[kvp.Key] = kvp.Value;
-            }
-
-            return result;
-        }
-
-        public static Inventory operator +(Inventory a, IItem b)
-        {
-            Inventory result = new(a.owner);
-
-            ItemIdentifier II = new()
-            {
-                ItemType = typeof(IItem).ToString(),
-                Tag = b.Tag,
-                Name = b.Name,
-            };
-
-            foreach (var kvp in a.Items)
-                result.Items[kvp.Key] = kvp.Value;
-
-            if (result.Items.ContainsKey(II))
-                result.Items[II] += 1;
-            else
-                result.Items[II] = 1;
-
-            return result;
-        }
-
-        public static Inventory operator -(Inventory a, IItem b)
-        {
-            Inventory result = new(a.owner);
-
-            ItemIdentifier II = new()
-            {
-                ItemType = typeof(IItem).ToString(),
-                Tag = b.Tag,
-                Name = b.Name,
-            };
-
-            foreach (var kvp in a.Items)
-                result.Items[kvp.Key] = kvp.Value;
-
-            if (result.Items.ContainsKey(II))
-                result.Remove(b);
-            else
-                result.Items[II] = 1;
-
-            return result;
-        }
-
-        public override string ToString()
-        {
-            return JsonSerializer.Serialize(Items);
-        }
     }
 }

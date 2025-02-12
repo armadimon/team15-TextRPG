@@ -11,9 +11,13 @@ namespace _15TextRPG.Source.State
     {
         public HackState HackState { get; }
         public Player Player { get; }
+        Example ex = new();
 
         public Computer(Player player)
         {
+            Player = player;
+            HackState = new HackState(HackingProcess, 60);
+            Player.Inventory.Add(ex, 2);
         }
 
        public bool HackingProcess(string userCommand)
@@ -35,12 +39,21 @@ namespace _15TextRPG.Source.State
                     
                default:
 
+<<<<<<< HEAD
+                    Console.WriteLine(JsonSerializer.Serialize(ex));
+                    Console.Write("없는 명령어입니다.");
+                    break;
+            }
+            return false;
+        }
+=======
                    //Console.WriteLine(JsonSerializer.Serialize());
                    Console.Write("없는 명령어입니다.");
                    break;
            }
            return false;
        }
+>>>>>>> develop
 
        public void Interact()
        {
