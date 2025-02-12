@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _15TextRPG.Source.Combat
 {
-    public interface IMonster
+    public interface IMonster : ICharacter
     {
         string Type { get; set; }
         string MonsterName { get; set; }

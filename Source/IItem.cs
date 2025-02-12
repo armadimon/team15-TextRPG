@@ -1,4 +1,6 @@
+using _15TextRPG.Source.Combat;
 using System;
+using System.Numerics;
 using System.Reflection.Metadata;
 
 namespace _15TextRPG.Source
@@ -13,7 +15,7 @@ namespace _15TextRPG.Source
         public string Name { get; }
         public string Desc { get; }
 
-        public void Use();
+        public void Use(ICharacter? target = null);
     }
 
     class Example() : IItem
@@ -28,9 +30,51 @@ namespace _15TextRPG.Source
 
         public string Desc { get; } = string.Empty;
 
-        public void Use()
+        public void Use(ICharacter? target)
         {
-            Console.WriteLine("Use Example Item!");
+            if(target is not null)
+            {
+                if (target is Player)
+                {
+                    Player player = (Player)target;
+                    Console.WriteLine(player.Name);
+                }
+                else if (target is IMonster)
+                {
+                    IMonster monster = (IMonster)target;
+                    Console.WriteLine(monster.MonsterName);
+                }
+            }
+        }
+    }
+
+    class HackTool() : IItem
+    {
+        public int Tag { get; } = 0;
+
+        public int Stat { get; } = 0;
+
+        public int Value { get; } = 0;
+
+        public string Name { get; } = "HackTool";
+
+        public string Desc { get; } = string.Empty;
+
+        public void Use(ICharacter? target)
+        {
+            if (target is not null)
+            {
+                if (target is Player)
+                {
+                    Player player = (Player)target;
+                    Console.WriteLine(player.Name);
+                }
+                else if (target is IMonster)
+                {
+                    IMonster monster = (IMonster)target;
+                    Console.WriteLine(monster.MonsterName);
+                }
+            }
         }
     }
 
@@ -53,10 +97,12 @@ namespace _15TextRPG.Source
             Desc = desc;
             RecoveryAmount = recoveryAmount;
         }
-        public void Use()
+
+        public void Use(ICharacter? target)
         {
             throw new NotImplementedException();
         }
+
         public void Use(Player player)
         {
             player.Health += RecoveryAmount;

@@ -9,7 +9,7 @@ using _15TextRPG.Source.Combat;
 
 namespace _15TextRPG.Source
 {
-    public class Player : IInventoryOwner
+    public class Player : IInventoryOwner, ICharacter
     {
         public string Name { get; set; }
         public Job Job { get; set; }
