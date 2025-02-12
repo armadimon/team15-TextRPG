@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,17 +49,23 @@ namespace _15TextRPG.Source
                 Console.ReadLine();
             }
         }
-        // 퀘스트 수락
+        public void CheckQuest()
+        {
+            
+            foreach (Quest quest in Quests)
+            {
+                quest.CheckComplete();
+                  }
+                
+
+        }
+
         public void AcceptQuest(Quest quest)
         {
             Console.WriteLine($"퀘스트 '{quest.Name}' 수락했습니다!");
             quest.Start();
         }
 
-        // 퀘스트 거절
-        //public void RejectQuest(Quest quest)
-        //{
-        //}
 
         public void ShowQuest(Quest quest)
         {
