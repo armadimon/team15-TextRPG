@@ -18,19 +18,19 @@ namespace _15TextRPG.Source
 
     class Example() : IItem
     {
-        public int Tag => throw new NotImplementedException();
+        public int Tag { get; } = 0;
 
-        public int Stat => throw new NotImplementedException();
+        public int Stat { get; } = 0;
 
-        public int Value => throw new NotImplementedException();
+        public int Value { get; } = 0;
 
-        public string Name => throw new NotImplementedException();
+        public string Name { get; } = "Example";
 
-        public string Desc => throw new NotImplementedException();
+        public string Desc { get; } = string.Empty;
 
         public void Use()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Use Example Item!");
         }
     }
 }

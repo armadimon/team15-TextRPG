@@ -49,13 +49,12 @@ namespace _15TextRPG.Source
 
     class SaveableEntity<T>(T target, string fileName) : ISaveable
     {
-        public T? Target { get; private set; } = target;
         public string FileName { get; set; } = fileName;
 
         public bool Save()
         {
             string fileName = FileName + ".json";
-            string jsonString = JsonSerializer.Serialize(Target);
+            string jsonString = JsonSerializer.Serialize(target);
             File.WriteAllText(fileName, jsonString);
             return true;
         }
@@ -72,11 +71,20 @@ namespace _15TextRPG.Source
                 string jsonString = File.ReadAllText(fileName);
                 T? loadedT = JsonSerializer.Deserialize<T>(jsonString);
                 Console.WriteLine($"{fileName} 불러오기 성공!");
-                Target = loadedT;
+                if (loadedT != null)
+                {
+                    foreach (var prop in typeof(T).GetProperties())
+                    {
+                        if (prop.CanWrite)
+                        {
+                            prop.SetValue(target, prop.GetValue(loadedT));
+                        }
+                    }
+                }
             }
             return true;
         }
 
-        public string ToString(JsonSerializerOptions? option) => JsonSerializer.Serialize(Target, option);
+        public string ToString(JsonSerializerOptions? option) => JsonSerializer.Serialize(target, option);
     }
 }
