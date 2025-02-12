@@ -7,7 +7,12 @@ using _15TextRPG.Source.Combat;
 
 namespace _15TextRPG.Source
 {
-
+    public enum Job
+    {
+        Nomad = 1,
+        Gutterchild,
+        Enterprise
+    }
     public class GameData
     {
         public Player Player { get; set; }
@@ -15,9 +20,20 @@ namespace _15TextRPG.Source
         public List<ChapterData> Chapters { get; set; }
         public ChapterData? CurrentChapter { get; set; }
 
+
+        public static readonly Dictionary<Job, string> JobDescriptions = new Dictionary<Job, string>
+        {
+            { Job.Nomad, "노마드" },
+            { Job.Gutterchild, "부랑아" },
+            { Job.Enterprise, "기업" }
+        };
+
+
+        public List<Quest> Quests { get; set; }
+
         public GameData()
         {
-            Player = new Player("Default", "");
+            Player = new Player("Default",Job.Nomad);
             Chapters = new List<ChapterData>();
 
             ChapterData chapter1 = new ChapterData("Chapter1");

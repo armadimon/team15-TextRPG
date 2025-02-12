@@ -12,7 +12,7 @@ namespace _15TextRPG.Source
     public class Player : IInventoryOwner
     {
         public string Name { get; set; }
-        public string Description { get; set; }
+        public Job Job { get; set; }
         public double AttackDamage { get; set; }
         public double SkillDamage { get; set; }
         public int Intelligence { get; set; }
@@ -37,13 +37,14 @@ namespace _15TextRPG.Source
         public Inventory Inventory { get; set; }
 
 
-        public Player(string name, string description) // 힘캐
+
+        public Player(string name, Job job)
         {
             Name = name;
             Level = 1;
             Exp = 0;
             MaxExp = 5;
-            Description = "노마드";
+            Job = job;
             Str = 3;
             Dex = 1;
             Critical = 20 + Dex;
@@ -120,7 +121,7 @@ namespace _15TextRPG.Source
             Console.WriteLine($"캐릭터의 정보가 표시됩니다.\n");
 
             Console.WriteLine($"Lv . {Level:D2}");
-            Console.WriteLine($"{Name} ({Description})");
+            Console.WriteLine($"{Name} ({GameData.JobDescriptions[Job]})");
             Console.WriteLine($"공격력 : {AttackDamage} ({ap})");
             Console.WriteLine($"방어력 : {DefensePoint} ({dp})");
             Console.WriteLine($"체력 : {Health}");
@@ -180,7 +181,7 @@ namespace _15TextRPG.Source
                 //    Console.WriteLine("획득한 아이템 없음.");
                 //}
 
-                Console.ReadLine();
+                Thread.Sleep(1500);
 
             }
         }
@@ -236,7 +237,7 @@ namespace _15TextRPG.Source
                     Console.WriteLine("획득한 아이템 없음.");
                 }
 
-                Console.ReadLine();
+                Thread.Sleep(1500);
             }
         }
     }
