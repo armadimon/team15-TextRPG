@@ -208,11 +208,11 @@ namespace _15TextRPG.Source.Combat
             Console.SetCursorPosition(85, 4);
             Console.WriteLine($"Exp. {player.Exp} / {player.MaxExp}");
             Console.SetCursorPosition(85, 5);
-            Console.WriteLine($"공격력 : {player.AttackDamage} ({ap})");
+            Console.WriteLine($"공격력 : {player.AttackDamage} ({player.Str})");
             Console.SetCursorPosition(85, 6);
-            Console.WriteLine($"스킬 공격력 : {player.SkillDamage}");
+            Console.WriteLine($"스킬 공격력 : {player.SkillDamage} ({player.Dex})");
             Console.SetCursorPosition(85, 7);
-            Console.WriteLine($"방어력 : {player.DefensePoint} ({dp})");
+            Console.WriteLine($"방어력 : {player.DefensePoint}");
             Console.SetCursorPosition(85, 8);
             Console.WriteLine($"스킬방어력 : {player.SkillDefensePoint}");
             Console.SetCursorPosition(85, 9);
