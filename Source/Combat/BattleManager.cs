@@ -357,8 +357,20 @@ namespace _15TextRPG.Source.Combat
                                 ItemPhase();
                                 break;
                             case "5":
-                                Runable = true;
-                                goto Runable;
+                                Random random = new Random();
+                                int k = random.Next(0, 100);
+
+                                if(k + GameManager.Instance.GameData.Player.Intelligence < 75)
+                                {
+                                    Runable = true;
+                                    goto Runable;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("도망치지 못 했습니다.");
+                                    Thread.Sleep(750);
+                                    goto RunFail;
+                                }
                             default:
                                 goto ReChoose;
                         }
@@ -377,7 +389,7 @@ namespace _15TextRPG.Source.Combat
                     {
                         goto Victory;
                     }
-
+                    RunFail:
                     MonsterPhase(GameManager.Instance.BattleManager);
                     if (lose)
                         goto BattleLose;
