@@ -57,12 +57,12 @@ namespace _15TextRPG.Source
         {
             if (choice == Job.Nomad)
             {
-                Str = 10;
-                Dex = 10;
+                Str = 3;
+                Dex = 1;
                 Intelligence = 1;
                 Critical = 20 + Dex;
                 Dodge = 15 + Dex;
-                AttackDamage = 140 + Str;
+                AttackDamage = 40 + Str;
                 SkillDamage = 20 + Dex;
                 DefensePoint = 5 + Str;
                 SkillDefensePoint = 5 + Str;
