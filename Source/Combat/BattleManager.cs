@@ -182,7 +182,7 @@ namespace _15TextRPG.Source.Combat
             for (int i = 0; i < GameManager.Instance.GameData.Player.Inventory.Count; i++)
             {
                 Console.SetCursorPosition(60, i * 2 + 2);
-                Console.WriteLine($"{i + 1}. {GameManager.Instance.GameData.Player.Inventory.Use(i)} {GameManager.Instance.GameData.Player.Inventory.GetItemNum(i)}개");
+                Console.WriteLine($"{i + 1}. {GameManager.Instance.GameData.Player.Inventory.Use(i)} {GameManager.Instance.GameData.Player.Inventory.GetItemCount(i)}개");
             }
         }
         public void InBattle(EnemyTrigger enemy)
