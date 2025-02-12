@@ -121,8 +121,33 @@ namespace _15TextRPG.Source
             string dp = Armor != null
                 ? $"{Armor.Stat:+#;-#;0}"
                 : "0";
-            Console.WriteLine($"상태 보기");
+            Console.WriteLine($"[상태 보기]");
             Console.WriteLine($"캐릭터의 정보가 표시됩니다.\n");
+
+            string imagePath= imagePath = "..\\..\\..\\image\\logo1.bmp";
+            int width = 40; // 출력할 너비
+            if (GameData.JobDescriptions[Job] == GameData.JobDescriptions[Job.Nomad])
+            {
+                imagePath = "..\\..\\..\\image\\logo1.bmp";
+                width = 40;
+            }
+            else if (GameData.JobDescriptions[Job] == GameData.JobDescriptions[Job.Gutterchild])
+            {
+                imagePath = "..\\..\\..\\image\\logo2.bmp";
+                width = 50;
+            }
+            else
+            {
+                imagePath = "..\\..\\..\\image\\example.bmp";
+                width = 50;
+            }
+            
+
+            
+
+            string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);
+
+            AsciiArtRenderer.PrintAsciiArt(0, 0, ascii); // 아스키 아트 출력
 
             Console.WriteLine($"Lv . {Level:D2}");
             Console.WriteLine($"{Name} ({GameData.JobDescriptions[Job]})");
@@ -130,8 +155,8 @@ namespace _15TextRPG.Source
             Console.WriteLine($"방어력 : {DefensePoint} ({dp})");
             Console.WriteLine($"체력 : {Health}");
             Console.WriteLine($"Gold : {Gold} G");
-            Console.WriteLine($"{Str}");
-            Console.WriteLine($"{Dex}");
+            Console.WriteLine($"Str : {Str}");
+            Console.WriteLine($"Dex : {Dex}");
         }
 
         public void Attack(GameManager gameManager, int i)

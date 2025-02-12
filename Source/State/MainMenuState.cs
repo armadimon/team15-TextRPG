@@ -8,6 +8,13 @@ namespace _15TextRPG.Source.State
         {
             Console.Clear();
             Console.WriteLine("\n[캠프 입구]");
+            string imagePath = "..\\..\\..\\image\\map3.bmp"; // BMP 이미지 파일
+            int width = 70; // 출력할 너비
+
+            string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);
+
+            AsciiArtRenderer.PrintAsciiArt(0, 0, ascii); // 아스키 아트 출력
+
             Console.WriteLine("\n1. 상태 보기");
             Console.WriteLine("\n2. 의뢰 수주");
             Console.WriteLine("\n3. 챕터 선택");
