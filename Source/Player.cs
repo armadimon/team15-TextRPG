@@ -43,7 +43,7 @@ namespace _15TextRPG.Source
         {
             Name = name;
             Level = 1;
-            StatPoint = 10;
+            StatPoint = 0;
             Exp = 0;
             MaxExp = 5;
             Job = job;
