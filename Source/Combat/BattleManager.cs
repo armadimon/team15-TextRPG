@@ -228,13 +228,15 @@ namespace _15TextRPG.Source.Combat
 
         public void AddSkill(GameManager gameManager)
         {
+            ReCheck:
             for (int i = 0; i < skills.Count; i++)
             {
                 if (gameManager.GameData.Player.Str >= skills[i].StrNeeded && gameManager.GameData.Player.Dex >= skills[i].DexNeeded)
                 {
                     userskills.Add(skills[i]);
                     skills.RemoveAt(i);
-                }
+                    goto ReCheck;
+                }        
             }
         }
         public void SkillList(GameManager gameManager)
