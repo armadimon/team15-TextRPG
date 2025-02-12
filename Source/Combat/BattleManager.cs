@@ -541,12 +541,19 @@ namespace _15TextRPG.Source.Combat
                 switch (input2)
                 {
                     case "1":
-                        GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 0, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
+                        if (GameManager.Instance.BattleManager.monsters[0].Health <= 0)
+                        {
+                            Console.WriteLine("이미 싸늘한 고철더미가 되었습니다.");
+                            Thread.Sleep(750);
+                            goto ReChooseTarget;
+                        }
+                        else
+                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 0, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
                         break;
                     case "2":
-                        if (GameManager.Instance.BattleManager.monsters[1] == null)
+                        if (GameManager.Instance.BattleManager.monsters[1].Health <= 0)
                         {
-                            Console.WriteLine("잘못된 입력입니다.");
+                            Console.WriteLine("이미 싸늘한 고철더미가 되었습니다.");
                             Thread.Sleep(750);
                             goto ReChooseTarget;
                         }
@@ -554,9 +561,9 @@ namespace _15TextRPG.Source.Combat
                             GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 1, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
                         break;
                     case "3":
-                        if (GameManager.Instance.BattleManager.monsters[2] == null)
+                        if (GameManager.Instance.BattleManager.monsters[2].Health <= 0)
                         {
-                            Console.WriteLine("잘못된 입력입니다.");
+                            Console.WriteLine("이미 싸늘한 고철더미가 되었습니다.");
                             Thread.Sleep(750);
                             goto ReChooseTarget;
                         }
@@ -564,9 +571,9 @@ namespace _15TextRPG.Source.Combat
                             GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 2, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
                         break;
                     case "4":
-                        if (GameManager.Instance.BattleManager.monsters[3] == null)
+                        if (GameManager.Instance.BattleManager.monsters[3].Health <= 0)
                         {
-                            Console.WriteLine("잘못된 입력입니다.");
+                            Console.WriteLine("이미 싸늘한 고철더미가 되었습니다.");
                             Thread.Sleep(750);
                             goto ReChooseTarget;
                         }
