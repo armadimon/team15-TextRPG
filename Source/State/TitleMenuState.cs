@@ -92,6 +92,7 @@ namespace _15TextRPG.Source.State
 
         private void NewGame(GameManager gameManager)
         {
+            gameManager.BattleManager.SkillList(GameManager.Instance);
             Console.Clear();
             Console.WriteLine("[시작]");
 

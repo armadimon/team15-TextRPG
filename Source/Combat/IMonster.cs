@@ -41,7 +41,7 @@ namespace _15TextRPG.Source.Combat
 
     public class Robo : IMonster
     {
-        public string Type { get; set; } = "robo";
+        public string Type { get; set; } = "Robo";
         public string MonsterName { get; set; } = "경비로봇";
         public int Level { get; set; } = 1;
         public double MaxHealth { get; set; } = 50;
@@ -82,7 +82,7 @@ namespace _15TextRPG.Source.Combat
 
     public class Cybo : IMonster
     {
-        public string Type { get; set; } = "cybo";
+        public string Type { get; set; } = "Cybo";
         public string MonsterName { get; set; } = "경비팀장";
         public int Level { get; set; } = 2;
         public double MaxHealth { get; set; } = 75;
@@ -103,7 +103,7 @@ namespace _15TextRPG.Source.Combat
 
     public class Human : IMonster
     {
-        public string Type { get; set; } = "human";
+        public string Type { get; set; } = "Human";
         public string MonsterName { get; set; } = "경찰";
         public int Level { get; set; } = 3;
         public double MaxHealth { get; set; } = 75;

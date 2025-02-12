@@ -208,11 +208,11 @@ namespace _15TextRPG.Source.Combat
             Console.SetCursorPosition(85, 4);
             Console.WriteLine($"Exp. {player.Exp} / {player.MaxExp}");
             Console.SetCursorPosition(85, 5);
-            Console.WriteLine($"공격력 : {player.AttackDamage} ({ap})");
+            Console.WriteLine($"공격력 : {player.AttackDamage} ({player.Str})");
             Console.SetCursorPosition(85, 6);
-            Console.WriteLine($"스킬 공격력 : {player.SkillDamage}");
+            Console.WriteLine($"스킬 공격력 : {player.SkillDamage} ({player.Dex})");
             Console.SetCursorPosition(85, 7);
-            Console.WriteLine($"방어력 : {player.DefensePoint} ({dp})");
+            Console.WriteLine($"방어력 : {player.DefensePoint}");
             Console.SetCursorPosition(85, 8);
             Console.WriteLine($"스킬방어력 : {player.SkillDefensePoint}");
             Console.SetCursorPosition(85, 9);
@@ -228,13 +228,15 @@ namespace _15TextRPG.Source.Combat
 
         public void AddSkill(GameManager gameManager)
         {
+            ReCheck:
             for (int i = 0; i < skills.Count; i++)
             {
                 if (gameManager.GameData.Player.Str >= skills[i].StrNeeded && gameManager.GameData.Player.Dex >= skills[i].DexNeeded)
                 {
                     userskills.Add(skills[i]);
                     skills.RemoveAt(i);
-                }
+                    goto ReCheck;
+                }        
             }
         }
         public void SkillList(GameManager gameManager)
@@ -277,7 +279,6 @@ namespace _15TextRPG.Source.Combat
         }
         public void InBattle(EnemyTrigger enemy)
         {
-            SkillList(GameManager.Instance);
             AddSkill(GameManager.Instance);
             Console.Clear();
             bool Runable = false;
@@ -356,8 +357,20 @@ namespace _15TextRPG.Source.Combat
                                 ItemPhase();
                                 break;
                             case "5":
-                                Runable = true;
-                                goto Runable;
+                                Random random = new Random();
+                                int l = random.Next(0, 100);
+
+                                if(l + GameManager.Instance.GameData.Player.Intelligence < 75)
+                                {
+                                    Runable = true;
+                                    goto Runable;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("도망치지 못 했습니다.");
+                                    Thread.Sleep(750);
+                                    goto RunFail;
+                                }
                             default:
                                 goto ReChoose;
                         }
@@ -376,7 +389,7 @@ namespace _15TextRPG.Source.Combat
                     {
                         goto Victory;
                     }
-
+                    RunFail:
                     MonsterPhase(GameManager.Instance.BattleManager);
                     if (lose)
                         goto BattleLose;
@@ -433,7 +446,6 @@ namespace _15TextRPG.Source.Combat
         BattleLose:
             StatPhase();
             GameManager.Instance.BattleManager.monsters.Clear();
-            GameManager.Instance.GameData.Player.Health = GameManager.Instance.GameData.Player.MaxHP;
             GameManager.Instance.GameData.Player.MP = GameManager.Instance.GameData.Player.MaxMP;
             if (GameManager.Instance.GameData.CurrentChapter == null)
             {
@@ -529,12 +541,19 @@ namespace _15TextRPG.Source.Combat
                 switch (input2)
                 {
                     case "1":
-                        GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 0, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
+                        if (GameManager.Instance.BattleManager.monsters[0].Health <= 0)
+                        {
+                            Console.WriteLine("이미 싸늘한 고철더미가 되었습니다.");
+                            Thread.Sleep(750);
+                            goto ReChooseTarget;
+                        }
+                        else
+                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 0, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
                         break;
                     case "2":
-                        if (GameManager.Instance.BattleManager.monsters[1] == null)
+                        if (GameManager.Instance.BattleManager.monsters[1].Health <= 0)
                         {
-                            Console.WriteLine("잘못된 입력입니다.");
+                            Console.WriteLine("이미 싸늘한 고철더미가 되었습니다.");
                             Thread.Sleep(750);
                             goto ReChooseTarget;
                         }
@@ -542,9 +561,9 @@ namespace _15TextRPG.Source.Combat
                             GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 1, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
                         break;
                     case "3":
-                        if (GameManager.Instance.BattleManager.monsters[2] == null)
+                        if (GameManager.Instance.BattleManager.monsters[2].Health <= 0)
                         {
-                            Console.WriteLine("잘못된 입력입니다.");
+                            Console.WriteLine("이미 싸늘한 고철더미가 되었습니다.");
                             Thread.Sleep(750);
                             goto ReChooseTarget;
                         }
@@ -552,9 +571,9 @@ namespace _15TextRPG.Source.Combat
                             GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 2, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
                         break;
                     case "4":
-                        if (GameManager.Instance.BattleManager.monsters[3] == null)
+                        if (GameManager.Instance.BattleManager.monsters[3].Health <= 0)
                         {
-                            Console.WriteLine("잘못된 입력입니다.");
+                            Console.WriteLine("이미 싸늘한 고철더미가 되었습니다.");
                             Thread.Sleep(750);
                             goto ReChooseTarget;
                         }
@@ -625,6 +644,8 @@ namespace _15TextRPG.Source.Combat
                         Console.WriteLine();
                         Console.WriteLine("적의 공격으로 쓰러졌습니다. 강제 귀환됩니다.");
                         Thread.Sleep(750);
+                        GameManager.Instance.GameData.Player.Health = 20;
+                        GameManager.Instance.GameData.Player.Gold /= 2;
                         GameManager.Instance.BattleManager.lose = true;
                         break;
                     }

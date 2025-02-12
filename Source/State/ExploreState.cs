@@ -25,7 +25,6 @@ namespace _15TextRPG.Source.State
         public void HandleInput()
         {
             NPC? npc = GameManager.Instance.GameData.CurrentChapter.nowPlay;
-            Console.WriteLine($"check : {(npc.posX, npc.posY - 1)}");
             if (npc == null)
             {
                 Console.WriteLine("nowPlay is null");
@@ -115,7 +114,10 @@ namespace _15TextRPG.Source.State
                 Console.WriteLine("해킹 모드로 전환합니다.");
                 Console.WriteLine("키보드 좌우 화살표로 목표를 전환. 'Z' 키를 눌러 결정하세요. 나가기 : ESC");
                 Console.SetCursorPosition(npcs[i].posX, npcs[i].posY);
-                Console.WriteLine($"{npcs[i].RevealedName}: ({npcs[i].posX}, {npcs[i].posY})");
+                if (npcs[i].Name == "player")
+                    Console.WriteLine($"{npcs[i].Name}: ({npcs[i].posX}, {npcs[i].posY})");
+                else
+                    Console.WriteLine($"{npcs[i].RevealedName}: ({npcs[i].posX}, {npcs[i].posY})");
             }
 
             DrawNpcInfo();
