@@ -35,9 +35,6 @@ namespace _15TextRPG.Source
         public void UpdateQuest(string questId, int objectIndex)
         {
             Quest quest = Quests.FirstOrDefault(q => q.Name == questId);
-
-            Console.WriteLine($"{quest}");
-            Console.ReadLine();
             if (quest == null)
                 return;
             quest.Object[objectIndex].UpdateProgress();
@@ -68,6 +65,14 @@ namespace _15TextRPG.Source
             Console.WriteLine($"퀘스트 제목: {quest.Name}");
             Console.WriteLine($"연관 챕터: {quest.ChapterName}");
             Console.WriteLine($"퀘스트 설명: {quest.Description}");
+            if (quest.Object.Count > 0)
+            {
+                Console.WriteLine("퀘스트 목표:");
+                foreach (var obj in quest.Object)
+                {
+                    obj.ShowProgress();
+                }
+            }
             Console.WriteLine($"보상: {1}");
         }
     }

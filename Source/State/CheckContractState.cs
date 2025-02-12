@@ -33,11 +33,11 @@ namespace _15TextRPG.Source.State
                         break;
                     default:
                         if (questLists[questIndex - 1].Status == QuestStatus.NotStarted)
-                            DisplayAcceptMenu(input, questIndex);
-                        //else if (questLists[questIndex].Status == QuestStatus.InProgress)
-                        //    DisplayAcceptMenu(input);
+                            DisplayAcceptMenu(questIndex);
+                        else if (questLists[questIndex - 1].Status == QuestStatus.InProgress)
+                            DisplayProgressMenu(questIndex);
                         else if (questLists[questIndex - 1].Status == QuestStatus.Completed)
-                            DisplayRewardMenu(input, questIndex);
+                            DisplayRewardMenu(questIndex);
                         break;
                 }
             }
@@ -70,7 +70,7 @@ namespace _15TextRPG.Source.State
             Console.WriteLine("0. 돌아가기");
         }
 
-        public void DisplayAcceptMenu(string input, int questIndex)
+        public void DisplayAcceptMenu(int questIndex)
         {
                 Console.Clear();
                 Quest selectedQuest = questLists[questIndex - 1];
@@ -78,21 +78,34 @@ namespace _15TextRPG.Source.State
 
                 Console.WriteLine("1. 수락");
                 Console.WriteLine("2. 거절");
-                string choice = Console.ReadLine() ?? "";
+                string input = Console.ReadLine() ?? "";
 
-                if (choice == "1")
+                if (input == "1")
                 {
                     QuestManager.Instance.AcceptQuest(selectedQuest);
                     Console.WriteLine("퀘스트를 수락했습니다.");
                     Console.ReadLine();
                 }
-                else if (choice == "2")
+                else if (input == "2")
                 {
                     Console.WriteLine("퀘스트를 거절했습니다.");
                     Console.ReadLine();
                 }
         }
-        public void DisplayRewardMenu(string input, int questIndex)
+        public void DisplayProgressMenu(int questIndex)
+        {
+            Console.Clear();
+            Quest selectedQuest = questLists[questIndex - 1];
+            QuestManager.Instance.ShowQuest(selectedQuest);
+            foreach (var obj in selectedQuest.Object)
+            {
+                obj.ShowProgress();
+            }
+            Console.WriteLine("엔터를 눌러 계속하세요");
+            Console.ReadLine();
+        }
+
+        public void DisplayRewardMenu(int questIndex)
         {
             Console.Clear();
             Quest selectedQuest = questLists[questIndex - 1];
@@ -100,15 +113,15 @@ namespace _15TextRPG.Source.State
 
             Console.WriteLine("1. 보상 받기");
             Console.WriteLine("2. 돌아오기");
-            string choice = Console.ReadLine() ?? "";
+            string input = Console.ReadLine() ?? "";
 
-            if (choice == "1")
+            if (input == "1")
             {
                 Console.WriteLine("보상을 획득했습니다.");
                 QuestManager.Instance.Quests.Remove(selectedQuest); ;
                 Console.ReadLine();
             }
-            else if (choice == "2")
+            else if (input == "2")
             {
             }
         }

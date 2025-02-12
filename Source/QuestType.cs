@@ -27,6 +27,11 @@ namespace _15TextRPG.Source
             Console.WriteLine($"아이템 {itemId} 수집 {currentAmount}/{requiredAmount}");
             Console.ReadLine();
         }
+        public void ShowProgress()
+        {
+            Console.WriteLine($"아이템 {itemId} 수집 {currentAmount}/{requiredAmount}");
+            Console.ReadLine();
+        }
     }
 
     class KillEnemyQuest : IQuestObject
@@ -48,6 +53,38 @@ namespace _15TextRPG.Source
         {
             currentKills++;
             Console.WriteLine($"{enemyName} 처치 {currentKills}/{requiredKills}");
+            Console.ReadLine();
+        }
+        public void ShowProgress()
+        {
+            Console.WriteLine($"{enemyName} 처치 {currentKills}/{requiredKills}");
+            Console.ReadLine();
+        }
+    }
+
+    class HackEnemyQuest : IQuestObject
+    {
+        private int requiredHacks;
+        private int currentHacks;
+
+        public bool IsCompleted => currentHacks >= requiredHacks;
+
+        public HackEnemyQuest(int requiredHacks)
+        {
+            this.requiredHacks = requiredHacks;
+            currentHacks = 0;
+        }
+
+        public void UpdateProgress()
+        {
+            currentHacks++;
+            Console.WriteLine($"해킹 진도 {currentHacks}/{requiredHacks}");
+            Console.ReadLine();
+        }
+
+        public void ShowProgress()
+        {
+            Console.WriteLine($"해킹 진도 {currentHacks}/{requiredHacks}");
             Console.ReadLine();
         }
     }

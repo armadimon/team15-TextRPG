@@ -201,6 +201,16 @@ namespace _15TextRPG.Source.Combat
                 // npc의 isHack을 true로 변경
                 enemy.IsHacked = true;
                 enemy.RevealedName = enemy.Name;
+                for (int i = 0; i < QuestManager.Instance.Quests.Count; i++)
+                {
+                    Console.WriteLine(QuestManager.Instance.Quests[i].Name);
+                    Console.ReadLine();
+                }
+                if (QuestManager.Instance.Quests.Where(q => q.Name == "해킹으로 정보를 얻어라").FirstOrDefault() != null)
+                {
+                    Console.ReadLine();
+                    QuestManager.Instance.UpdateQuest("해킹으로 정보를 얻어라", 0);
+                }
             }
             else if (enemy.Health < 0)
             {
@@ -215,8 +225,14 @@ namespace _15TextRPG.Source.Combat
                 Console.ResetColor();
                 Console.WriteLine($"\n{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
                 enemy.Health = 0;
-                chap.nowPlay = enemy;
+                enemy.IsHacked = true;
                 enemy.RevealedName = enemy.Name;
+
+                if (QuestManager.Instance.Quests.Where(q => q.Name == "해킹으로 정보를 얻어라").FirstOrDefault() != null)
+                {
+                    QuestManager.Instance.UpdateQuest("해킹으로 정보를 얻어라", 0);
+                    Console.ReadLine();
+                }
             }
             else
             { 
