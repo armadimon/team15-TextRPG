@@ -91,7 +91,7 @@ namespace _15TextRPG.Source
                 Critical = 20 + Dex;
                 Dodge = 15 + Dex;
                 AttackDamage = 20 + Str;
-                SkillDamage = 20 + Str;
+                SkillDamage = 20 + Dex;
                 DefensePoint = 2 + Str;
                 SkillDefensePoint = 2 + Str;
                 MaxMP = 50;
