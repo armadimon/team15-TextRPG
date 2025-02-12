@@ -71,7 +71,7 @@ namespace _15TextRPG.Source.State
             {
                 Console.SetCursorPosition(0, 0);
                 Console.ForegroundColor = colors[colorIndex]; // 색상 변경
-                AsciiArtRenderer.PrintAsciiArt(0, 0, ascii); // 아스키 아트 출력
+                AsciiArtRenderer.PrintAsciiArt(0, ascii); // 아스키 아트 출력
                 curTop = Console.CursorTop;
                 curLeft = Console.CursorLeft;
                 Console.ResetColor();
@@ -94,6 +94,14 @@ namespace _15TextRPG.Source.State
         {
             Console.Clear();
             Console.WriteLine("[시작]");
+
+            string imagePath = "..\\..\\..\\image\\npc.bmp"; // BMP 이미지 파일
+            int width = 70; // 출력할 너비
+
+            string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);
+
+            AsciiArtRenderer.PrintAsciiArt(0, ascii); // 아스키 아트 출력
+
             Console.WriteLine("\n어서와, 그래. 당신 이름이 뭐라고 했지?");
 
             Console.WriteLine("\n당신의 이름을 입력해주세요");
@@ -141,6 +149,7 @@ namespace _15TextRPG.Source.State
                 {           
                     Job choice = (Job)input;
                     gameManager.GameData.Player.Job = choice;
+                    gameManager.GameData.Player.StartStat(choice);
                     Console.ResetColor();
 
                     break;

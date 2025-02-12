@@ -15,6 +15,7 @@ namespace _15TextRPG.Source.State
         public void DisplayMenu()
         {
             Console.Clear();
+            QuestManager.Instance.CheckQuest();
             questLists = QuestManager.Instance.Quests.Where(q => q.ChapterName == ChapterName).ToList();
             CheckContract(ChapterName);
         }

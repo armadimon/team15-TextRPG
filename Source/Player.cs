@@ -40,76 +40,64 @@ namespace _15TextRPG.Source
 
 
         public Player(string name, Job job)
-        {
+        {           
             Name = name;
             Level = 1;
             StatPoint = 0;
             Exp = 0;
             MaxExp = 5;
             Job = job;
-            Str = 3;
-            Dex = 1;
-            Critical = 20 + Dex;
-            Dodge = 15 + Dex;
-            AttackDamage = 140 + Str;
-            SkillDamage = 20 + Dex;
-            DefensePoint = 5 + Str;
-            SkillDefensePoint = 5 + Str;
             MaxHP = 100;
             Health = MaxHP;
-            MaxMP = 25;
-            MP = MaxMP;
             Gold = 1500;
             Inventory = new();
         }
 
-        //public Player(string name, int description) // 민첩캐
-        //{
-        //    Name = name;
-        //    Level = 1;
-        //    SkillPoint = 0;
-        //    Exp = 0;
-        //    MaxExp = 5;
-        //    Description = "부랑아";
-        //    Str = 1;
-        //    Dex = 3;
-        //    Critical = 25 + Dex;
-        //    Dodge = 20 + Dex;
-        //    AttackDamage = 20 + Str;
-        //    SkillDamage = 40 + Dex;
-        //    DefensePoint = 5 + Str;
-        //    SkillDefensePoint = 5 + Str;
-        //    MaxHP = 100;
-        //    Health = MaxHP;
-        //    MaxMP = 50;
-        //    MP = MaxMP;
-        //    Gold = 1500;
-        //    Inventory = new(this);
-        //}
-
-        //public Player(string name, int description) / 지능캐
-        //{
-        //    Name = name;
-        //    Level = 1;
-        //    SkillPoint = 0;
-        //    Exp = 0;
-        //    MaxExp = 5;
-        //    Description = "기업";
-        //    Str = 1;
-        //    Dex = 1;
-        //    Critical = 20 + Dex;
-        //    Dodge = 15 + Dex;
-        //    AttackDamage = 20 + Str;
-        //    SkillDamage = 20 + Str;
-        //    DefensePoint = 2 + Str;
-        //    SkillDefensePoint = 2 + Str;
-        //    MaxHP = 100;
-        //    Health = MaxHP;
-        //    MaxMP = 50;
-        //    MP = MaxMP;
-        //    Gold = 1500;
-        //    Inventory = new (this);
-        //}
+        public void StartStat(Job choice)
+        {
+            if (choice == Job.Nomad)
+            {
+                Str = 3;
+                Dex = 1;
+                Intelligence = 1;
+                Critical = 20 + Dex;
+                Dodge = 15 + Dex;
+                AttackDamage = 140 + Str;
+                SkillDamage = 20 + Dex;
+                DefensePoint = 5 + Str;
+                SkillDefensePoint = 5 + Str;
+                MaxMP = 25;
+                MP = MaxMP;
+            }
+            else if (choice == Job.Gutterchild)
+            {
+                Str = 1;
+                Dex = 3;
+                Intelligence = 1;
+                Critical = 25 + Dex;
+                Dodge = 20 + Dex;
+                AttackDamage = 20 + Str;
+                SkillDamage = 40 + Dex;
+                DefensePoint = 5 + Str;
+                SkillDefensePoint = 5 + Str;
+                MaxMP = 50;
+                MP = MaxMP;
+            }
+            else
+            {
+                Str = 1;
+                Dex = 1;
+                Intelligence = 3;
+                Critical = 20 + Dex;
+                Dodge = 15 + Dex;
+                AttackDamage = 20 + Str;
+                SkillDamage = 20 + Str;
+                DefensePoint = 2 + Str;
+                SkillDefensePoint = 2 + Str;
+                MaxMP = 50;
+                MP = MaxMP;
+            }
+        }
 
         public void ShowStatus()
         {
@@ -121,8 +109,33 @@ namespace _15TextRPG.Source
             string dp = Armor != null
                 ? $"{Armor.Stat:+#;-#;0}"
                 : "0";
-            Console.WriteLine($"상태 보기");
+            Console.WriteLine($"[상태 보기]");
             Console.WriteLine($"캐릭터의 정보가 표시됩니다.\n");
+
+            string imagePath= imagePath = "..\\..\\..\\image\\logo1.bmp";
+            int width = 40; // 출력할 너비
+            if (GameData.JobDescriptions[Job] == GameData.JobDescriptions[Job.Nomad])
+            {
+                imagePath = "..\\..\\..\\image\\logo1.bmp";
+                width = 40;
+            }
+            else if (GameData.JobDescriptions[Job] == GameData.JobDescriptions[Job.Gutterchild])
+            {
+                imagePath = "..\\..\\..\\image\\logo2.bmp";
+                width = 50;
+            }
+            else
+            {
+                imagePath = "..\\..\\..\\image\\example.bmp";
+                width = 50;
+            }
+            
+
+            
+
+            string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);
+
+            AsciiArtRenderer.PrintAsciiArt(0, ascii); // 아스키 아트 출력
 
             Console.WriteLine($"Lv . {Level:D2}");
             Console.WriteLine($"{Name} ({GameData.JobDescriptions[Job]})");
@@ -130,8 +143,6 @@ namespace _15TextRPG.Source
             Console.WriteLine($"방어력 : {DefensePoint} ({dp})");
             Console.WriteLine($"체력 : {Health}");
             Console.WriteLine($"Gold : {Gold} G");
-            Console.WriteLine($"{Str}");
-            Console.WriteLine($"{Dex}");
         }
 
         public void Attack(GameManager gameManager, int i)

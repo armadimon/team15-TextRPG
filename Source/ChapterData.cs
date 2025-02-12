@@ -55,6 +55,7 @@ namespace _15TextRPG.Source
             NPCs.Add(p);
             NPCs.Add(npc1);
             NPCs.Add(npc2);
+
             stage1.SetTile(3, 3, TileType.NPC, p);
             stage1.SetTile(npc1.posX, npc1.posY, TileType.NPC, npc1);
             stage1.SetTile(npc2.posX, npc2.posY, TileType.NPC, npc2);
@@ -62,25 +63,43 @@ namespace _15TextRPG.Source
             stage1.SetTile(15, 0, TileType.CCTV, new CCTV());
 
             //스테이지 2 설정
-            BossMob boss = new BossMob("Boss");
-
-            stage2.SetTile(15, 15, TileType.Boss, boss);
+            for (int i = 3; i < 29; i++)
+            {
+                stage2.SetTile(i, 4, TileType.Wall);
+            }
+            for (int i = 3; i < 29; i++)
+            {
+                stage2.SetTile(i, 6, TileType.Wall);
+            }
+            stage2.SetTile(1, 3, TileType.Wall);
+            stage2.SetTile(2, 3, TileType.Wall);
+            stage2.SetTile(3, 3, TileType.Wall);
+            stage2.SetTile(1, 7, TileType.Wall);
+            stage2.SetTile(2, 7, TileType.Wall);
+            stage2.SetTile(3, 7, TileType.Wall);
+            Database database = new Database();
+            stage2.SetTile(2, 5, TileType.ETC, database);
             stage2.SetTile(29, 5, TileType.ChangeStage, new ChangeStage(stage1, true));
 
             // 현재 스테이지 설정
             CurrentStage = stage1;
 
             // 퀘스트 추가
-            Quest killQuest = new Quest("보스를 처치하라", ChapterID.Chapter1, "보스를 처치하세요.");
-            killQuest.Object.Add(new KillEnemyQuest(boss.Name, 1));
-            QuestManager.Instance.AddQuest(killQuest);
+            //Quest killQuest = new Quest("보스를 처치하라", ChapterID.Chapter1, "보스를 처치하세요.");
+            //killQuest.Object.Add(new KillEnemyQuest(boss.Name, 1));
+            //QuestManager.Instance.AddQuest(killQuest);
+
+
+            Quest collectQuest = new Quest("기밀 문서를 입수하라", ChapterID.Chapter1, "메가코프의 최상층에서 기밀 문서를 입수해라.");
+            collectQuest.Object.Add(new CollectItemQuest("기밀문서", 1));
+            QuestManager.Instance.AddQuest(collectQuest);
 
             Quest HackQuest = new Quest("해킹으로 정보를 얻어라", ChapterID.Chapter1, "해킹을 2번 성공 시켜라");
             HackQuest.Object.Add(new HackEnemyQuest(2));
             QuestManager.Instance.AddQuest(HackQuest);
 
             AddQuestEvent("FindPass", "패스워드를 찾으세요.");
-            AddQuestEvent("DefeatBoss", "보스를 처치하세요.");
+            //AddQuestEvent("GetSecret", "기밀을 획득하세요.");
         }
 
         private void InitializeStage(StageData stage)

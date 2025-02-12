@@ -22,6 +22,7 @@ namespace _15TextRPG.Source
         Password,
         Boss,
         CCTV,
+        ETC
     }
 
     public class NPC : IInteractableObject
