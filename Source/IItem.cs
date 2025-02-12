@@ -107,7 +107,8 @@ namespace _15TextRPG.Source
 
         public void Use(ICharacter? target)
         {
-            throw new NotImplementedException();
+            Player.Health = Math.Min(Player.Health + RecoveryAmount, Player.MaxHP);
+            Console.WriteLine($"{RecoveryAmount}만큼 플레이어 회복함 -> {Player.Health}");
         }
 
         public void Use(Player player)
