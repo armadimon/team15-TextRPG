@@ -135,7 +135,7 @@ namespace _15TextRPG.Source
 
             string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);
 
-            AsciiArtRenderer.PrintAsciiArt(0, 0, ascii); // 아스키 아트 출력
+            AsciiArtRenderer.PrintAsciiArt(0, ascii); // 아스키 아트 출력
 
             Console.WriteLine($"Lv . {Level:D2}");
             Console.WriteLine($"{Name} ({GameData.JobDescriptions[Job]})");

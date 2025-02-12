@@ -68,7 +68,20 @@ namespace _15TextRPG.Source
             return asciiArt.ToString();
         }
 
-        public static void PrintAsciiArt(int x, int y, string ascii)
+        public static void PrintAsciiArt(int x, int y, string ascii) 
+        {
+            string[] lines = ascii.Split('\n');
+            y = Math.Max(y, 0);
+            for (int i = 0; i < lines.Length; i++)
+            {             
+                int lineY = y + i;
+
+                if (lineY >= Console.WindowHeight) break;
+                Console.SetCursorPosition(x, lineY);
+                Console.WriteLine(lines[i]);
+            }
+        }
+        public static void PrintAsciiArt(int y, string ascii)    // 가운데 그림
         {
             string[] lines = ascii.Split('\n');
             y = Math.Max(y, 0);
@@ -82,6 +95,8 @@ namespace _15TextRPG.Source
                 Console.WriteLine(lines[i]);
             }
         }
+
+
 
         public static void DrawMenu(int x, int y, int width, int height)
         {

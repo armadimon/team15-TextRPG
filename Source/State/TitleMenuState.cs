@@ -71,7 +71,7 @@ namespace _15TextRPG.Source.State
             {
                 Console.SetCursorPosition(0, 0);
                 Console.ForegroundColor = colors[colorIndex]; // 색상 변경
-                AsciiArtRenderer.PrintAsciiArt(0, 0, ascii); // 아스키 아트 출력
+                AsciiArtRenderer.PrintAsciiArt(0, ascii); // 아스키 아트 출력
                 curTop = Console.CursorTop;
                 curLeft = Console.CursorLeft;
                 Console.ResetColor();
@@ -100,7 +100,7 @@ namespace _15TextRPG.Source.State
 
             string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);
 
-            AsciiArtRenderer.PrintAsciiArt(0, 0, ascii); // 아스키 아트 출력
+            AsciiArtRenderer.PrintAsciiArt(0, ascii); // 아스키 아트 출력
 
             Console.WriteLine("\n어서와, 그래. 당신 이름이 뭐라고 했지?");
 
