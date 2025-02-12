@@ -13,7 +13,7 @@ namespace _15TextRPG.Source.State
 
             string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);
 
-            AsciiArtRenderer.PrintAsciiArt(0, 0, ascii); // 아스키 아트 출력
+            AsciiArtRenderer.PrintAsciiArt(0, ascii); // 아스키 아트 출력
 
             Console.WriteLine("\n1. 상태 보기");
             Console.WriteLine("\n2. 의뢰 수주");
