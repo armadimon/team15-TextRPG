@@ -175,8 +175,8 @@ namespace _15TextRPG.Source.Combat
         }
         public void InBattle(EnemyTrigger enemy)
         {
-            SkillList(gameManager);
-            AddSkill(gameManager);
+            SkillList(GameManager.Instance);
+            AddSkill(GameManager.Instance);
             Console.Clear();
             bool Runable = false;
             GameManager.Instance.BattleManager.SpawnMonster();
