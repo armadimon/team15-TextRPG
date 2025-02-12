@@ -16,6 +16,13 @@ namespace _15TextRPG.Source.State
             string input = Console.ReadLine() ?? "";
             switch (input)
             {
+                case "1":
+                    if (GameManager.Instance.GameData.Player.StatPoint != 0)
+                        GameManager.Instance.BattleManager.StatPhase();
+                    else
+                        Console.WriteLine("StatPoint가 없습니다.");
+                        Thread.Sleep(750);
+                    break;
                 case "0":
                     GameManager.Instance.ChangeState(new MainMenuState());
                     break;

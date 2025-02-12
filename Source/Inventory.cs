@@ -18,7 +18,7 @@ namespace _15TextRPG.Source
 
     public class Inventory
     {
-        private List<ItemIdentifier> Items { get; set; } = [];
+        public List<ItemIdentifier> Items { get; set; } = [];
         public int Count => Items.Count;
         public int GetItemCount(int index) => Items[index].Count;
         public int GetItemCount(IItem item) =>
@@ -197,7 +197,6 @@ namespace _15TextRPG.Source
                             method?.Invoke(instance,  new object?[] {target});
                         }
                     }
-
                     return true;
                 }
             }
@@ -265,7 +264,7 @@ namespace _15TextRPG.Source
                 Console.Write($" (x{item.Count})");
 
 
-                if (item.Tag == (int)ItemList.HpRecovery )Console.Write($"- 회복 아이템이다.");
+                if (item.Tag == (int)ItemList.HpRecovery )Console.Write($"- 소비 아이템이다.");
 
                 else Console.Write("- 기타 아이템이다.");
 

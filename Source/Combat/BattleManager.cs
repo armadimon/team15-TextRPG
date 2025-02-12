@@ -50,23 +50,68 @@ namespace _15TextRPG.Source.Combat
                 {
                     if (monsters[i].Health <= 0)
                     {
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                        Console.SetCursorPosition(x + i * 15, y);
-                        Console.WriteLine($"{i + 1} " + monsters[i].MonsterName);
-                        Console.SetCursorPosition(x + i * 15, y + 1);
-                        Console.WriteLine("Lv. " + monsters[i].Level);
-                        Console.SetCursorPosition(x + i * 15, y + 2);
-                        Console.WriteLine("Dead");
-                        Console.ResetColor();
+                        string imagePath = $"..\\..\\..\\image\\Dead.bmp"; // BMP 이미지 파일
+                        int width = 20; // 출력할 너비
+
+                        string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);
+
+                        AsciiArtRenderer.PrintAsciiArt(x + i * 20, y - 6, ascii); // 아스키 아트 출력
+
+                        if(monsters[i].MonsterName == "경찰")
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            Console.SetCursorPosition(x + i * 20 + 8, y);
+                            Console.WriteLine($"{i + 1} " + monsters[i].MonsterName);
+                            Console.SetCursorPosition(x + i * 20 + 8, y + 1);
+                            Console.WriteLine("Lv. " + monsters[i].Level);
+                            Console.SetCursorPosition(x + i * 20 + 8, y + 2);
+                            Console.WriteLine("Dead");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            Console.SetCursorPosition(x + i * 20 + 6, y);
+                            Console.WriteLine($"{i + 1} " + monsters[i].MonsterName);
+                            Console.SetCursorPosition(x + i * 20 + 6, y + 1);
+                            Console.WriteLine("Lv. " + monsters[i].Level);
+                            Console.SetCursorPosition(x + i * 20 + 6, y + 2);
+                            Console.WriteLine("Dead");
+                            Console.ResetColor();
+                        }
                     }
                     else
                     {
-                        Console.SetCursorPosition(x + i * 15, y);
-                        Console.WriteLine($"{i + 1} " + monsters[i].MonsterName);
-                        Console.SetCursorPosition(x + i * 15, y + 1);
-                        Console.WriteLine("Lv. " + monsters[i].Level);
-                        Console.SetCursorPosition(x + i * 15, y + 2);
-                        Console.WriteLine("HP " + monsters[i].Health);
+                        string imagePath = $"..\\..\\..\\image\\{monsters[i].MonsterName}.bmp"; // BMP 이미지 파일
+                        int width = 20; // 출력할 너비
+
+                        string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);
+
+                        if (monsters[i].MonsterName == "경비로봇")
+                            AsciiArtRenderer.PrintAsciiArt(x + i * 20, y - 10, ascii); // 아스키 아트 출력
+                        else if (monsters[i].MonsterName == "경비팀장")
+                            AsciiArtRenderer.PrintAsciiArt(x + i * 20, y - 12, ascii); // 아스키 아트 출력
+                        else
+                            AsciiArtRenderer.PrintAsciiArt(x + i * 20, y - 17, ascii); // 아스키 아트 출력
+
+                        if (monsters[i].MonsterName == "경찰")
+                        {
+                            Console.SetCursorPosition(x + i * 20 + 8, y);
+                            Console.WriteLine($"{i + 1} " + monsters[i].MonsterName);
+                            Console.SetCursorPosition(x + i * 20 + 8, y + 1);
+                            Console.WriteLine("Lv. " + monsters[i].Level);
+                            Console.SetCursorPosition(x + i * 20 + 8, y + 2);
+                            Console.WriteLine("HP " + monsters[i].Health);
+                        }
+                        else
+                        {
+                            Console.SetCursorPosition(x + i * 20 + 6, y);
+                            Console.WriteLine($"{i + 1} " + monsters[i].MonsterName);
+                            Console.SetCursorPosition(x + i * 20 + 6, y + 1);
+                            Console.WriteLine("Lv. " + monsters[i].Level);
+                            Console.SetCursorPosition(x + i * 20 + 6, y + 2);
+                            Console.WriteLine("HP " + monsters[i].Health);
+                        }
                     }
                 }
             }
@@ -76,23 +121,68 @@ namespace _15TextRPG.Source.Combat
                 {
                     if (monsters[i].Health <= 0)
                     {
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                        Console.SetCursorPosition(x + i * 15, y);
-                        Console.WriteLine(monsters[i].MonsterName);
-                        Console.SetCursorPosition(x + i * 15, y + 1);
-                        Console.WriteLine("Lv. " + monsters[i].Level);
-                        Console.SetCursorPosition(x + i * 15, y + 2);
-                        Console.WriteLine("Dead");
-                        Console.ResetColor();
+                        string imagePath = $"..\\..\\..\\image\\Dead.bmp"; // BMP 이미지 파일
+                        int width = 20; // 출력할 너비
+
+                        string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);
+
+                        AsciiArtRenderer.PrintAsciiArt(x + i * 20, y - 6, ascii); // 아스키 아트 출력
+
+                        if (monsters[i].MonsterName == "경찰")
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            Console.SetCursorPosition(x + i * 20 + 8, y);
+                            Console.WriteLine(monsters[i].MonsterName);
+                            Console.SetCursorPosition(x + i * 20 + 8, y + 1);
+                            Console.WriteLine("Lv. " + monsters[i].Level);
+                            Console.SetCursorPosition(x + i * 20 + 8, y + 2);
+                            Console.WriteLine("Dead");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            Console.SetCursorPosition(x + i * 20 + 6, y);
+                            Console.WriteLine(monsters[i].MonsterName);
+                            Console.SetCursorPosition(x + i * 20 + 6, y + 1);
+                            Console.WriteLine("Lv. " + monsters[i].Level);
+                            Console.SetCursorPosition(x + i * 20 + 6, y + 2);
+                            Console.WriteLine("Dead");
+                            Console.ResetColor();
+                        }
                     }
                     else
                     {
-                        Console.SetCursorPosition(x + i * 15, y);
-                        Console.WriteLine(monsters[i].MonsterName);
-                        Console.SetCursorPosition(x + i * 15, y + 1);
-                        Console.WriteLine("Lv. " + monsters[i].Level);
-                        Console.SetCursorPosition(x + i * 15, y + 2);
-                        Console.WriteLine("HP " + monsters[i].Health);
+                        string imagePath = $"..\\..\\..\\image\\{monsters[i].MonsterName}.bmp"; // BMP 이미지 파일
+                        int width = 20; // 출력할 너비
+
+                        string ascii = AsciiArtRenderer.ConvertBmpToAscii(imagePath, width);
+
+                        if (monsters[i].MonsterName == "경비로봇")
+                            AsciiArtRenderer.PrintAsciiArt(x + i * 20, y - 10, ascii); // 아스키 아트 출력
+                        else if (monsters[i].MonsterName == "경비팀장")
+                            AsciiArtRenderer.PrintAsciiArt(x + i * 20, y - 12, ascii); // 아스키 아트 출력
+                        else
+                            AsciiArtRenderer.PrintAsciiArt(x + i * 20, y - 17, ascii); // 아스키 아트 출력
+
+                        if (monsters[i].MonsterName == "경찰")
+                        {
+                            Console.SetCursorPosition(x + i * 20 + 8, y);
+                            Console.WriteLine(monsters[i].MonsterName);
+                            Console.SetCursorPosition(x + i * 20 + 8, y + 1);
+                            Console.WriteLine("Lv. " + monsters[i].Level);
+                            Console.SetCursorPosition(x + i * 20 + 8, y + 2);
+                            Console.WriteLine("HP " + monsters[i].Health);
+                        }
+                        else
+                        {
+                            Console.SetCursorPosition(x + i * 20 + 6, y);
+                            Console.WriteLine(monsters[i].MonsterName);
+                            Console.SetCursorPosition(x + i * 20 + 6, y + 1);
+                            Console.WriteLine("Lv. " + monsters[i].Level);
+                            Console.SetCursorPosition(x + i * 20 + 6, y + 2);
+                            Console.WriteLine("HP " + monsters[i].Health);
+                        }
                     }
                 }
             }
@@ -109,29 +199,29 @@ namespace _15TextRPG.Source.Combat
                 ? $"{player.Armor.Stat:+#;-#;0}"
                 : "0";
 
-            Console.SetCursorPosition(60, 0);
+            Console.SetCursorPosition(85, 0);
             Console.WriteLine($"플레이어 정보");
-            Console.SetCursorPosition(60, 2);
+            Console.SetCursorPosition(85, 2);
             Console.WriteLine($"{player.Name} ({GameData.JobDescriptions[player.Job]})");
-            Console.SetCursorPosition(60, 3);
+            Console.SetCursorPosition(85, 3);
             Console.WriteLine($"Lv . {player.Level}");
-            Console.SetCursorPosition(60, 4);
+            Console.SetCursorPosition(85, 4);
             Console.WriteLine($"Exp. {player.Exp} / {player.MaxExp}");
-            Console.SetCursorPosition(60, 5);
+            Console.SetCursorPosition(85, 5);
             Console.WriteLine($"공격력 : {player.AttackDamage} ({ap})");
-            Console.SetCursorPosition(60, 6);
+            Console.SetCursorPosition(85, 6);
             Console.WriteLine($"스킬 공격력 : {player.SkillDamage}");
-            Console.SetCursorPosition(60, 7);
+            Console.SetCursorPosition(85, 7);
             Console.WriteLine($"방어력 : {player.DefensePoint} ({dp})");
-            Console.SetCursorPosition(60, 8);
+            Console.SetCursorPosition(85, 8);
             Console.WriteLine($"스킬방어력 : {player.SkillDefensePoint}");
-            Console.SetCursorPosition(60, 9);
+            Console.SetCursorPosition(85, 9);
             Console.WriteLine($"체력 : {player.Health}");
-            Console.SetCursorPosition(60, 10);
+            Console.SetCursorPosition(85, 10);
             Console.WriteLine($"MP : {player.MP}");
-            Console.SetCursorPosition(60, 11);
+            Console.SetCursorPosition(85, 11);
             Console.WriteLine($"치명타 확률 : {player.Critical} %");
-            Console.SetCursorPosition(60, 12);
+            Console.SetCursorPosition(85, 12);
             Console.WriteLine($"회피율 : {player.Dodge} %");
 
         }
@@ -162,27 +252,27 @@ namespace _15TextRPG.Source.Combat
 
         public void ShowSkill()
         {
-            Console.SetCursorPosition(60, 0);
+            Console.SetCursorPosition(85, 0);
             Console.WriteLine("특수공격");
 
             for (int i = 0; i < userskills.Count; i++)
             {
-                Console.SetCursorPosition(60, i * 3 + 2);
+                Console.SetCursorPosition(85, i * 3 + 2);
                 Console.WriteLine($"{i + 1}. {userskills[i].SkillName}");
-                Console.SetCursorPosition(60, i * 3 + 3);
+                Console.SetCursorPosition(85, i * 3 + 3);
                 Console.WriteLine($"{userskills[i].Description}");
             }
         }
 
         public void ShowItem()
         {
-            Console.SetCursorPosition(60, 0);
+            Console.SetCursorPosition(85, 0);
             Console.WriteLine("아이템");
 
             for (int i = 0; i < GameManager.Instance.GameData.Player.Inventory.Count; i++)
             {
-                Console.SetCursorPosition(60, i * 2 + 2);
-                Console.WriteLine($"{i + 1}. {GameManager.Instance.GameData.Player.Inventory.Use(i)} {GameManager.Instance.GameData.Player.Inventory.GetItemCount(i)}개");
+                Console.SetCursorPosition(85, i * 2 + 2);
+                Console.WriteLine($"{i + 1}. {GameManager.Instance.GameData.Player.Inventory.Items[i].Name} {GameManager.Instance.GameData.Player.Inventory.Items[i].Count}개");
             }
         }
         public void InBattle(EnemyTrigger enemy)
@@ -192,7 +282,7 @@ namespace _15TextRPG.Source.Combat
             Console.Clear();
             bool Runable = false;
             GameManager.Instance.BattleManager.SpawnMonster();
-            GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
+            GameManager.Instance.BattleManager.ShowMonster(false, 0, 16);
 
             for (int i = 0; i < GameManager.Instance.BattleManager.monsters.Count; i++)
             {
@@ -201,8 +291,8 @@ namespace _15TextRPG.Source.Combat
                 ReChoose:
                     Console.Clear();
                     GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
-                    GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
-                    Console.SetCursorPosition(0, 13);
+                    GameManager.Instance.BattleManager.ShowMonster(false, 0, 16);
+                    Console.SetCursorPosition(0, 20);
                     Console.Write("1. 공격  ");
                     Console.Write("2. 특수공격  ");
                     Console.Write("3. 방어  ");
@@ -227,11 +317,31 @@ namespace _15TextRPG.Source.Combat
                                 if (GameManager.Instance.BattleManager.userskills.Count == 0)
                                 {
                                     Console.WriteLine("사용할 수 있는 특수 능력이 없습니다.");
-                                    Thread.Sleep(1500);
+                                    Thread.Sleep(750);
                                     goto ReChoose;
                                 }
                                 else
-                                    SkillPhase();
+                                {
+                                    int overCost = 0;
+                                    for (int k = 0; k < GameManager.Instance.BattleManager.userskills.Count; k++)
+                                    {
+                                        if (GameManager.Instance.BattleManager.userskills[k].SkillCost > GameManager.Instance.GameData.Player.MP)
+                                        {
+                                            overCost++;
+                                        }
+                                    }
+
+                                    if(overCost == GameManager.Instance.BattleManager.userskills.Count)
+                                    {
+                                        Console.WriteLine("MP가 부족합니다.");
+                                        Thread.Sleep(750);
+                                        goto ReChoose;
+                                    }
+                                    else
+                                    {
+                                        SkillPhase();
+                                    }
+                                }
                                 break;
                             case "3":
                                 DefPhase();
@@ -240,7 +350,7 @@ namespace _15TextRPG.Source.Combat
                                 if (GameManager.Instance.GameData.Player.Inventory.Count == 0)
                                 {
                                     Console.WriteLine("사용할 수 있는 아이템이 없습니다.");
-                                    Thread.Sleep(1500);
+                                    Thread.Sleep(750);
                                     goto ReChoose;
                                 }
                                 ItemPhase();
@@ -278,7 +388,7 @@ namespace _15TextRPG.Source.Combat
             if (Runable)
             {
                 Console.WriteLine("전투에서 후퇴했습니다");
-                Thread.Sleep(1500);
+                Thread.Sleep(750);
 
                 if (GameManager.Instance.GameData.CurrentChapter == null)
                 {
@@ -293,10 +403,10 @@ namespace _15TextRPG.Source.Combat
             {
                 Console.Clear();
                 GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
-                GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
+                GameManager.Instance.BattleManager.ShowMonster(false, 0, 16);
                 Console.WriteLine();
                 Console.WriteLine("전투에서 승리했습니다.");
-                Thread.Sleep(1500);
+                Thread.Sleep(750);
 
                 if (GameManager.Instance.GameData.CurrentChapter == null)
                 {
@@ -340,7 +450,7 @@ namespace _15TextRPG.Source.Combat
         ReChoose:
             Console.Clear();
             GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
-            GameManager.Instance.BattleManager.ShowMonster(true, 0, 9);
+            GameManager.Instance.BattleManager.ShowMonster(true, 0, 16);
 
             Console.Write("\n원하시는 대상을 입력해주세요. >> ");
             string input = Console.ReadLine() ?? "";
@@ -348,7 +458,7 @@ namespace _15TextRPG.Source.Combat
             if (!int.TryParse(input, out j) || j > GameManager.Instance.BattleManager.monsters.Count || GameManager.Instance.BattleManager.monsters[j - 1].Health <= 0)
             {
                 Console.WriteLine("잘못된 입력입니다.");
-                Thread.Sleep(1500);
+                Thread.Sleep(750);
                 goto ReChoose;
             }
             else
@@ -385,7 +495,7 @@ namespace _15TextRPG.Source.Combat
         ReChooseSkill:
             Console.Clear();
             GameManager.Instance.BattleManager.ShowSkill();
-            GameManager.Instance.BattleManager.ShowMonster(true, 0, 9);
+            GameManager.Instance.BattleManager.ShowMonster(true, 0, 16);
 
             Console.Write("\n원하시는 스킬을 입력해주세요. >> ");
             string input1 = Console.ReadLine() ?? "";
@@ -393,7 +503,13 @@ namespace _15TextRPG.Source.Combat
             if (!int.TryParse(input1, out int i) || i > GameManager.Instance.BattleManager.userskills.Count || i <= 0)
             {
                 Console.WriteLine("잘못된 입력입니다.");
-                Thread.Sleep(1500);
+                Thread.Sleep(750);
+                goto ReChooseSkill;
+            }
+            else if(GameManager.Instance.BattleManager.userskills[i - 1].SkillCost > GameManager.Instance.GameData.Player.MP)
+            {
+                Console.WriteLine("MP가 부족합니다.");
+                Thread.Sleep(750);
                 goto ReChooseSkill;
             }
             else
@@ -401,7 +517,7 @@ namespace _15TextRPG.Source.Combat
             ReChooseTarget:
                 Console.Clear();
                 GameManager.Instance.BattleManager.ShowSkill();
-                GameManager.Instance.BattleManager.ShowMonster(true, 0, 9);
+                GameManager.Instance.BattleManager.ShowMonster(true, 0, 16);
                 Console.Write("\n원하시는 대상을 입력해주세요. >> ");
                 string input2 = Console.ReadLine() ?? "";
 
@@ -413,37 +529,37 @@ namespace _15TextRPG.Source.Combat
                 switch (input2)
                 {
                     case "1":
-                        GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 0, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
+                        GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 0, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
                         break;
                     case "2":
                         if (GameManager.Instance.BattleManager.monsters[1] == null)
                         {
                             Console.WriteLine("잘못된 입력입니다.");
-                            Thread.Sleep(1500);
+                            Thread.Sleep(750);
                             goto ReChooseTarget;
                         }
                         else
-                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 1, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
+                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 1, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
                         break;
                     case "3":
                         if (GameManager.Instance.BattleManager.monsters[2] == null)
                         {
                             Console.WriteLine("잘못된 입력입니다.");
-                            Thread.Sleep(1500);
+                            Thread.Sleep(750);
                             goto ReChooseTarget;
                         }
                         else
-                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 2, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
+                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 2, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
                         break;
                     case "4":
                         if (GameManager.Instance.BattleManager.monsters[3] == null)
                         {
                             Console.WriteLine("잘못된 입력입니다.");
-                            Thread.Sleep(1500);
+                            Thread.Sleep(750);
                             goto ReChooseTarget;
                         }
                         else
-                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 3, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
+                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 3, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[j - 1]);
                         break;
                 }
             }
@@ -456,7 +572,7 @@ namespace _15TextRPG.Source.Combat
             GameManager.Instance.GameData.Player.MP += 10;
             if (GameManager.Instance.GameData.Player.MP >= GameManager.Instance.GameData.Player.MaxMP)
                 GameManager.Instance.GameData.Player.MP = GameManager.Instance.GameData.Player.MaxMP;
-            Thread.Sleep(1500);
+            Thread.Sleep(750);
         }
 
         public void ItemPhase()
@@ -464,7 +580,7 @@ namespace _15TextRPG.Source.Combat
             ReItem:
             Console.Clear();
             GameManager.Instance.BattleManager.ShowItem();
-            GameManager.Instance.BattleManager.ShowMonster(true, 0, 9);
+            GameManager.Instance.BattleManager.ShowMonster(true, 0, 16);
 
             Console.Write("\n원하시는 아이템을 입력해주세요. >> ");
             string input1 = Console.ReadLine() ?? "";
@@ -472,24 +588,24 @@ namespace _15TextRPG.Source.Combat
             if (!int.TryParse(input1, out int i) || i > GameManager.Instance.GameData.Player.Inventory.Count || i <= 0)
             {
                 Console.WriteLine("잘못된 입력입니다.");
-                Thread.Sleep(1500);
+                Thread.Sleep(750);
                 goto ReItem;
             }
             else
             {
-                Console.WriteLine($"{GameManager.Instance.GameData.Player.Inventory.GetItemName(i-1)}을 사용하였습니다.");
-                Thread.Sleep(1500);
-                GameManager.Instance.GameData.Player.Inventory.Use(GameManager.Instance.GameData.Player.Inventory.GetItemName(i-1)); // 수정 요망
+                Console.WriteLine($"{GameManager.Instance.GameData.Player.Inventory.Items[i - 1].Name}을 사용하였습니다.");
+                Thread.Sleep(750);
+                GameManager.Instance.GameData.Player.Inventory.Use(GameManager.Instance.GameData.Player.Inventory.Items[i - 1].Name); // 수정 요망
             }
         }
         public void MonsterPhase(BattleManager battleManager)
         {
             Console.Clear();
             GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
-            GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
+            GameManager.Instance.BattleManager.ShowMonster(false, 0, 16);
             Console.WriteLine();
             Console.WriteLine("적의 공격이 시작됩니다.");
-            Thread.Sleep(1500);
+            Thread.Sleep(750);
 
             for (int i = 0; i < battleManager.monsters.Count; i++)
             {
@@ -497,18 +613,18 @@ namespace _15TextRPG.Source.Combat
                 {
                     Console.Clear();
                     GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
-                    GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
+                    GameManager.Instance.BattleManager.ShowMonster(false, 0, 16);
                     Console.WriteLine();
                     MonsterAttack(i);
                     Console.Clear();
                     GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
-                    GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
+                    GameManager.Instance.BattleManager.ShowMonster(false, 0, 16);
 
                     if (GameManager.Instance.GameData.Player.Health <= 0)
                     {
                         Console.WriteLine();
                         Console.WriteLine("적의 공격으로 쓰러졌습니다. 강제 귀환됩니다.");
-                        Thread.Sleep(1500);
+                        Thread.Sleep(750);
                         GameManager.Instance.BattleManager.lose = true;
                         break;
                     }
@@ -519,7 +635,7 @@ namespace _15TextRPG.Source.Combat
             {
                 Console.WriteLine();
                 Console.WriteLine("적의 공격이 끝났습니다.");
-                Thread.Sleep(1500);
+                Thread.Sleep(750);
                 GameManager.Instance.BattleManager.defensePose = false;
             }
         }
@@ -538,7 +654,7 @@ namespace _15TextRPG.Source.Combat
                     if (k <= GameManager.Instance.GameData.Player.Dodge)
                     {
                         Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 {GameManager.Instance.BattleManager.monsters[i].SkillName}(을/를) 피했습니다.");
-                        Thread.Sleep(1500);
+                        Thread.Sleep(750);
                         GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].SkillDamage;
                     }
                     else
@@ -557,7 +673,7 @@ namespace _15TextRPG.Source.Combat
                     if (k <= GameManager.Instance.GameData.Player.Dodge)
                     {
                         Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 공격을 피했습니다.");
-                        Thread.Sleep(1500);
+                        Thread.Sleep(750);
                         GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].AttackDamage;
                     }
                     else
@@ -579,7 +695,7 @@ namespace _15TextRPG.Source.Combat
                     if (k <= GameManager.Instance.GameData.Player.Dodge)
                     {
                         Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 {GameManager.Instance.BattleManager.monsters[i].SkillName}(을/를) 피했습니다.");
-                        Thread.Sleep(1500);
+                        Thread.Sleep(750);
                         GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].SkillDamage;
                     }
                     else
@@ -598,7 +714,7 @@ namespace _15TextRPG.Source.Combat
                     if (k <= GameManager.Instance.GameData.Player.Dodge)
                     {
                         Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 공격을 피했습니다.");
-                        Thread.Sleep(1500);
+                        Thread.Sleep(750);
                         GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].AttackDamage;
                     }
                     else
@@ -620,7 +736,7 @@ namespace _15TextRPG.Source.Combat
                     if (k <= GameManager.Instance.GameData.Player.Dodge)
                     {
                         Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 {GameManager.Instance.BattleManager.monsters[i].SkillName}(을/를) 피했습니다.");
-                        Thread.Sleep(1500);
+                        Thread.Sleep(750);
                         GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].SkillDamage;
                     }
                     else
@@ -639,7 +755,7 @@ namespace _15TextRPG.Source.Combat
                     if (k <= GameManager.Instance.GameData.Player.Dodge)
                     {
                         Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 공격을 피했습니다.");
-                        Thread.Sleep(1500);
+                        Thread.Sleep(750);
                         GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].AttackDamage;
                     }
                     else
@@ -686,7 +802,7 @@ namespace _15TextRPG.Source.Combat
                             if (GameManager.Instance.GameData.Player.StatPoint <= 0)
                             {
                                 Console.WriteLine("StatPoint가 없습니다.");
-                                Thread.Sleep(1500);
+                                Thread.Sleep(750);
                             }
                             else
                             {
@@ -698,7 +814,7 @@ namespace _15TextRPG.Source.Combat
                             if (GameManager.Instance.GameData.Player.StatPoint <= 0)
                             {
                                 Console.WriteLine("StatPoint가 없습니다.");
-                                Thread.Sleep(1500);
+                                Thread.Sleep(750);
                             }
                             else
                             {
@@ -710,7 +826,7 @@ namespace _15TextRPG.Source.Combat
                             if (GameManager.Instance.GameData.Player.StatPoint <= 0)
                             {
                                 Console.WriteLine("StatPoint가 없습니다.");
-                                Thread.Sleep(1500);
+                                Thread.Sleep(750);
                             }
                             else
                             {
@@ -722,7 +838,7 @@ namespace _15TextRPG.Source.Combat
                             if (GameManager.Instance.GameData.Player.StatPoint <= 0)
                             {
                                 Console.WriteLine("StatPoint가 없습니다.");
-                                Thread.Sleep(1500);
+                                Thread.Sleep(750);
                             }
                             else
                             {
@@ -734,13 +850,13 @@ namespace _15TextRPG.Source.Combat
                             break;
                         default:
                             Console.WriteLine("잘못된 입력입니다.");
-                            Thread.Sleep(1500);
+                            Thread.Sleep(750);
                             break;
                     }
                 } while (input != "0");
 
                 Console.WriteLine("능력치 선택을 종료합니다.");
-                Thread.Sleep(1500);
+                Thread.Sleep(750);
             }
         }
     }

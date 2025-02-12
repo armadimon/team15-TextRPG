@@ -80,42 +80,43 @@ namespace _15TextRPG.Source
 
     class RecoveryItem : IItem
     {
-        public int Tag { get; }
-        public int Stat { get; }
-        public int Value { get; }
-        public string Name { get; }
-        public string Desc { get; }
-        public int RecoveryAmount { get; }
+        public int Tag { get; } = (int)ItemList.HpRecovery;
+        public int Stat { get; } = 1;
+        public int Value { get; } = 1;
+        public string Name { get; } = "HP 포션";
+        public string Desc { get; } = "HP를 50만큼 회복시켜주는 포션이다.";
+        public int RecoveryAmount { get; } = 50;
       
-        private Player Player { get; }
+        private Player Player { get; } = GameManager.Instance.GameData.Player;
 
-        public RecoveryItem(Player player)
-        {
-            Player = player;
-        }
-        public RecoveryItem(int tag, int stat, int value, string name, string desc, int recoveryAmount)
-        {
-            Tag = tag;
-            Stat = stat;
-            Value = value;
-            Name = name;
-            Desc = desc;
-            RecoveryAmount = recoveryAmount;
-
-            Player = GameManager.Instance.GameData.Player;
-        }
 
         public void Use(ICharacter? target)
         {
+            if (Player.Health == Player.MaxHP)
+            {
+                Console.WriteLine("플레이어는 이미 최대 체력입니다.");
+                return;
+            }
             Player.Health = Math.Min(Player.Health + RecoveryAmount, Player.MaxHP);
             Console.WriteLine($"{RecoveryAmount}만큼 플레이어 회복함 -> {Player.Health}");
         }
+    }
 
-        public void Use(Player player)
+    class StateUpgradeItem : IItem
+    {
+        public int Tag { get; } = (int)ItemList.StrUpPotion;
+        public int Stat { get; } = 1;
+        public int Value { get; } = 1;
+        public string Name { get; } = "힘이나는 포션";
+        public string Desc { get; } = "STR 수치를 1증가 시켜주는 포션";
+        public int RecoveryAmount { get; } = 1;
+
+        private Player Player { get; } = GameManager.Instance.GameData.Player;
+
+        public void Use(ICharacter? target)
         {
-            Player.Health = Math.Min(Player.Health + RecoveryAmount, Player.MaxHP);
-            Console.WriteLine($"{RecoveryAmount}만큼 플레이어 회복함 -> {Player.Health}");
+            
+            Console.WriteLine($"{RecoveryAmount}만큼 플레이어의 STR이 증가 -> {Player.Str}");
         }
-
     }
 }
