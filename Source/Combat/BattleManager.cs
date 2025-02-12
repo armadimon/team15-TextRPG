@@ -277,7 +277,6 @@ namespace _15TextRPG.Source.Combat
         }
         public void InBattle(EnemyTrigger enemy)
         {
-            SkillList(GameManager.Instance);
             AddSkill(GameManager.Instance);
             Console.Clear();
             bool Runable = false;
@@ -433,7 +432,6 @@ namespace _15TextRPG.Source.Combat
         BattleLose:
             StatPhase();
             GameManager.Instance.BattleManager.monsters.Clear();
-            GameManager.Instance.GameData.Player.Health = GameManager.Instance.GameData.Player.MaxHP;
             GameManager.Instance.GameData.Player.MP = GameManager.Instance.GameData.Player.MaxMP;
             if (GameManager.Instance.GameData.CurrentChapter == null)
             {
@@ -625,6 +623,8 @@ namespace _15TextRPG.Source.Combat
                         Console.WriteLine();
                         Console.WriteLine("적의 공격으로 쓰러졌습니다. 강제 귀환됩니다.");
                         Thread.Sleep(750);
+                        GameManager.Instance.GameData.Player.Health = 20;
+                        GameManager.Instance.GameData.Player.Gold /= 2;
                         GameManager.Instance.BattleManager.lose = true;
                         break;
                     }
