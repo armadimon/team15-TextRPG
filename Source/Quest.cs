@@ -17,6 +17,7 @@ namespace _15TextRPG.Source
     {
         bool IsCompleted { get; }
         void UpdateProgress();
+        void ShowProgress();
     }
 
     public class Quest

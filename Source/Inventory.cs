@@ -157,6 +157,15 @@ namespace _15TextRPG.Source
 
         //public static Inventory operator -(Inventory a, IItem b) => new Inventory(a.owner) { Items = a.Remove(b) };
 
+        public IEnumerable<ItemIdentifier> Find(IItem _item)
+        {
+            var query = from item in Items
+                        where item.GetType() == _item.GetType()
+                        select item;
+
+            return query;
+        }
+
         public override string ToString()
         {
             string result = string.Empty;
@@ -170,6 +179,7 @@ namespace _15TextRPG.Source
         // 테스트 중-----
         // 에라 모르겠다 함수들
         // 권장되지 않음
+        // 리플렉션 처음 써봄
         public bool Use(string name)
         {
             foreach (var _ in Items)
@@ -221,14 +231,33 @@ namespace _15TextRPG.Source
             }
             return false;
         }
-
-        public IEnumerable<ItemIdentifier> Find(IItem _item)
+        public void ShowInventory()
         {
-            var query = from item in Items
-                        where item.GetType() == _item.GetType()
-                        select item;
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\n[인벤토리]");
+            Console.ResetColor();
 
-            return query;
-        }       
+            if (Items.Count == 0)
+            {
+                Console.WriteLine("\n인벤토리가 비어 있습니다.");
+                return;
+            }
+
+            foreach (var item in Items)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write($"{item.Name}");
+                Console.ResetColor();
+                Console.Write($" (x{item.Count})");
+
+
+                if (item.Tag == (int)ItemList.HpRecovery )Console.Write($"- 회복 아이템이다.");
+
+                else Console.Write("- 기타 아이템이다.");
+
+                Console.WriteLine();
+            }
+
+        }
     }
 }
