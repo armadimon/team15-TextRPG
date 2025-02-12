@@ -38,15 +38,18 @@ namespace _15TextRPG.Source
         public int AttackDamage { get; set; }
         public bool IsHacked { get; set; }
         public string StageName { get; set; }
+        public string Chat { get; set; }
 
-        public NPC(string name, string stageName, string desc, (int, int) npcPos)
+        public NPC(string name, string stageName, string desc, string chat, (int, int) npcPos)
         {
             posX = npcPos.Item1;
             posY = npcPos.Item2;
             Dir = 1;
             Name = name;
+
             StageName = stageName;
             Desc = desc;
+            Chat = chat;
             RevealedName = new string('*', name.Length);
             Health = 100;
             AttackDamage = 5;
@@ -56,15 +59,7 @@ namespace _15TextRPG.Source
 
         public void Interact()
         {
-            Console.WriteLine("1. 전투");
-            string input = Console.ReadLine() ?? "";
-
-            switch (input)
-            {
-                case "1":
-                    GameManager.Instance.ChangeState(new BattleMenuState());
-                    break;
-            }
+            Console.WriteLine($"\n{Chat}");
             Console.ReadLine();
         }
     }
