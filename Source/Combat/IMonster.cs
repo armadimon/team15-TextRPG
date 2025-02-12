@@ -23,14 +23,14 @@ namespace _15TextRPG.Source.Combat
         void Attack(Player player)
         {
             Console.WriteLine($"{MonsterName}(이/가) 공격합니다.");
-            Thread.Sleep(1500);
+            Thread.Sleep(750);
             player.Health -= AttackDamage;
         }
 
         void UseSkill(Player player)
         {
             Console.WriteLine($"{MonsterName}(이/가) {SkillName}(을/를) 사용합니다.");
-            Thread.Sleep(1500);
+            Thread.Sleep(750);
             player.Health -= SkillDamage;
         }
 
@@ -87,7 +87,7 @@ namespace _15TextRPG.Source.Combat
         public int Level { get; set; } = 2;
         public double MaxHealth { get; set; } = 75;
         public double Health { get; set; } = 75;
-        public string SkillName { get; set; } = "몽둥이질";
+        public string SkillName { get; set; } = "스턴건";
         public int AttackDamage { get; set; } = 7;
         public int SkillDamage { get; set; } = 10;
         public double ArmorRisistence { get; set; } = 1;
@@ -108,7 +108,7 @@ namespace _15TextRPG.Source.Combat
         public int Level { get; set; } = 3;
         public double MaxHealth { get; set; } = 75;
         public double Health { get; set; } = 75;
-        public string SkillName { get; set; } = "스턴건";
+        public string SkillName { get; set; } = "소총 사격";
         public int AttackDamage { get; set; } = 10;
         public int SkillDamage { get; set; } = 12;
         public double ArmorRisistence { get; set; } = 2;

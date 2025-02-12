@@ -57,8 +57,8 @@ namespace _15TextRPG.Source
         {
             if (choice == Job.Nomad)
             {
-                Str = 3;
-                Dex = 1;
+                Str = 10;
+                Dex = 10;
                 Intelligence = 1;
                 Critical = 20 + Dex;
                 Dodge = 15 + Dex;
@@ -143,6 +143,13 @@ namespace _15TextRPG.Source
             Console.WriteLine($"방어력 : {DefensePoint} ({dp})");
             Console.WriteLine($"체력 : {Health}");
             Console.WriteLine($"Gold : {Gold} G");
+            Console.WriteLine();
+            Console.WriteLine("1. 능력치 배분");
+            Console.WriteLine("0. 나가기");
+            //string input = Console.ReadLine() ?? "";
+            //switch (input)
+            //{
+
         }
 
         public void Attack(GameManager gameManager, int i)
@@ -151,12 +158,12 @@ namespace _15TextRPG.Source
             int j = random.Next(90, 111);
             int k = random.Next(0, 100);
             Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(을/를) 공격합니다");
-            Thread.Sleep(1500);
+            Thread.Sleep(750);
 
             if( k <= gameManager.GameData.Player.Critical)
             {
                 Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}에게 치명적인 피해를 입혔습니다.");
-                Thread.Sleep(1500);
+                Thread.Sleep(750);
                 gameManager.BattleManager.monsters[i].Health -= Math.Round(gameManager.GameData.Player.AttackDamage * j / 100) * 1.5 + gameManager.BattleManager.monsters[i].ArmorRisistence;
             }
             else
@@ -178,7 +185,7 @@ namespace _15TextRPG.Source
 
                 Console.Clear();
                 gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
-                gameManager.BattleManager.ShowMonster(false, 0, 9);
+                gameManager.BattleManager.ShowMonster(false, 0, 16);
                 Console.WriteLine();
                 Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(이/가) 쓰러졌습니다.");
 
@@ -199,7 +206,7 @@ namespace _15TextRPG.Source
                 //    Console.WriteLine("획득한 아이템 없음.");
                 //}
 
-                Thread.Sleep(1500);
+                Thread.Sleep(750);
 
             }
         }
@@ -207,7 +214,7 @@ namespace _15TextRPG.Source
         public void UseSkill(GameManager gameManager, int i, ISKill skill, IMonster monster)
         {
             Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}에게 {skill.SkillName}(을/를) 사용합니다");
-            Thread.Sleep(1500);
+            Thread.Sleep(750);
             if (skill.SkillType == monster.Type)
             {
                 gameManager.BattleManager.monsters[i].Health -= (gameManager.GameData.Player.SkillDamage + skill.BonusDamage) - gameManager.BattleManager.monsters[i].SkillRisistence;
@@ -234,7 +241,7 @@ namespace _15TextRPG.Source
 
                 Console.Clear();
                 gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
-                gameManager.BattleManager.ShowMonster(false, 0, 9);
+                gameManager.BattleManager.ShowMonster(false, 0, 16);
                 Console.WriteLine();
                 Console.WriteLine($"{gameManager.BattleManager.monsters[i].MonsterName}(이/가) 쓰러졌습니다.");
 
@@ -255,7 +262,7 @@ namespace _15TextRPG.Source
                     Console.WriteLine("획득한 아이템 없음.");
                 }
 
-                Thread.Sleep(1500);
+                Thread.Sleep(750);
             }
         }
     }
