@@ -168,9 +168,21 @@ namespace _15TextRPG.Source.Combat
             for (int i = 0; i < userskills.Count; i++)
             {
                 Console.SetCursorPosition(60, i * 3 + 2);
-                Console.WriteLine($"{i + 1} {userskills[i].SkillName}");
+                Console.WriteLine($"{i + 1}. {userskills[i].SkillName}");
                 Console.SetCursorPosition(60, i * 3 + 3);
                 Console.WriteLine($"{userskills[i].Description}");
+            }
+        }
+
+        public void ShowItem()
+        {
+            Console.SetCursorPosition(60, 0);
+            Console.WriteLine("아이템");
+
+            for (int i = 0; i < GameManager.Instance.GameData.Player.Inventory.Items.Count; i++)
+            {
+                Console.SetCursorPosition(60, i * 2 + 2);
+                Console.WriteLine($"{i + 1}. {GameManager.Instance.GameData.Player.Inventory.Items[i].Name} {GameManager.Instance.GameData.Player.Inventory.Items[i].Count}개");
             }
         }
         public void InBattle(EnemyTrigger enemy)
@@ -194,11 +206,12 @@ namespace _15TextRPG.Source.Combat
                     Console.Write("1. 공격  ");
                     Console.Write("2. 특수공격  ");
                     Console.Write("3. 방어  ");
-                    Console.WriteLine("4. 전략적 후퇴");
+                    Console.Write("4. 아이템  ");
+                    Console.WriteLine("5. 전략적 후퇴");
                     Console.Write("\n원하시는 행동을 입력해주세요. >> ");
                     string input = Console.ReadLine() ?? "";
                     int j;
-                    if (!int.TryParse(input, out j) || j > 4)
+                    if (!int.TryParse(input, out j) || j > 5)
                     {
                         Console.WriteLine("잘못된 입력입니다.");
                         goto ReChoose;
@@ -211,19 +224,28 @@ namespace _15TextRPG.Source.Combat
                                 AtkPhase();
                                 break;
                             case "2":
-                                if (GameManager.Instance.BattleManager.userskills[0] == null)
+                                if (GameManager.Instance.BattleManager.userskills.Count == 0)
                                 {
                                     Console.WriteLine("사용할 수 있는 특수 능력이 없습니다.");
                                     Thread.Sleep(1500);
                                     goto ReChoose;
                                 }
                                 else
-                                SkillPhase();
+                                    SkillPhase();
                                 break;
                             case "3":
                                 DefPhase();
                                 break;
                             case "4":
+                                if (GameManager.Instance.GameData.Player.Inventory.Items.Count == 0)
+                                {
+                                    Console.WriteLine("사용할 수 있는 아이템이 없습니다.");
+                                    Thread.Sleep(1500);
+                                    goto ReChoose;
+                                }
+                                ItemPhase();
+                                break;
+                            case "5":
                                 Runable = true;
                                 goto Runable;
                             default:
@@ -437,6 +459,29 @@ namespace _15TextRPG.Source.Combat
             Thread.Sleep(1500);
         }
 
+        public void ItemPhase()
+        {
+            ReItem:
+            Console.Clear();
+            GameManager.Instance.BattleManager.ShowItem();
+            GameManager.Instance.BattleManager.ShowMonster(true, 0, 9);
+
+            Console.Write("\n원하시는 아이템을 입력해주세요. >> ");
+            string input1 = Console.ReadLine() ?? "";
+
+            if (!int.TryParse(input1, out int i) || i > GameManager.Instance.GameData.Player.Inventory.Items.Count || i <= 0)
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+                Thread.Sleep(1500);
+                goto ReItem;
+            }
+            else
+            {
+                Console.WriteLine($"{GameManager.Instance.GameData.Player.Inventory.Items[i - 1].Name}을 사용하였습니다.");
+                Thread.Sleep(1500);
+                GameManager.Instance.GameData.Player.Inventory.Use(GameManager.Instance.GameData.Player.Inventory.Items[i - 1].Name); // 수정 요망
+            }
+        }
         public void MonsterPhase(BattleManager battleManager)
         {
             Console.Clear();
