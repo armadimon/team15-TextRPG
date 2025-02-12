@@ -33,10 +33,10 @@ namespace _15TextRPG.Source.State
                     break;
                 case "2":
                     
-                    if (GameManager.Instance.GameData.Player.Inventory.GetItemNum(item) > 0 
+                    if (GameManager.Instance.GameData.Player.Inventory.Find(item) != null
                         && GameManager.Instance.GameData.Player.Health < GameManager.Instance.GameData.Player.MaxHP)
                     {
-                        GameManager.Instance.GameData.Player.Inventory.Use(item);
+                        GameManager.Instance.GameData.Player.Inventory.Use(item, GameManager.Instance.GameData.Player);
                         Console.WriteLine("아이템 사용함");
                         GameManager.Instance.GameData.Player.Inventory.Subtract(item);
                         Console.WriteLine("아이템 삭제함");

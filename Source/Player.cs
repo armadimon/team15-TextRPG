@@ -48,7 +48,7 @@ namespace _15TextRPG.Source
             MaxExp = 5;
             Job = job;
             MaxHP = 100;
-            Health = MaxHP;
+            Health = 50;
             Gold = 1500;
             Inventory = new();
         }
