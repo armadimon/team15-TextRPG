@@ -199,7 +199,6 @@ namespace _15TextRPG.Source
                             method?.Invoke(instance, null);
                         }
                     }
-
                     return true;
                 }
             }

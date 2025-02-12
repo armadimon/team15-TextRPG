@@ -231,7 +231,27 @@ namespace _15TextRPG.Source.Combat
                                     goto ReChoose;
                                 }
                                 else
-                                    SkillPhase();
+                                {
+                                    int overCost = 0;
+                                    for (int k = 0; k < GameManager.Instance.BattleManager.userskills.Count; k++)
+                                    {
+                                        if (GameManager.Instance.BattleManager.userskills[k].SkillCost > GameManager.Instance.GameData.Player.MP)
+                                        {
+                                            overCost++;
+                                        }
+                                    }
+
+                                    if(overCost == GameManager.Instance.BattleManager.userskills.Count)
+                                    {
+                                        Console.WriteLine("MP가 부족합니다.");
+                                        Thread.Sleep(1500);
+                                        goto ReChoose;
+                                    }
+                                    else
+                                    {
+                                        SkillPhase();
+                                    }
+                                }
                                 break;
                             case "3":
                                 DefPhase();
@@ -396,6 +416,12 @@ namespace _15TextRPG.Source.Combat
                 Thread.Sleep(1500);
                 goto ReChooseSkill;
             }
+            else if(GameManager.Instance.BattleManager.userskills[i - 1].SkillCost > GameManager.Instance.GameData.Player.MP)
+            {
+                Console.WriteLine("MP가 부족합니다.");
+                Thread.Sleep(1500);
+                goto ReChooseSkill;
+            }
             else
             {
             ReChooseTarget:
@@ -413,7 +439,7 @@ namespace _15TextRPG.Source.Combat
                 switch (input2)
                 {
                     case "1":
-                        GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 0, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
+                        GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 0, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
                         break;
                     case "2":
                         if (GameManager.Instance.BattleManager.monsters[1] == null)
@@ -423,7 +449,7 @@ namespace _15TextRPG.Source.Combat
                             goto ReChooseTarget;
                         }
                         else
-                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 1, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
+                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 1, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
                         break;
                     case "3":
                         if (GameManager.Instance.BattleManager.monsters[2] == null)
@@ -433,7 +459,7 @@ namespace _15TextRPG.Source.Combat
                             goto ReChooseTarget;
                         }
                         else
-                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 2, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
+                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 2, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
                         break;
                     case "4":
                         if (GameManager.Instance.BattleManager.monsters[3] == null)
@@ -443,7 +469,7 @@ namespace _15TextRPG.Source.Combat
                             goto ReChooseTarget;
                         }
                         else
-                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 3, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
+                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 3, GameManager.Instance.BattleManager.userskills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
                         break;
                 }
             }
