@@ -269,7 +269,7 @@ namespace _15TextRPG.Source.Combat
             Console.SetCursorPosition(85, 0);
             Console.WriteLine("아이템");
 
-            for (int i = 0; i < GameManager.Instance.GameData.Player.Inventory.Items.Count; i++)
+            for (int i = 0; i < GameManager.Instance.GameData.Player.Inventory.Count; i++)
             {
                 Console.SetCursorPosition(85, i * 2 + 2);
                 Console.WriteLine($"{i + 1}. {GameManager.Instance.GameData.Player.Inventory.Items[i].Name} {GameManager.Instance.GameData.Player.Inventory.Items[i].Count}개");
@@ -347,7 +347,7 @@ namespace _15TextRPG.Source.Combat
                                 DefPhase();
                                 break;
                             case "4":
-                                if (GameManager.Instance.GameData.Player.Inventory.Items.Count == 0)
+                                if (GameManager.Instance.GameData.Player.Inventory.Count == 0)
                                 {
                                     Console.WriteLine("사용할 수 있는 아이템이 없습니다.");
                                     Thread.Sleep(750);
@@ -585,7 +585,7 @@ namespace _15TextRPG.Source.Combat
             Console.Write("\n원하시는 아이템을 입력해주세요. >> ");
             string input1 = Console.ReadLine() ?? "";
 
-            if (!int.TryParse(input1, out int i) || i > GameManager.Instance.GameData.Player.Inventory.Items.Count || i <= 0)
+            if (!int.TryParse(input1, out int i) || i > GameManager.Instance.GameData.Player.Inventory.Count || i <= 0)
             {
                 Console.WriteLine("잘못된 입력입니다.");
                 Thread.Sleep(750);

@@ -9,7 +9,7 @@ namespace _15TextRPG
     {
         private static void Main()
         {
-
+            Console.SetWindowSize(150, 50);
             GameManager.Instance.Run();
         }
     }

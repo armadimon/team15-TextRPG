@@ -47,7 +47,7 @@ namespace _15TextRPG.Source.HackExample
             CurrentStage = stage1;
 
             // 퀘스트 추가
-            Quest killQuest = new Quest("보스를 처치하라", ChapterID.Chapter1, "보스를 처치하세요.");
+            Quest killQuest = new Quest("보스를 처치하라", ChapterID.Chapter1, "보스를 처치하세요.", 3, 1500);
             killQuest.Object.Add(new KillEnemyQuest(boss.Name, 1));
             QuestManager.Instance.AddQuest(killQuest);
 

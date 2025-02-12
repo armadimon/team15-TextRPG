@@ -30,7 +30,6 @@ namespace _15TextRPG.Source
         public void ShowProgress()
         {
             Console.WriteLine($"아이템 {itemId} 수집 {currentAmount}/{requiredAmount}");
-            Console.ReadLine();
         }
     }
 
@@ -57,6 +56,7 @@ namespace _15TextRPG.Source
         {
             Console.WriteLine($"{enemyName} 처치 {currentKills}/{requiredKills}");
         }
+
     }
 
     class HackEnemyQuest : IQuestObject
@@ -82,7 +82,6 @@ namespace _15TextRPG.Source
         public void ShowProgress()
         {
             Console.WriteLine($"해킹 진도 {currentHacks}/{requiredHacks}");
-            Console.ReadLine();
         }
     }
 }

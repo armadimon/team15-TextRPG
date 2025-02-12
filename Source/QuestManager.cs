@@ -40,7 +40,6 @@ namespace _15TextRPG.Source
                 return;
             quest.Object[objectIndex].UpdateProgress();
             quest.CheckComplete();
-            Console.WriteLine($"{quest.Status}");
 
             Console.ReadLine();
             if (quest.Status == QuestStatus.Completed)
@@ -80,7 +79,6 @@ namespace _15TextRPG.Source
                     obj.ShowProgress();
                 }
             }
-            Console.WriteLine($"보상: {1}");
         }
     }
 }

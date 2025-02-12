@@ -9,7 +9,7 @@ using _15TextRPG.Source.Combat;
 
 namespace _15TextRPG.Source
 {
-    public class Player : IInventoryOwner
+    public class Player : IInventoryOwner, ICharacter
     {
         public string Name { get; set; }
         public Job Job { get; set; }
@@ -48,7 +48,7 @@ namespace _15TextRPG.Source
             MaxExp = 5;
             Job = job;
             MaxHP = 100;
-            Health = MaxHP;
+            Health = 50;
             Gold = 1500;
             Inventory = new();
         }

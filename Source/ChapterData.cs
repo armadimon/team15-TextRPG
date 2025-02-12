@@ -79,6 +79,7 @@ namespace _15TextRPG.Source
             stage2.SetTile(3, 7, TileType.Wall);
             Database database = new Database();
             stage2.SetTile(2, 5, TileType.ETC, database);
+            stage2.SetTile(5, 5, TileType.Battle, new EnemyTrigger((5, 5)));
             stage2.SetTile(29, 5, TileType.ChangeStage, new ChangeStage(stage1, true));
 
             // 현재 스테이지 설정
@@ -90,11 +91,11 @@ namespace _15TextRPG.Source
             //QuestManager.Instance.AddQuest(killQuest);
 
 
-            Quest collectQuest = new Quest("기밀 문서를 입수하라", ChapterID.Chapter1, "메가코프의 최상층에서 기밀 문서를 입수해라.");
+            Quest collectQuest = new Quest("기밀 문서를 입수하라", ChapterID.Chapter1, "메가코프의 최상층에서 기밀 문서를 입수해라.", 5, 3000);
             collectQuest.Object.Add(new CollectItemQuest("기밀문서", 1));
             QuestManager.Instance.AddQuest(collectQuest);
 
-            Quest HackQuest = new Quest("해킹으로 정보를 얻어라", ChapterID.Chapter1, "해킹을 2번 성공 시켜라");
+            Quest HackQuest = new Quest("해킹으로 정보를 얻어라", ChapterID.Chapter1, "해킹을 2번 성공 시켜라", 3, 1500);
             HackQuest.Object.Add(new HackEnemyQuest(2));
             QuestManager.Instance.AddQuest(HackQuest);
 

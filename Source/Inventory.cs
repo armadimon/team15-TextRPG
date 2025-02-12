@@ -1,9 +1,12 @@
-﻿using System;
+﻿using _15TextRPG.Source.Combat;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -16,6 +19,13 @@ namespace _15TextRPG.Source
     public class Inventory
     {
         public List<ItemIdentifier> Items { get; set; } = [];
+        public int Count => Items.Count;
+        public int GetItemCount(int index) => Items[index].Count;
+        public int GetItemCount(IItem item) =>
+                Items.FirstOrDefault(_ => item.GetType() == Type.GetType(_.ItemType))?.Count ?? 0;
+
+
+        public string GetItemName(int index) => Items[index].Name;
 
         public class ItemIdentifier
         {
@@ -34,31 +44,19 @@ namespace _15TextRPG.Source
             public int Count { get; set; }
         }
 
-        public int GetItemNum(IItem item)
-        {
-            foreach (var _ in Items)
-            {
-                if(item.GetType() == Type.GetType(_.ItemType))
-                {
-                    return _.Count;
-                }
-            }
-            return 0;
-        }
 
-        public bool Use(IItem item)
+        public bool Use(IItem item, ICharacter? target = null)
         {
             foreach (var _ in Items)
             {
                 if (item.GetType() == Type.GetType(_.ItemType))
                 {
-                    item.Use();
+                    item.Use(target);
                     return true;
                 }
             }
             return false;
         }
-
         public void Add(IItem item, int num = 1)
         {
             foreach (var _ in Items)
@@ -72,16 +70,7 @@ namespace _15TextRPG.Source
             Items.Add(new ItemIdentifier(item.GetType().ToString(), item.Tag, item.Name, num));
         }
 
-        public void Add(int tag, int num = 1)
-        {
-            foreach (var _ in Items)
-            {
-                if (tag == _.Tag)
-                {
-                    _.Count += num;
-                }
-            }
-        }
+        public void Add(int index, int num = 1) => Items[index].Count += num;
 
         public void Add(string name, int num = 1)
         {
@@ -180,7 +169,8 @@ namespace _15TextRPG.Source
         // 에라 모르겠다 함수들
         // 권장되지 않음
         // 리플렉션 처음 써봄
-        public bool Use(string name)
+
+        public bool Use(string name, ICharacter? target = null)
         {
             foreach (var _ in Items)
             {
@@ -196,7 +186,7 @@ namespace _15TextRPG.Source
 
                             MethodInfo? method = type.GetMethod("Use");
 
-                            method?.Invoke(instance, null);
+                            method?.Invoke(instance,  new object?[] {target});
                         }
                     }
                     return true;
@@ -205,31 +195,47 @@ namespace _15TextRPG.Source
             return false;
         }
 
-        public bool Use(int tag)
+        public bool Use(int index, ICharacter? target = null)
         {
-            foreach (var _ in Items)
+            Type? type = Type.GetType(Items[index].ItemType);
+
+            if (type is not null)
             {
-                if (_.Tag == tag)
-                {
-                    if (_.Count > 0)
-                    {
-                        Type? type = Type.GetType(_.ItemType);
+                object? instance = Activator.CreateInstance(type);
 
-                        if (type is not null)
-                        {
-                            object? instance = Activator.CreateInstance(type);
+                MethodInfo? method = type.GetMethod("Use");
 
-                            MethodInfo? method = type.GetMethod("Use");
-
-                            method?.Invoke(instance, null);
-                        }
-                    }
-
-                    return true;
-                }
+                method?.Invoke(instance, new object?[] { target });
             }
+
             return false;
         }
+
+        //public bool Use(int tag, ICharacter? target = null)
+        //{
+        //    foreach (var _ in Items)
+        //    {
+        //        if (_.Tag == tag)
+        //        {
+        //            if (_.Count > 0)
+        //            {
+        //                Type? type = Type.GetType(_.ItemType);
+
+        //                if (type is not null)
+        //                {
+        //                    object? instance = Activator.CreateInstance(type);
+
+        //                    MethodInfo? method = type.GetMethod("Use");
+
+        //                    method?.Invoke(instance, null);
+        //                }
+        //            }
+
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
         public void ShowInventory()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -250,7 +256,7 @@ namespace _15TextRPG.Source
                 Console.Write($" (x{item.Count})");
 
 
-                if (item.Tag == (int)ItemList.HpRecovery )Console.Write($"- 회복 아이템이다.");
+                if (item.Tag == (int)ItemList.HpRecovery )Console.Write($"- 소비 아이템이다.");
 
                 else Console.Write("- 기타 아이템이다.");
 

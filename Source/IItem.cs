@@ -1,3 +1,4 @@
+using _15TextRPG.Source.Combat;
 using System;
 using System.Numerics;
 using System.Reflection.Metadata;
@@ -14,7 +15,7 @@ namespace _15TextRPG.Source
         public string Name { get; }
         public string Desc { get; }
 
-        public void Use();
+        public void Use(ICharacter? target = null);
     }
 
     class Example() : IItem
@@ -29,44 +30,93 @@ namespace _15TextRPG.Source
 
         public string Desc { get; } = string.Empty;
 
-        public void Use()
+        public void Use(ICharacter? target)
         {
-            Console.WriteLine("Use Example Item!");
+            if(target is not null)
+            {
+                if (target is Player)
+                {
+                    Player player = (Player)target;
+                    Console.WriteLine(player.Name);
+                }
+                else if (target is IMonster)
+                {
+                    IMonster monster = (IMonster)target;
+                    Console.WriteLine(monster.MonsterName);
+                }
+            }
+        }
+    }
+
+    class HackTool() : IItem
+    {
+        public int Tag { get; } = 0;
+
+        public int Stat { get; } = 0;
+
+        public int Value { get; } = 0;
+
+        public string Name { get; } = "HackTool";
+
+        public string Desc { get; } = string.Empty;
+
+        public void Use(ICharacter? target)
+        {
+            if (target is not null)
+            {
+                if (target is Player)
+                {
+                    Player player = (Player)target;
+                    Console.WriteLine(player.Name);
+                }
+                else if (target is IMonster)
+                {
+                    IMonster monster = (IMonster)target;
+                    Console.WriteLine(monster.MonsterName);
+                }
+            }
         }
     }
 
     class RecoveryItem : IItem
     {
-        public int Tag { get; }
-        public int Stat { get; }
-        public int Value { get; }
-        public string Name { get; }
-        public string Desc { get; }
-        public int RecoveryAmount { get; }
+        public int Tag { get; } = (int)ItemList.HpRecovery;
+        public int Stat { get; } = 1;
+        public int Value { get; } = 1;
+        public string Name { get; } = "HP 포션";
+        public string Desc { get; } = "HP를 50만큼 회복시켜주는 포션이다.";
+        public int RecoveryAmount { get; } = 50;
       
-        private Player Player { get; }
+        private Player Player { get; } = GameManager.Instance.GameData.Player;
 
-        public RecoveryItem(Player player)
-        {
-            Player = player;
-        }
-        public RecoveryItem(int tag, int stat, int value, string name, string desc, int recoveryAmount)
-        {
-            Tag = tag;
-            Stat = stat;
-            Value = value;
-            Name = name;
-            Desc = desc;
-            RecoveryAmount = recoveryAmount;
 
-            Player = GameManager.Instance.GameData.Player;
-        }
-        public void Use()
+        public void Use(ICharacter? target)
         {
+            if (Player.Health == Player.MaxHP)
+            {
+                Console.WriteLine("플레이어는 이미 최대 체력입니다.");
+                return;
+            }
             Player.Health = Math.Min(Player.Health + RecoveryAmount, Player.MaxHP);
             Console.WriteLine($"{RecoveryAmount}만큼 플레이어 회복함 -> {Player.Health}");
-            
         }
+    }
 
+    class StateUpgradeItem : IItem
+    {
+        public int Tag { get; } = (int)ItemList.StrUpPotion;
+        public int Stat { get; } = 1;
+        public int Value { get; } = 1;
+        public string Name { get; } = "힘이나는 포션";
+        public string Desc { get; } = "STR 수치를 1증가 시켜주는 포션";
+        public int RecoveryAmount { get; } = 1;
+
+        private Player Player { get; } = GameManager.Instance.GameData.Player;
+
+        public void Use(ICharacter? target)
+        {
+            
+            Console.WriteLine($"{RecoveryAmount}만큼 플레이어의 STR이 증가 -> {Player.Str}");
+        }
     }
 }
