@@ -40,76 +40,59 @@ namespace _15TextRPG.Source
 
 
         public Player(string name, Job job)
-        {
+        {           
             Name = name;
             Level = 1;
             StatPoint = 0;
             Exp = 0;
             MaxExp = 5;
             Job = job;
-            Str = 3;
-            Dex = 1;
-            Critical = 20 + Dex;
-            Dodge = 15 + Dex;
-            AttackDamage = 140 + Str;
-            SkillDamage = 20 + Dex;
-            DefensePoint = 5 + Str;
-            SkillDefensePoint = 5 + Str;
             MaxHP = 100;
             Health = MaxHP;
-            MaxMP = 25;
             MP = MaxMP;
             Gold = 1500;
-            Inventory = new(this);
+            //Inventory = new(this);
         }
 
-        //public Player(string name, int description) // 민첩캐
-        //{
-        //    Name = name;
-        //    Level = 1;
-        //    SkillPoint = 0;
-        //    Exp = 0;
-        //    MaxExp = 5;
-        //    Description = "부랑아";
-        //    Str = 1;
-        //    Dex = 3;
-        //    Critical = 25 + Dex;
-        //    Dodge = 20 + Dex;
-        //    AttackDamage = 20 + Str;
-        //    SkillDamage = 40 + Dex;
-        //    DefensePoint = 5 + Str;
-        //    SkillDefensePoint = 5 + Str;
-        //    MaxHP = 100;
-        //    Health = MaxHP;
-        //    MaxMP = 50;
-        //    MP = MaxMP;
-        //    Gold = 1500;
-        //    Inventory = new(this);
-        //}
-
-        //public Player(string name, int description) / 지능캐
-        //{
-        //    Name = name;
-        //    Level = 1;
-        //    SkillPoint = 0;
-        //    Exp = 0;
-        //    MaxExp = 5;
-        //    Description = "기업";
-        //    Str = 1;
-        //    Dex = 1;
-        //    Critical = 20 + Dex;
-        //    Dodge = 15 + Dex;
-        //    AttackDamage = 20 + Str;
-        //    SkillDamage = 20 + Str;
-        //    DefensePoint = 2 + Str;
-        //    SkillDefensePoint = 2 + Str;
-        //    MaxHP = 100;
-        //    Health = MaxHP;
-        //    MaxMP = 50;
-        //    MP = MaxMP;
-        //    Gold = 1500;
-        //    Inventory = new (this);
-        //}
+        public void StartStat(Job choice)
+        {
+            if (choice == Job.Nomad)
+            {
+                Str = 3;
+                Dex = 1;
+                Critical = 20 + Dex;
+                Dodge = 15 + Dex;
+                AttackDamage = 140 + Str;
+                SkillDamage = 20 + Dex;
+                DefensePoint = 5 + Str;
+                SkillDefensePoint = 5 + Str;
+                MaxMP = 25;
+            }
+            else if (choice == Job.Gutterchild)
+            {
+                Str = 1;
+                Dex = 3;
+                Critical = 25 + Dex;
+                Dodge = 20 + Dex;
+                AttackDamage = 20 + Str;
+                SkillDamage = 40 + Dex;
+                DefensePoint = 5 + Str;
+                SkillDefensePoint = 5 + Str;
+                MaxMP = 50;
+            }
+            else
+            {
+                Str = 1;
+                Dex = 1;
+                Critical = 20 + Dex;
+                Dodge = 15 + Dex;
+                AttackDamage = 20 + Str;
+                SkillDamage = 20 + Str;
+                DefensePoint = 2 + Str;
+                SkillDefensePoint = 2 + Str;
+                MaxMP = 50;
+            }
+        }
 
         public void ShowStatus()
         {

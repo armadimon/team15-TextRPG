@@ -141,6 +141,7 @@ namespace _15TextRPG.Source.State
                 {           
                     Job choice = (Job)input;
                     gameManager.GameData.Player.Job = choice;
+                    gameManager.GameData.Player.StartStat(choice);
                     Console.ResetColor();
 
                     break;
