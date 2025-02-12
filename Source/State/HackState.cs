@@ -64,7 +64,7 @@ namespace _15TextRPG.Source.State
                     {
                         if (HackingProcess(command))
                         {
-                            Console.WriteLine("Hacking Success!");
+                            Console.WriteLine("\nHacking Success!");
                             GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
                             return;
                         }

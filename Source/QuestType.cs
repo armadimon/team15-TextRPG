@@ -52,13 +52,10 @@ namespace _15TextRPG.Source
         public void UpdateProgress()
         {
             currentKills++;
-            Console.WriteLine($"{enemyName} 처치 {currentKills}/{requiredKills}");
-            Console.ReadLine();
         }
         public void ShowProgress()
         {
             Console.WriteLine($"{enemyName} 처치 {currentKills}/{requiredKills}");
-            Console.ReadLine();
         }
     }
 

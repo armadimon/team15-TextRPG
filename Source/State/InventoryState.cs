@@ -21,23 +21,25 @@ namespace _15TextRPG.Source.State
 
         public void HandleInput()
         {
+            var item = ItemData.RecoveryItems[0];
+
             Console.Write("\n원하시는 행동을 입력해주세요. >> ");
             string input = Console.ReadLine() ?? "";
             switch (input)
             {
                 case "1":
-                    GameManager.Instance.GameData.Player.Inventory.Add(new RecoveryItem((int)ItemList.HpRecovery, 0, 1, "Hp포션", "체력을 회복시켜주는 포션이다.", 100));
-
+                    GameManager.Instance.GameData.Player.Inventory.Add(item);
                     Console.WriteLine("추가됨");
                     break;
                 case "2":
-                    var item = new RecoveryItem((int)ItemList.HpRecovery, 0, 1, "Hp포션", "체력을 회복시켜주는 포션이다.", 100);
+                    
                     if (GameManager.Instance.GameData.Player.Inventory.GetItemNum(item) > 0 
                         && GameManager.Instance.GameData.Player.Health < GameManager.Instance.GameData.Player.MaxHP)
                     {
-                        GameManager.Instance.GameData.Player.Inventory.Use(new RecoveryItem(GameManager.Instance.GameData.Player));
-                        GameManager.Instance.GameData.Player.Inventory.Subtract(new RecoveryItem(GameManager.Instance.GameData.Player));
+                        GameManager.Instance.GameData.Player.Inventory.Use(item);
                         Console.WriteLine("아이템 사용함");
+                        GameManager.Instance.GameData.Player.Inventory.Subtract(item);
+                        Console.WriteLine("아이템 삭제함");
                     }
                     else
                     {
