@@ -27,13 +27,18 @@ namespace _15TextRPG.Source
         public ChapterID ChapterName { get; set; }
         public List<IQuestObject> Object { get; } = new List<IQuestObject>();
         public QuestStatus Status { get; private set; }
+        public Reward Reward { get; set; }
 
-        public Quest(string name, ChapterID chapterName, string description)
+        public Quest(string name, ChapterID chapterName, string description, int rewardExp, int rewardGold, List<IItem>? items = null)
         {
+
             Name = name;
             ChapterName = chapterName;
             Description = description;
             Status = QuestStatus.NotStarted;
+            if (items == null)
+                items = new List<IItem>();
+            Reward = new Reward(items, rewardExp, rewardGold);
         }
 
         public void Start()
@@ -46,6 +51,18 @@ namespace _15TextRPG.Source
         {
             if (Status == QuestStatus.InProgress && Object.All(o => o.IsCompleted))
                 Status = QuestStatus.Completed;
+        }
+
+        public void ShowRewards()
+        {
+            Console.WriteLine($"[보상]\n");
+            Console.WriteLine($"Exp: {Reward.rewardExp}");
+            Console.WriteLine($"Gold: {Reward.rewardGold}");
+            foreach( var item in Reward.Items)
+            {
+                Console.WriteLine($"아이템 : [{item.Name}] : {item.Desc}");
+            }
+            Console.WriteLine();
         }
     }
 }

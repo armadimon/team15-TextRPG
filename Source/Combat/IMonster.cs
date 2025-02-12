@@ -62,7 +62,7 @@ namespace _15TextRPG.Source.Combat
 
         public Reward GetReward()
         {
-            return new Reward(Items);
+            return new Reward(Items, 0, 0);
         }
 
         //void Attack(Player player)
@@ -96,7 +96,7 @@ namespace _15TextRPG.Source.Combat
         public List<IItem> Items { get; } = ItemData.RecoveryItems;
         public Reward GetReward()
         {
-            return new Reward(Items);
+            return new Reward(Items, 0, 0);
         }
 
     }
@@ -117,7 +117,7 @@ namespace _15TextRPG.Source.Combat
         public List<IItem> Items { get; } = ItemData.RecoveryItems;
         public Reward GetReward()
         {
-            return new Reward(Items);
+            return new Reward(Items, 0, 0);
         }
     }
 }
