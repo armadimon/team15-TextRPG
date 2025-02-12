@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,20 +32,21 @@ namespace _15TextRPG.Source.State
                     GameManager.Instance.GameData.Player.Inventory.Add(item);
                     Console.WriteLine("추가됨");
                     break;
-                case "2":
-                    
-                    if (GameManager.Instance.GameData.Player.Inventory.Find(item) != null
-                        && GameManager.Instance.GameData.Player.Health < GameManager.Instance.GameData.Player.MaxHP)
+                case "2":     
+                    if (GameManager.Instance.GameData.Player.Inventory.Find(item) != null)
                     {
                         GameManager.Instance.GameData.Player.Inventory.Use(item, GameManager.Instance.GameData.Player);
                         Console.WriteLine("아이템 사용함");
                         GameManager.Instance.GameData.Player.Inventory.Subtract(item);
                         Console.WriteLine("아이템 삭제함");
                     }
+                    else if(GameManager.Instance.GameData.Player.Health < GameManager.Instance.GameData.Player.MaxHP)
+                    {
+                        Console.WriteLine("플레이어의 체력이 이미 가득 차 있습니다.");
+                    }
                     else
                     {
-                        Console.WriteLine("아이템 없거나 이미 피 만땅임");
-
+                        Console.WriteLine("아이템이 없습니다.");
                     }
 
                     Console.ReadLine();
