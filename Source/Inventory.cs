@@ -149,7 +149,15 @@ namespace _15TextRPG.Source
         public IEnumerable<ItemIdentifier> Find(IItem _item)
         {
             var query = from item in Items
-                        where item.GetType() == _item.GetType()
+                        where Type.GetType(item.ItemType) == _item.GetType()
+                        select item;
+
+            return query;
+        }
+        public IEnumerable<ItemIdentifier> Find(int tag)
+        {
+            var query = from item in Items
+                        where item.Tag == tag
                         select item;
 
             return query;
