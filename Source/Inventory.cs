@@ -231,5 +231,33 @@ namespace _15TextRPG.Source
             }
             return false;
         }
+        public void ShowInventory()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\n[인벤토리]");
+            Console.ResetColor();
+
+            if (Items.Count == 0)
+            {
+                Console.WriteLine("\n인벤토리가 비어 있습니다.");
+                return;
+            }
+
+            foreach (var item in Items)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write($"{item.Name}");
+                Console.ResetColor();
+                Console.Write($" (x{item.Count})");
+
+
+                if (item.Tag == (int)ItemList.HpRecovery )Console.Write($"- 회복 아이템이다.");
+
+                else Console.Write("- 기타 아이템이다.");
+
+                Console.WriteLine();
+            }
+
+        }
     }
 }

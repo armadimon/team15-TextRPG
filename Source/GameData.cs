@@ -13,6 +13,13 @@ namespace _15TextRPG.Source
         Gutterchild,
         Enterprise
     }
+    public enum ItemList
+    {
+        HpRecovery = 1,
+
+    }
+
+
     public class GameData
     {
         public Player Player { get; set; }

@@ -42,8 +42,13 @@ namespace _15TextRPG.Source
         public string Name { get; }
         public string Desc { get; }
         public int RecoveryAmount { get; }
-       
+      
+        private Player Player { get; }
 
+        public RecoveryItem(Player player)
+        {
+            Player = player;
+        }
         public RecoveryItem(int tag, int stat, int value, string name, string desc, int recoveryAmount)
         {
             Tag = tag;
@@ -55,11 +60,9 @@ namespace _15TextRPG.Source
         }
         public void Use()
         {
-            throw new NotImplementedException();
+            Player.Health = Math.Min(Player.Health + RecoveryAmount, Player.MaxHP);
+            
         }
-        public void Use(Player player)
-        {
-            player.Health += RecoveryAmount;
-        }
+
     }
 }

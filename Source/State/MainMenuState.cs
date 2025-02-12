@@ -20,7 +20,9 @@ namespace _15TextRPG.Source.State
             Console.WriteLine("\n3. 챕터 선택");
             Console.WriteLine("\n4. hn전투");
             Console.WriteLine("\n5. JW전투");
-            Console.WriteLine("0. 종료");
+            Console.WriteLine("\n6. 회복하기");
+
+            Console.WriteLine("\n0. 종료");
         }
 
         public void HandleInput()
@@ -45,6 +47,9 @@ namespace _15TextRPG.Source.State
                     break;
                 case "5":
                     GameManager.Instance.ChangeState(new BattleMenuState());
+                    break;
+                case "6":
+                    GameManager.Instance.ChangeState(new InventoryState());
                     break;
                 case "0":
                     GameManager.Instance.QuitGame();
