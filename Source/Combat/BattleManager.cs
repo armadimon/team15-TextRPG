@@ -44,7 +44,7 @@ namespace _15TextRPG.Source.Combat
 
         public void ShowMonster(bool num, int x, int y)
         {
-            if(num)
+            if (num)
             {
                 for (int i = 0; i < monsters.Count; i++)
                 {
@@ -165,7 +165,7 @@ namespace _15TextRPG.Source.Combat
             Console.SetCursorPosition(60, 0);
             Console.WriteLine("특수공격");
 
-            for ( int i = 0; i < userskills.Count; i++)
+            for (int i = 0; i < userskills.Count; i++)
             {
                 Console.SetCursorPosition(60, i * 3 + 2);
                 Console.WriteLine($"{i + 1} {userskills[i].SkillName}");
@@ -241,7 +241,7 @@ namespace _15TextRPG.Source.Combat
                     MonsterPhase(GameManager.Instance.BattleManager);
                     if (lose)
                         goto BattleLose;
-                   
+
                 }
             }
         Victory:
@@ -261,7 +261,7 @@ namespace _15TextRPG.Source.Combat
                 }
             }
             else
-            {   
+            {
                 Console.Clear();
                 GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
                 GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
@@ -283,7 +283,7 @@ namespace _15TextRPG.Source.Combat
                 }
             }
 
-            if(!Runable)
+            if (!Runable)
             {
                 for (int i = 0; i < GameManager.Instance.BattleManager.monsters.Count; i++)
                 {
@@ -292,6 +292,7 @@ namespace _15TextRPG.Source.Combat
             }
 
         BattleLose:
+            StatPhase();
             GameManager.Instance.BattleManager.monsters.Clear();
             GameManager.Instance.GameData.Player.Health = GameManager.Instance.GameData.Player.MaxHP;
             GameManager.Instance.GameData.Player.MP = GameManager.Instance.GameData.Player.MaxMP;
@@ -315,7 +316,7 @@ namespace _15TextRPG.Source.Combat
             Console.Write("\n원하시는 대상을 입력해주세요. >> ");
             string input = Console.ReadLine() ?? "";
             int j;
-            if (!int.TryParse(input, out j) || j > GameManager.Instance.BattleManager.monsters.Count || GameManager.Instance.BattleManager.monsters[j-1].Health <= 0)
+            if (!int.TryParse(input, out j) || j > GameManager.Instance.BattleManager.monsters.Count || GameManager.Instance.BattleManager.monsters[j - 1].Health <= 0)
             {
                 Console.WriteLine("잘못된 입력입니다.");
                 Thread.Sleep(1500);
@@ -359,9 +360,8 @@ namespace _15TextRPG.Source.Combat
 
             Console.Write("\n원하시는 스킬을 입력해주세요. >> ");
             string input1 = Console.ReadLine() ?? "";
-            int i = int.Parse(input1);
 
-            if (!int.TryParse(input1, out i) || i > GameManager.Instance.BattleManager.skills.Count || i <= 0)
+            if (!int.TryParse(input1, out int i) || i > GameManager.Instance.BattleManager.userskills.Count || i <= 0)
             {
                 Console.WriteLine("잘못된 입력입니다.");
                 Thread.Sleep(1500);
@@ -375,9 +375,8 @@ namespace _15TextRPG.Source.Combat
                 GameManager.Instance.BattleManager.ShowMonster(true, 0, 9);
                 Console.Write("\n원하시는 대상을 입력해주세요. >> ");
                 string input2 = Console.ReadLine() ?? "";
-                int j;
 
-                if (!int.TryParse(input2, out j) || j > GameManager.Instance.BattleManager.monsters.Count || j <= 0)
+                if (!int.TryParse(input2, out int j) || j > GameManager.Instance.BattleManager.monsters.Count || j <= 0)
                 {
                     Console.WriteLine("잘못된 입력입니다.");
                     goto ReChooseTarget;
@@ -386,11 +385,12 @@ namespace _15TextRPG.Source.Combat
                 {
                     case "1":
                         GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 0, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
-                      break;
+                        break;
                     case "2":
                         if (GameManager.Instance.BattleManager.monsters[1] == null)
                         {
                             Console.WriteLine("잘못된 입력입니다.");
+                            Thread.Sleep(1500);
                             goto ReChooseTarget;
                         }
                         else
@@ -400,6 +400,7 @@ namespace _15TextRPG.Source.Combat
                         if (GameManager.Instance.BattleManager.monsters[2] == null)
                         {
                             Console.WriteLine("잘못된 입력입니다.");
+                            Thread.Sleep(1500);
                             goto ReChooseTarget;
                         }
                         else
@@ -409,6 +410,7 @@ namespace _15TextRPG.Source.Combat
                         if (GameManager.Instance.BattleManager.monsters[3] == null)
                         {
                             Console.WriteLine("잘못된 입력입니다.");
+                            Thread.Sleep(1500);
                             goto ReChooseTarget;
                         }
                         else
@@ -461,8 +463,8 @@ namespace _15TextRPG.Source.Combat
                 }
             }
 
-            if(!lose)
-            {          
+            if (!lose)
+            {
                 Console.WriteLine();
                 Console.WriteLine("적의 공격이 끝났습니다.");
                 Thread.Sleep(1500);
@@ -602,5 +604,64 @@ namespace _15TextRPG.Source.Combat
             if (GameManager.Instance.GameData.Player.Health <= 0)
                 GameManager.Instance.GameData.Player.Health = 0;
         }
-    }    
+
+        public void StatPhase()
+        {
+            if (GameManager.Instance.GameData.Player.StatPoint > 0)
+            {
+                string input;
+                do
+                {
+                    Console.Clear();
+                    Console.WriteLine("사용하지 않은 StatPoint가 있습니다.");
+                    Console.WriteLine($"남은 StatPoint: {GameManager.Instance.GameData.Player.StatPoint}");
+                    Console.WriteLine();
+                    Console.WriteLine($"1. Str {GameManager.Instance.GameData.Player.Str}: 기본 공격력과 방어력에 영향을 미칩니다.");
+                    Console.WriteLine();
+                    Console.WriteLine($"2. Dex {GameManager.Instance.GameData.Player.Dex}: 특수 공격력과 회피율 및 치명타 확률에 영향을 미칩니다.");
+                    Console.WriteLine();
+                    Console.WriteLine("0. 나가기");
+                    Console.Write("\n원하는 능력치를 입력해주세요. >> ");
+                    input = Console.ReadLine() ?? "";
+
+                    switch (input)
+                    {
+                        case "1":
+                            if (GameManager.Instance.GameData.Player.StatPoint <= 0)
+                            {
+                                Console.WriteLine("StatPoint가 없습니다.");
+                                Thread.Sleep(1500);
+                            }
+                            else
+                            {
+                                GameManager.Instance.GameData.Player.Str++;
+                                GameManager.Instance.GameData.Player.StatPoint--;
+                            }
+                            break;
+                        case "2":
+                            if (GameManager.Instance.GameData.Player.StatPoint <= 0)
+                            {
+                                Console.WriteLine("StatPoint가 없습니다.");
+                                Thread.Sleep(1500);
+                            }
+                            else
+                            {
+                                GameManager.Instance.GameData.Player.Dex++;
+                                GameManager.Instance.GameData.Player.StatPoint--;
+                            }
+                            break;
+                        case "0":
+                            break;
+                        default:
+                            Console.WriteLine("잘못된 입력입니다.");
+                            Thread.Sleep(1500);
+                            break;
+                    }
+                } while (input != "0");
+
+                Console.WriteLine("능력치 선택을 종료합니다.");
+                Thread.Sleep(1500);
+            }
+        }
+    }
 }

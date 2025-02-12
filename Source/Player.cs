@@ -28,6 +28,7 @@ namespace _15TextRPG.Source
         public int MP { get; set; }
         public int Gold { get; set; }
         public int Level { get; set; }
+        public int StatPoint { get; set; }
         public int Exp {  get; set; }
         public int MaxExp { get; set; }
         public int ClearCount { get; set; }
@@ -42,6 +43,7 @@ namespace _15TextRPG.Source
         {
             Name = name;
             Level = 1;
+            StatPoint = 10;
             Exp = 0;
             MaxExp = 5;
             Job = job;
@@ -49,7 +51,7 @@ namespace _15TextRPG.Source
             Dex = 1;
             Critical = 20 + Dex;
             Dodge = 15 + Dex;
-            AttackDamage = 40 + Str;
+            AttackDamage = 140 + Str;
             SkillDamage = 20 + Dex;
             DefensePoint = 5 + Str;
             SkillDefensePoint = 5 + Str;
@@ -65,6 +67,7 @@ namespace _15TextRPG.Source
         //{
         //    Name = name;
         //    Level = 1;
+        //    SkillPoint = 0;
         //    Exp = 0;
         //    MaxExp = 5;
         //    Description = "부랑아";
@@ -88,6 +91,7 @@ namespace _15TextRPG.Source
         //{
         //    Name = name;
         //    Level = 1;
+        //    SkillPoint = 0;
         //    Exp = 0;
         //    MaxExp = 5;
         //    Description = "기업";
@@ -126,6 +130,8 @@ namespace _15TextRPG.Source
             Console.WriteLine($"방어력 : {DefensePoint} ({dp})");
             Console.WriteLine($"체력 : {Health}");
             Console.WriteLine($"Gold : {Gold} G");
+            Console.WriteLine($"{Str}");
+            Console.WriteLine($"{Dex}");
         }
 
         public void Attack(GameManager gameManager, int i)
@@ -155,6 +161,7 @@ namespace _15TextRPG.Source
                 if (gameManager.GameData.Player.Exp >= gameManager.GameData.Player.MaxExp)
                 {
                     gameManager.GameData.Player.Level += gameManager.GameData.Player.Exp / gameManager.GameData.Player.MaxExp;
+                    gameManager.GameData.Player.StatPoint += gameManager.GameData.Player.Level;
                     gameManager.GameData.Player.Exp %= gameManager.GameData.Player.MaxExp;
                 }
 
