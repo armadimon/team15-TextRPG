@@ -10,7 +10,6 @@ namespace _15TextRPG.Source.State
         string command = "";
         List<string> commands = new List<string>();
         int commandIndex = -1;
-        bool isHacked = false;
 
         public void DisplayMenu()
         {
@@ -150,11 +149,6 @@ namespace _15TextRPG.Source.State
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ReadLine();
-        }
-
-        public void checkHacked()
-        {
-            isHacked = true;
         }
     }
 }

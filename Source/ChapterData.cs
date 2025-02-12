@@ -75,6 +75,10 @@ namespace _15TextRPG.Source
             killQuest.Object.Add(new KillEnemyQuest(boss.Name, 1));
             QuestManager.Instance.AddQuest(killQuest);
 
+            Quest HackQuest = new Quest("해킹으로 정보를 얻어라", ChapterID.Chapter1, "해킹을 2번 성공 시켜라");
+            HackQuest.Object.Add(new HackEnemyQuest(2));
+            QuestManager.Instance.AddQuest(HackQuest);
+
             AddQuestEvent("FindPass", "패스워드를 찾으세요.");
             AddQuestEvent("DefeatBoss", "보스를 처치하세요.");
         }
