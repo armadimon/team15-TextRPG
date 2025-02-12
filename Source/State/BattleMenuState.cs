@@ -8,16 +8,29 @@ using _15TextRPG.Source.Combat;
 
 namespace _15TextRPG.Source.State
 {
-    public class BattleMenuState() : IGameState
+    public class BattleMenuState : IGameState
     {
-        public void DisplayMenu(GameManager gameManager)
+
+        public EnemyTrigger? Enemy { get; set; }
+
+        public BattleMenuState()
+        {
+
+        }
+
+        public BattleMenuState(EnemyTrigger enemy)
+        {
+            Enemy = enemy;
+        }
+
+        public void DisplayMenu()
         {
         }
 
-        public void HandleInput(GameManager gameManager)
+        public void HandleInput()
         {
-            gameManager.BattleManager.InBattle(gameManager);
-            //gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
+            GameManager.Instance.BattleManager.InBattle(Enemy);
+            //GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
         }        
     }
 }

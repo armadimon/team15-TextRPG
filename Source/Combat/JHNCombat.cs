@@ -24,7 +24,7 @@ namespace _15TextRPG.Source.Combat
 
         }
 
-        public void ScanEnemy(NPC enemy)
+        public void ScanEnemy(Player player, NPC enemy)
         {
             // 이미 모든 정보를 얻었다면 추가 스캔 불가
             if (revealedLetters >= enemy.Name.Length)
@@ -70,7 +70,9 @@ namespace _15TextRPG.Source.Combat
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"{enemy.Desc}");
 
-            Console.Write($"{combatCount}");
+            int totalCombatCount = combatCount + (int)(player.Intelligence * 0.5);
+
+            Console.Write($"{totalCombatCount}(+{(int)(player.Intelligence * 0.5)})");
             Console.ResetColor();
             Console.WriteLine($"초 내에 정확히 입력하세요");
 
@@ -79,7 +81,7 @@ namespace _15TextRPG.Source.Combat
             stopwatch.Start();
 
             Console.Write("\n보안 키 입력: ");
-            string playerInput = ReadInputWithTimeout(combatCount); // combatCount동안 입력 받기
+            string playerInput = ReadInputWithTimeout(totalCombatCount); // combatCount동안 입력 받기
 
 
             if (string.IsNullOrWhiteSpace(playerInput))
@@ -181,6 +183,8 @@ namespace _15TextRPG.Source.Combat
 
             // 적의 이름과 유사도를 계산
             double accuracy = CalculateNameSimilarity(playerInput, enemy.Name);
+            int totalDamage = CalculateDamage(player.AttackDamage, enemy.DefensePoint, accuracy);
+            enemy.Health -= totalDamage;
 
             // 정확하게 맞췄다면 즉시 처치
             if (accuracy == 1.0)
@@ -194,15 +198,28 @@ namespace _15TextRPG.Source.Combat
                 Console.ResetColor();
                 Console.WriteLine($"\n{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
                 enemy.Health = 0;
+                // npc의 isHack을 true로 변경
+                enemy.IsHacked = true;
+                enemy.RevealedName = enemy.Name;
+            }
+            else if (enemy.Health < 0)
+            {
+                Console.WriteLine($"\n{player.Name}이(가) {GetRevealedEnemyName(enemy)}의 시스템을 해킹하여 {totalDamage}만큼 해킹 데미지를 주었습니다!");
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine();
+                Console.WriteLine("+---------------------------------+");
+                Console.WriteLine("|  해킹 성공!                     |");
+                Console.WriteLine("|  적의 보안을 완전히 무너뜨렸다  |");
+                Console.WriteLine("+---------------------------------+\n");
+                Console.ResetColor();
+                Console.WriteLine($"\n{player.Name}이(가) {enemy.Name}의 보안을 완전히 무너뜨렸습니다! 적이 즉시 무력화되었습니다!");
+                enemy.Health = 0;
                 chap.nowPlay = enemy;
                 enemy.RevealedName = enemy.Name;
             }
             else
-            {
-                int totalDamage = CalculateDamage(player.AttackDamage, enemy.DefensePoint, accuracy);
-
-
-                enemy.Health -= totalDamage;
+            { 
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine();
                 Console.WriteLine("+---------------------------------+");
@@ -251,6 +268,8 @@ namespace _15TextRPG.Source.Combat
             Console.WriteLine("+---------------------------------+\n");
             Console.ResetColor();
 
+
+
             // 적의 랜덤 방향 리스트 생성
             List<char> enemyText = GenerateRandomText(5);
             Console.WriteLine($"적이 해킹 공격을 시도합니다. ");
@@ -258,9 +277,14 @@ namespace _15TextRPG.Source.Combat
             Console.WriteLine($"{string.Join(" -> ", enemyText)}");
             Console.ResetColor();
 
-            Console.WriteLine("방어하세요: ");
+            int totalCombatCount = combatCount + (int)(player.Intelligence * 0.5);
 
-            string playerInput = ReadInputWithTimeout(5); // 5초 제한
+            Console.Write($"{totalCombatCount}(+{(int)(player.Intelligence * 0.5)})");
+            Console.ResetColor();
+            Console.WriteLine($"초 내에 정확히 입력해서 방어하세요.");
+            Console.WriteLine("방어 코드 입력: ");
+
+            string playerInput = ReadInputWithTimeout(totalCombatCount); // 5초 제한
             double accuracy = CalculateNameSimilarity(playerInput, new string(enemyText.ToArray()));
 
             // 정확도 비례 데미지 계산
@@ -387,7 +411,7 @@ namespace _15TextRPG.Source.Combat
                     {
                         if (i < (remainingTime * barLength / timeoutSeconds))
                         {
-                            if (remainingTime > 3)
+                            if (remainingTime > timeoutSeconds/2)
                                 Console.ForegroundColor = ConsoleColor.Green;
                             else if (remainingTime > 1)
                                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -456,40 +480,6 @@ namespace _15TextRPG.Source.Combat
             Console.WriteLine("도망쳤수");
             Console.WriteLine("아무키나 입력해주세요");
             Console.ReadKey();
-        }
-
-        private void EnemyTurn(Player player, NPC enemy)
-        {
-            //기본 데미지 계산(공격력과 방어력의 비율 적용)
-            double attackDefenseRatio = (double)player.AttackDamage / enemy.DefensePoint;
-
-            int baseDamage = (int)player.AttackDamage;
-            baseDamage = (int)(baseDamage * attackDefenseRatio);
-
-            if (baseDamage < 0) baseDamage = 0; // 최소 데미지 보장
-
-            player.Health -= baseDamage;
-            Console.Write($"{GetRevealedEnemyName(enemy)}이(가) {player.Name}의 시스템을 해킹하여 ");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"{baseDamage}");
-            Console.ResetColor();
-            Console.WriteLine(" 만큼 해킹 데미지를 주었습니다");
-
-            // 플레이어 체력 확인
-            if (player.Health <= 0)
-            {
-                Console.WriteLine("\n해킹 실패! 플레이어의 시스템이 다운됩니다...");
-                Console.WriteLine("아무 키나 입력하면 메인 화면으로 돌아갑니다.");
-                Console.ReadKey();
-
-                // 메인 메뉴로 이동
-                //GameManager.Instance.ChangeState(new MainMenuState());
-
-            }
-
-            Console.WriteLine("아무키나 입력해주세요");
-            Console.ReadKey();
-
         }
 
         public string GetRevealedEnemyName(NPC enemy)

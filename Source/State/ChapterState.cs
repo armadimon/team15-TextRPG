@@ -9,14 +9,14 @@ namespace _15TextRPG.Source.State
     internal class ChapterState : IGameState
     {
 
-        public void DisplayMenu(GameManager gameManager)
+        public void DisplayMenu()
         {
             Console.Clear();
             Console.WriteLine("\n1. 챕터 1 선택");
             Console.WriteLine("0. 나가기");
         }
 
-        public void HandleInput(GameManager gameManager)
+        public void HandleInput()
         {
             Console.Write("\n원하시는 챕터를 입력해주세요. >> ");
             string input = Console.ReadLine() ?? "";
@@ -24,7 +24,7 @@ namespace _15TextRPG.Source.State
             switch (input)
             {
                 case "1":
-                    gameManager.GameData.CurrentChapter = gameManager.GameData.Chapters[0];
+                    GameManager.Instance.GameData.CurrentChapter = GameManager.Instance.GameData.Chapters[0];
                     Console.WriteLine("[임무 브리핑]\n\n");
                     Console.WriteLine("당신은 메가코프내의 고위 인물에게서 기밀 정보를 빼와야 해.");
                     Console.WriteLine("죽여서 그놈의 전뇌를 뽑아오던, 방화벽을 뚫고 정보만 빼내오던");
@@ -33,10 +33,10 @@ namespace _15TextRPG.Source.State
                     Console.WriteLine("\n\n[메인 퀘스트 : 메가코프의 기밀 정보를 획득하라]");
                     Console.WriteLine("[사이드 퀘스트 : 어딘가에 있는 메가코프의 시험용 무기를 획득하라]");
                     Console.ReadLine();
-                    gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
+                    GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
                     break;
                 case "0":
-                    gameManager.ChangeState(new MainMenuState());
+                    GameManager.Instance.ChangeState(new MainMenuState());
                     break;
             }
         }

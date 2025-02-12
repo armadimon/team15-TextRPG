@@ -23,8 +23,9 @@ namespace _15TextRPG.Source.Combat
         bool lose = false;
         public List<IMonster> monsters = new List<IMonster>();
         public List<ISKill> skills = new List<ISKill>();
+        public List<ISKill> userskills = new List<ISKill>();
 
-        public void SpawnMonster(GameManager gameManager)
+        public void SpawnMonster()
         {
             Random random = new Random();
             int num = random.Next(1, 4);
@@ -111,7 +112,7 @@ namespace _15TextRPG.Source.Combat
             Console.SetCursorPosition(60, 0);
             Console.WriteLine($"Stat");
             Console.SetCursorPosition(60, 1);
-            Console.WriteLine($"{player.Name} ({player.Description})");
+            Console.WriteLine($"{player.Name} ({GameData.JobDescriptions[player.Job]})");
             Console.SetCursorPosition(60, 2);
             Console.WriteLine($"Lv . {player.Level}");
             Console.SetCursorPosition(60, 3);
@@ -129,44 +130,69 @@ namespace _15TextRPG.Source.Combat
             Console.SetCursorPosition(60, 9);
             Console.WriteLine($"MP : {player.MP}");
             Console.SetCursorPosition(60, 10);
-            Console.WriteLine($"Gold : {player.Gold} G");
+            Console.WriteLine($"치명타 확률 : {player.Critical} %");
+            Console.SetCursorPosition(60, 11);
+            Console.WriteLine($"회피율 : {player.Dodge} %");
+
         }
 
-        public void AddSkill(ISKill skill)
+        public void AddSkill(GameManager gameManager)
         {
-            skills.Add(skill);
+            for (int i = 0; i < skills.Count; i++)
+            {
+                if (gameManager.GameData.Player.Str >= skills[i].StrNeeded && gameManager.GameData.Player.Dex >= skills[i].DexNeeded)
+                {
+                    userskills.Add(skills[i]);
+                    skills.RemoveAt(i);
+                }
+            }
+        }
+        public void SkillList(GameManager gameManager)
+        {
+            gameManager.BattleManager.skills.Add(new HandGun(gameManager));
+            gameManager.BattleManager.skills.Add(new Raifle(gameManager));
+            gameManager.BattleManager.skills.Add(new ShotGun(gameManager));
+            gameManager.BattleManager.skills.Add(new MachineGun(gameManager));
+            gameManager.BattleManager.skills.Add(new OverHeat(gameManager));
+            gameManager.BattleManager.skills.Add(new ShortCircuit(gameManager));
+            gameManager.BattleManager.skills.Add(new Cyberpsychosis(gameManager));
+            gameManager.BattleManager.skills.Add(new Suicide(gameManager));
+            gameManager.BattleManager.skills.Add(new SystemCollapse(gameManager));
         }
 
         public void ShowSkill()
         {
             Console.SetCursorPosition(60, 0);
-            Console.WriteLine("Skills");
+            Console.WriteLine("특수공격");
 
-            for ( int i = 0; i < skills.Count; i++)
+            for ( int i = 0; i < userskills.Count; i++)
             {
-                Console.SetCursorPosition(60, (i + 1) * 2);
-                Console.WriteLine($"{i + 1} {skills[0].SkillName}: {skills[0].Description}");
+                Console.SetCursorPosition(60, i * 3 + 2);
+                Console.WriteLine($"{i + 1} {userskills[i].SkillName}");
+                Console.SetCursorPosition(60, i * 3 + 3);
+                Console.WriteLine($"{userskills[i].Description}");
             }
         }
-        public void InBattle(GameManager gameManager)
+        public void InBattle(EnemyTrigger enemy)
         {
-            skills.Add(new RailGun()); //임시 스킬
+            SkillList(GameManager.Instance);
+            AddSkill(GameManager.Instance);
             Console.Clear();
             bool Runable = false;
-            gameManager.BattleManager.SpawnMonster(gameManager);
-            gameManager.BattleManager.ShowMonster(false, 0, 9);
+            GameManager.Instance.BattleManager.SpawnMonster();
+            GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
 
-            for (int i = 0; i < gameManager.BattleManager.monsters.Count; i++)
+            for (int i = 0; i < GameManager.Instance.BattleManager.monsters.Count; i++)
             {
-                while (gameManager.BattleManager.monsters[i].Health != 0)
+                while (GameManager.Instance.BattleManager.monsters[i].Health != 0)
                 {
                 ReChoose:
                     Console.Clear();
-                    gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
-                    gameManager.BattleManager.ShowMonster(false, 0, 9);
+                    GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
+                    GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
                     Console.SetCursorPosition(0, 13);
                     Console.Write("1. 공격  ");
-                    Console.Write("2. 스킬  ");
+                    Console.Write("2. 특수공격  ");
                     Console.Write("3. 방어  ");
                     Console.WriteLine("4. 전략적 후퇴");
                     Console.Write("\n원하시는 행동을 입력해주세요. >> ");
@@ -182,13 +208,13 @@ namespace _15TextRPG.Source.Combat
                         switch (input)
                         {
                             case "1":
-                                AtkPhase(gameManager);
+                                AtkPhase();
                                 break;
                             case "2":
-                                SkillPhase(gameManager);
+                                SkillPhase();
                                 break;
                             case "3":
-                                DefPhase(gameManager);
+                                DefPhase();
                                 break;
                             case "4":
                                 Runable = true;
@@ -212,7 +238,7 @@ namespace _15TextRPG.Source.Combat
                         goto Victory;
                     }
 
-                    MonsterPhase(gameManager, gameManager.BattleManager);
+                    MonsterPhase(GameManager.Instance.BattleManager);
                     if (lose)
                         goto BattleLose;
                    
@@ -223,71 +249,76 @@ namespace _15TextRPG.Source.Combat
             if (Runable)
             {
                 Console.WriteLine("전투에서 후퇴했습니다");
-                Console.ReadLine();
+                Thread.Sleep(1500);
 
-                if (gameManager.GameData.CurrentChapter == null)
+                if (GameManager.Instance.GameData.CurrentChapter == null)
                 {
-                    gameManager.ChangeState(new MainMenuState());
+                    GameManager.Instance.ChangeState(new MainMenuState());
                 }
                 else
                 {
-                    gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
+                    GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
                 }
             }
             else
             {   
                 Console.Clear();
-                gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
-                gameManager.BattleManager.ShowMonster(false, 0, 9);
+                GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
+                GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
                 Console.WriteLine();
                 Console.WriteLine("전투에서 승리했습니다.");
-                Console.ReadLine();
-                if (gameManager.GameData.CurrentChapter == null)
+                Thread.Sleep(1500);
+
+                if (GameManager.Instance.GameData.CurrentChapter == null)
                 {
-                    gameManager.ChangeState(new MainMenuState());
+                    GameManager.Instance.ChangeState(new MainMenuState());
                 }
                 else
                 {
-                    gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
+                    if (enemy != null)
+                    {
+                        enemy.Defeat();
+                    }
+                    GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
                 }
             }
 
             if(!Runable)
             {
-                for (int i = 0; i < gameManager.BattleManager.monsters.Count; i++)
+                for (int i = 0; i < GameManager.Instance.BattleManager.monsters.Count; i++)
                 {
-                    gameManager.GameData.Player.Gold += (int)Math.Truncate(gameManager.BattleManager.monsters[i].MaxHealth) * 10;
+                    GameManager.Instance.GameData.Player.Gold += (int)Math.Truncate(GameManager.Instance.BattleManager.monsters[i].MaxHealth) * 10;
                 }
             }
 
         BattleLose:
-            gameManager.BattleManager.monsters.Clear();
-            gameManager.GameData.Player.Health = gameManager.GameData.Player.MaxHP;
-            gameManager.GameData.Player.MP = gameManager.GameData.Player.MaxMP;
-            if (gameManager.GameData.CurrentChapter == null)
+            GameManager.Instance.BattleManager.monsters.Clear();
+            GameManager.Instance.GameData.Player.Health = GameManager.Instance.GameData.Player.MaxHP;
+            GameManager.Instance.GameData.Player.MP = GameManager.Instance.GameData.Player.MaxMP;
+            if (GameManager.Instance.GameData.CurrentChapter == null)
             {
-                gameManager.ChangeState(new MainMenuState());
+                GameManager.Instance.ChangeState(new MainMenuState());
             }
             else
             {
-                gameManager.ChangeState(new ExploreState(gameManager.GameData.CurrentChapter.CurrentStage.Name));
+                GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
             }
         }
 
-        public void AtkPhase(GameManager gameManager)
+        public void AtkPhase()
         {
         ReChoose:
             Console.Clear();
-            gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
-            gameManager.BattleManager.ShowMonster(true, 0, 9);
+            GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
+            GameManager.Instance.BattleManager.ShowMonster(true, 0, 9);
 
             Console.Write("\n원하시는 대상을 입력해주세요. >> ");
             string input = Console.ReadLine() ?? "";
             int j;
-            if (!int.TryParse(input, out j) || j > gameManager.BattleManager.monsters.Count || gameManager.BattleManager.monsters[j-1].Health <= 0)
+            if (!int.TryParse(input, out j) || j > GameManager.Instance.BattleManager.monsters.Count || GameManager.Instance.BattleManager.monsters[j-1].Health <= 0)
             {
                 Console.WriteLine("잘못된 입력입니다.");
-                Console.ReadLine();
+                Thread.Sleep(1500);
                 goto ReChoose;
             }
             else
@@ -295,23 +326,23 @@ namespace _15TextRPG.Source.Combat
                 switch (input)
                 {
                     case "1":
-                        gameManager.GameData.Player.Attack(gameManager, 0);
+                        GameManager.Instance.GameData.Player.Attack(GameManager.Instance, 0);
                         break;
                     case "2":
-                        if (gameManager.BattleManager.monsters[1] != null)
-                            gameManager.GameData.Player.Attack(gameManager, 1);
+                        if (GameManager.Instance.BattleManager.monsters[1] != null)
+                            GameManager.Instance.GameData.Player.Attack(GameManager.Instance, 1);
                         else
                             goto ReChoose;
                         break;
                     case "3":
-                        if (gameManager.BattleManager.monsters[2] != null)
-                            gameManager.GameData.Player.Attack(gameManager, 2);
+                        if (GameManager.Instance.BattleManager.monsters[2] != null)
+                            GameManager.Instance.GameData.Player.Attack(GameManager.Instance, 2);
                         else
                             goto ReChoose;
                         break;
                     case "4":
-                        if (gameManager.BattleManager.monsters[3] != null)
-                            gameManager.GameData.Player.Attack(gameManager, 3);
+                        if (GameManager.Instance.BattleManager.monsters[3] != null)
+                            GameManager.Instance.GameData.Player.Attack(GameManager.Instance, 3);
                         else
                             goto ReChoose;
                         break;
@@ -319,32 +350,34 @@ namespace _15TextRPG.Source.Combat
             }
         }
 
-        public void SkillPhase(GameManager gameManager)
+        public void SkillPhase()
         {
         ReChooseSkill:
             Console.Clear();
-            gameManager.BattleManager.ShowSkill();
-            gameManager.BattleManager.ShowMonster(true, 0, 9);
+            GameManager.Instance.BattleManager.ShowSkill();
+            GameManager.Instance.BattleManager.ShowMonster(true, 0, 9);
 
             Console.Write("\n원하시는 스킬을 입력해주세요. >> ");
             string input1 = Console.ReadLine() ?? "";
             int i = int.Parse(input1);
-            if (!int.TryParse(input1, out i) || i > gameManager.BattleManager.skills.Count)
+
+            if (!int.TryParse(input1, out i) || i > GameManager.Instance.BattleManager.skills.Count || i <= 0)
             {
                 Console.WriteLine("잘못된 입력입니다.");
-                Console.ReadLine();
+                Thread.Sleep(1500);
                 goto ReChooseSkill;
             }
             else
             {
             ReChooseTarget:
                 Console.Clear();
-                gameManager.BattleManager.ShowSkill();
-                gameManager.BattleManager.ShowMonster(true, 0, 9);
+                GameManager.Instance.BattleManager.ShowSkill();
+                GameManager.Instance.BattleManager.ShowMonster(true, 0, 9);
                 Console.Write("\n원하시는 대상을 입력해주세요. >> ");
                 string input2 = Console.ReadLine() ?? "";
                 int j;
-                if (!int.TryParse(input2, out j) || j > gameManager.BattleManager.monsters.Count)
+
+                if (!int.TryParse(input2, out j) || j > GameManager.Instance.BattleManager.monsters.Count || j <= 0)
                 {
                     Console.WriteLine("잘못된 입력입니다.");
                     goto ReChooseTarget;
@@ -352,77 +385,77 @@ namespace _15TextRPG.Source.Combat
                 switch (input2)
                 {
                     case "1":
-                        gameManager.GameData.Player.UseSkill(gameManager, 0, gameManager.BattleManager.skills[i - 1], gameManager.BattleManager.monsters[i - 1]);
-                        break;
+                        GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 0, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
+                      break;
                     case "2":
-                        if (gameManager.BattleManager.monsters[1] == null)
+                        if (GameManager.Instance.BattleManager.monsters[1] == null)
                         {
                             Console.WriteLine("잘못된 입력입니다.");
                             goto ReChooseTarget;
                         }
                         else
-                            gameManager.GameData.Player.UseSkill(gameManager, 1, gameManager.BattleManager.skills[i - 1], gameManager.BattleManager.monsters[i - 1]);
+                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 1, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
                         break;
                     case "3":
-                        if (gameManager.BattleManager.monsters[2] == null)
+                        if (GameManager.Instance.BattleManager.monsters[2] == null)
                         {
                             Console.WriteLine("잘못된 입력입니다.");
                             goto ReChooseTarget;
                         }
                         else
-                            gameManager.GameData.Player.UseSkill(gameManager, 2, gameManager.BattleManager.skills[i - 1], gameManager.BattleManager.monsters[i - 1]);
+                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 2, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
                         break;
                     case "4":
-                        if (gameManager.BattleManager.monsters[3] == null)
+                        if (GameManager.Instance.BattleManager.monsters[3] == null)
                         {
                             Console.WriteLine("잘못된 입력입니다.");
                             goto ReChooseTarget;
                         }
                         else
-                            gameManager.GameData.Player.UseSkill(gameManager, 3, gameManager.BattleManager.skills[i - 1], gameManager.BattleManager.monsters[i - 1]);
+                            GameManager.Instance.GameData.Player.UseSkill(GameManager.Instance, 3, GameManager.Instance.BattleManager.skills[i - 1], GameManager.Instance.BattleManager.monsters[i - 1]);
                         break;
                 }
             }
         }
 
-        public void DefPhase(GameManager gameManager)
+        public void DefPhase()
         {
-            gameManager.BattleManager.defensePose = true;
+            GameManager.Instance.BattleManager.defensePose = true;
             Console.WriteLine("방어자세를 취하여 정신력을 회복합니다.");
-            gameManager.GameData.Player.MP += 10;
-            if (gameManager.GameData.Player.MP >= gameManager.GameData.Player.MaxMP)
-                gameManager.GameData.Player.MP = gameManager.GameData.Player.MaxMP;
-            Console.ReadLine();
+            GameManager.Instance.GameData.Player.MP += 10;
+            if (GameManager.Instance.GameData.Player.MP >= GameManager.Instance.GameData.Player.MaxMP)
+                GameManager.Instance.GameData.Player.MP = GameManager.Instance.GameData.Player.MaxMP;
+            Thread.Sleep(1500);
         }
 
-        public void MonsterPhase(GameManager gameManager, BattleManager battleManager)
+        public void MonsterPhase(BattleManager battleManager)
         {
             Console.Clear();
-            gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
-            gameManager.BattleManager.ShowMonster(false, 0, 9);
+            GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
+            GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
             Console.WriteLine();
             Console.WriteLine("적의 공격이 시작됩니다.");
-            Console.ReadLine();
+            Thread.Sleep(1500);
 
             for (int i = 0; i < battleManager.monsters.Count; i++)
             {
                 if (battleManager.monsters[i].Health > 0)
                 {
                     Console.Clear();
-                    gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
-                    gameManager.BattleManager.ShowMonster(false, 0, 9);
+                    GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
+                    GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
                     Console.WriteLine();
-                    MonsterAttack(gameManager, i);
+                    MonsterAttack(i);
                     Console.Clear();
-                    gameManager.BattleManager.BattleStat(gameManager.GameData.Player);
-                    gameManager.BattleManager.ShowMonster(false, 0, 9);
+                    GameManager.Instance.BattleManager.BattleStat(GameManager.Instance.GameData.Player);
+                    GameManager.Instance.BattleManager.ShowMonster(false, 0, 9);
 
-                    if (gameManager.GameData.Player.Health <= 0)
+                    if (GameManager.Instance.GameData.Player.Health <= 0)
                     {
                         Console.WriteLine();
                         Console.WriteLine("적의 공격으로 쓰러졌습니다. 강제 귀환됩니다.");
-                        Console.ReadLine();
-                        gameManager.BattleManager.lose = true;
+                        Thread.Sleep(1500);
+                        GameManager.Instance.BattleManager.lose = true;
                         break;
                     }
                 }
@@ -432,56 +465,95 @@ namespace _15TextRPG.Source.Combat
             {          
                 Console.WriteLine();
                 Console.WriteLine("적의 공격이 끝났습니다.");
-                Console.ReadLine();
-                gameManager.BattleManager.defensePose = false;
+                Thread.Sleep(1500);
+                GameManager.Instance.BattleManager.defensePose = false;
             }
         }
 
-        public void MonsterAttack(GameManager gameManager, int i)
+        public void MonsterAttack(int i)
         {
             Random random = new Random();
             int j = random.Next(0, 100);
-            if (gameManager.BattleManager.monsters[i].Type == "robo")
+            int k = random.Next(0, 100);
+            if (GameManager.Instance.BattleManager.monsters[i].Type == "robo")
             {
                 if (j < 15)
                 {
-                    gameManager.BattleManager.monsters[i].UseSkill(gameManager.GameData.Player);
+                    GameManager.Instance.BattleManager.monsters[i].UseSkill(GameManager.Instance.GameData.Player);
 
-                    if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].SkillDamage > gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.GameData.Player.DefensePoint;
-                    else if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].SkillDamage <= gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.BattleManager.monsters[i].SkillDamage;
+                    if (k <= GameManager.Instance.GameData.Player.Dodge)
+                    {
+                        Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 {GameManager.Instance.BattleManager.monsters[i].SkillName}(을/를) 피했습니다.");
+                        Thread.Sleep(1500);
+                        GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].SkillDamage;
+                    }
+                    else
+                    {
+                        if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].SkillDamage > GameManager.Instance.GameData.Player.SkillDefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.GameData.Player.SkillDefensePoint;
+                        else if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].SkillDamage <= GameManager.Instance.GameData.Player.SkillDefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].SkillDamage;
+                    }
+
                 }
                 else
                 {
-                    gameManager.BattleManager.monsters[i].Attack(gameManager.GameData.Player);
+                    GameManager.Instance.BattleManager.monsters[i].Attack(GameManager.Instance.GameData.Player);
 
-                    if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].AttackDamage > gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.GameData.Player.DefensePoint;
-                    else if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].AttackDamage <= gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.BattleManager.monsters[i].AttackDamage;
+                    if (k <= GameManager.Instance.GameData.Player.Dodge)
+                    {
+                        Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 공격을 피했습니다.");
+                        Thread.Sleep(1500);
+                        GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].AttackDamage;
+                    }
+                    else
+                    {
+                        if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].AttackDamage > GameManager.Instance.GameData.Player.DefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.GameData.Player.DefensePoint;
+                        else if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].AttackDamage <= GameManager.Instance.GameData.Player.DefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].AttackDamage;
+                    }
                 }
 
             }
-            else if (gameManager.BattleManager.monsters[i].Type == "cybo")
+            else if (GameManager.Instance.BattleManager.monsters[i].Type == "cybo")
             {
                 if (j < 30)
                 {
-                    gameManager.BattleManager.monsters[i].UseSkill(gameManager.GameData.Player);
+                    GameManager.Instance.BattleManager.monsters[i].UseSkill(GameManager.Instance.GameData.Player);
 
-                    if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].SkillDamage > gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.GameData.Player.DefensePoint;
-                    else if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].SkillDamage <= gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.BattleManager.monsters[i].SkillDamage;
+                    if (k <= GameManager.Instance.GameData.Player.Dodge)
+                    {
+                        Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 {GameManager.Instance.BattleManager.monsters[i].SkillName}(을/를) 피했습니다.");
+                        Thread.Sleep(1500);
+                        GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].SkillDamage;
+                    }
+                    else
+                    {
+                        if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].SkillDamage > GameManager.Instance.GameData.Player.SkillDefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.GameData.Player.SkillDefensePoint;
+                        else if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].SkillDamage <= GameManager.Instance.GameData.Player.SkillDefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].SkillDamage;
+                    }
+
                 }
                 else
                 {
-                    gameManager.BattleManager.monsters[i].Attack(gameManager.GameData.Player);
+                    GameManager.Instance.BattleManager.monsters[i].Attack(GameManager.Instance.GameData.Player);
 
-                    if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].AttackDamage > gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.GameData.Player.DefensePoint;
-                    else if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].AttackDamage <= gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.BattleManager.monsters[i].AttackDamage;
+                    if (k <= GameManager.Instance.GameData.Player.Dodge)
+                    {
+                        Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 공격을 피했습니다.");
+                        Thread.Sleep(1500);
+                        GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].AttackDamage;
+                    }
+                    else
+                    {
+                        if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].AttackDamage > GameManager.Instance.GameData.Player.DefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.GameData.Player.DefensePoint;
+                        else if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].AttackDamage <= GameManager.Instance.GameData.Player.DefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].AttackDamage;
+                    }
                 }
 
             }
@@ -489,27 +561,46 @@ namespace _15TextRPG.Source.Combat
             {
                 if (j < 45)
                 {
-                    gameManager.BattleManager.monsters[i].UseSkill(gameManager.GameData.Player);
+                    GameManager.Instance.BattleManager.monsters[i].UseSkill(GameManager.Instance.GameData.Player);
 
-                    if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].SkillDamage > gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.GameData.Player.DefensePoint;
-                    else if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].SkillDamage <= gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.BattleManager.monsters[i].SkillDamage;
+                    if (k <= GameManager.Instance.GameData.Player.Dodge)
+                    {
+                        Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 {GameManager.Instance.BattleManager.monsters[i].SkillName}(을/를) 피했습니다.");
+                        Thread.Sleep(1500);
+                        GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].SkillDamage;
+                    }
+                    else
+                    {
+                        if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].SkillDamage > GameManager.Instance.GameData.Player.SkillDefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.GameData.Player.SkillDefensePoint;
+                        else if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].SkillDamage <= GameManager.Instance.GameData.Player.SkillDefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].SkillDamage;
+                    }
+
                 }
                 else
                 {
-                    gameManager.BattleManager.monsters[i].Attack(gameManager.GameData.Player);
+                    GameManager.Instance.BattleManager.monsters[i].Attack(GameManager.Instance.GameData.Player);
 
-                    if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].AttackDamage > gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.GameData.Player.DefensePoint;
-                    else if (gameManager.BattleManager.defensePose == true && gameManager.BattleManager.monsters[i].AttackDamage <= gameManager.GameData.Player.DefensePoint)
-                        gameManager.GameData.Player.Health += gameManager.BattleManager.monsters[i].AttackDamage;
+                    if (k <= GameManager.Instance.GameData.Player.Dodge)
+                    {
+                        Console.WriteLine($"{GameManager.Instance.BattleManager.monsters[i].MonsterName}의 공격을 피했습니다.");
+                        Thread.Sleep(1500);
+                        GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].AttackDamage;
+                    }
+                    else
+                    {
+                        if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].AttackDamage > GameManager.Instance.GameData.Player.DefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.GameData.Player.DefensePoint;
+                        else if (GameManager.Instance.BattleManager.defensePose == true && GameManager.Instance.BattleManager.monsters[i].AttackDamage <= GameManager.Instance.GameData.Player.DefensePoint)
+                            GameManager.Instance.GameData.Player.Health += GameManager.Instance.BattleManager.monsters[i].AttackDamage;
+                    }
                 }
 
             }
 
-            if (gameManager.GameData.Player.Health <= 0)
-                gameManager.GameData.Player.Health = 0;
+            if (GameManager.Instance.GameData.Player.Health <= 0)
+                GameManager.Instance.GameData.Player.Health = 0;
         }
     }    
 }
