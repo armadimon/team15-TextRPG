@@ -60,7 +60,7 @@ namespace _15TextRPG.Source
             MaxMP = 25;
             MP = MaxMP;
             Gold = 1500;
-            Inventory = new(this);
+            Inventory = new();
         }
 
         //public Player(string name, int description) // 민첩캐

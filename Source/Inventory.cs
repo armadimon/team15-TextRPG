@@ -157,6 +157,15 @@ namespace _15TextRPG.Source
 
         //public static Inventory operator -(Inventory a, IItem b) => new Inventory(a.owner) { Items = a.Remove(b) };
 
+        public IEnumerable<ItemIdentifier> Find(IItem _item)
+        {
+            var query = from item in Items
+                        where item.GetType() == _item.GetType()
+                        select item;
+
+            return query;
+        }
+
         public override string ToString()
         {
             string result = string.Empty;
@@ -170,6 +179,7 @@ namespace _15TextRPG.Source
         // 테스트 중-----
         // 에라 모르겠다 함수들
         // 권장되지 않음
+        // 리플렉션 처음 써봄
         public bool Use(string name)
         {
             foreach (var _ in Items)
@@ -221,14 +231,5 @@ namespace _15TextRPG.Source
             }
             return false;
         }
-
-        public IEnumerable<ItemIdentifier> Find(IItem _item)
-        {
-            var query = from item in Items
-                        where item.GetType() == _item.GetType()
-                        select item;
-
-            return query;
-        }       
     }
 }

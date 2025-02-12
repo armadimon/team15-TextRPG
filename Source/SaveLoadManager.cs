@@ -12,9 +12,9 @@ namespace _15TextRPG.Source
 {
     internal class SaveLoadManager()
     {
-        List<ISaveable> saveableEntitys = new();
+        List<ISaveable> saveableEntitys = [];
 
-        public void AddSaveableEntity<T>(T target, string fileName)
+        public void AddSaveableEntity<T>(T target, string fileName) where T : class
         {
             SaveableEntity<T> saveableEntity = new(target, fileName);
             saveableEntitys.Add(saveableEntity);
@@ -47,7 +47,7 @@ namespace _15TextRPG.Source
         string ToString(JsonSerializerOptions option);
     }
 
-    class SaveableEntity<T>(T target, string fileName) : ISaveable
+    class SaveableEntity<T>(T target, string fileName) : ISaveable where T :class
     {
         public string FileName { get; set; } = fileName;
 
