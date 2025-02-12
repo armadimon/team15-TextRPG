@@ -5,11 +5,14 @@ using System.Text;
 
 namespace _15TextRPG.Source.State
 {
-    internal class HackState(Func<string, bool> HackingProcess, int limitTimeSec) : IGameState
+    internal class HackState(Func<string, bool> HackingProcess, int limitTimeSec, string[]? _commandList = null) : IGameState
     {
-        string command = "";
-        List<string> commands = new List<string>();
+        string[] commandList = _commandList ?? [];
+
+        List<string> commands = [];
         int commandIndex = -1;
+
+        string command = "";
 
         public void DisplayMenu()
         {
@@ -68,7 +71,7 @@ namespace _15TextRPG.Source.State
                             GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
                             return;
                         }
-                        commands.Add(command);
+                        if(command.Length > 0) commands.Add(command);
                         Console.WriteLine();
                         command = "";
                         commandIndex = -1;
@@ -101,22 +104,6 @@ namespace _15TextRPG.Source.State
                             Console.Write(command);
                         }
                     }
-                    else if (key.Key == ConsoleKey.UpArrow)
-                    {
-                        if (commands.Count > 0)
-                        {
-                            if (commands.Count - 1 > commandIndex)
-                            {
-                                ++commandIndex;
-                            }
-                            command = commands[commands.Count - 1 - commandIndex];
-                            Console.SetCursorPosition(0, Console.CursorTop);
-                            Console.Write(new string(' ', Console.WindowWidth));
-                            Console.SetCursorPosition(0, Console.CursorTop);
-                            Console.Write(">> ");
-                            Console.Write(command);
-                        }
-                    }
                     else if (key.Key == ConsoleKey.DownArrow)
                     {
                         if (commands.Count > 0)
@@ -131,6 +118,22 @@ namespace _15TextRPG.Source.State
                             Console.SetCursorPosition(0, Console.CursorTop);
                             Console.Write(">> ");
                             Console.Write(command);
+                        }
+                    }
+                    else if (key.Key == ConsoleKey.Tab)
+                    {
+                        if (command.Length > 0)
+                        {
+                            foreach (string _ in commandList)
+                            {
+                                if (_.Contains(command) && _ != command)
+                                {
+                                    Console.SetCursorPosition(0, Console.CursorTop);
+                                    Console.Write(">> " + _);
+                                    command = _;
+                                    break;
+                                }
+                            }
                         }
                     }
                     else
