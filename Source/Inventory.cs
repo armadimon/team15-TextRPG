@@ -264,8 +264,8 @@ namespace _15TextRPG.Source
                 Console.Write($" (x{item.Count})");
 
 
-                if (item.Tag == (int)ItemList.HpRecovery )Console.Write($"- 소비 아이템이다.");
-
+                if (item.Tag == (int)ItemList.HpRecovery)Console.Write($"- 소비 아이템이다.");
+                else if (item.Tag == (int)ItemList.StrUpPotion) Console.Write($"- 소비 아이템이다.");
                 else Console.Write("- 기타 아이템이다.");
 
                 Console.WriteLine();

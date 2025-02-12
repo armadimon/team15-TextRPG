@@ -37,7 +37,6 @@ namespace _15TextRPG.Source.State
 
             Console.WriteLine("1. 정보 스캔");
             Console.WriteLine("2. 해킹 공격");
-            Console.WriteLine("3. 주먹 공격");
             Console.WriteLine("0. 도망");
         }
 
@@ -56,10 +55,7 @@ namespace _15TextRPG.Source.State
                     break;
                 case "2":
                     combat.Hack(GameManager.Instance.GameData.Player, GameManager.Instance.GameData.CurrentChapter, Npc);
-                    break;
-                case "3":
-                    combatPhy.Attack(GameManager.Instance.GameData.Player, Npc);
-                    break;
+                    break;;
                 case "0":
                     GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
                     return;
