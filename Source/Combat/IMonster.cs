@@ -44,13 +44,13 @@ namespace _15TextRPG.Source.Combat
         public string Type { get; set; } = "Robo";
         public string MonsterName { get; set; } = "경비로봇";
         public int Level { get; set; } = 1;
-        public double MaxHealth { get; set; } = 50;
-        public double Health { get; set; } = 50;
+        public double MaxHealth { get; set; } = 50 + GameManager.Instance.GameData.Player.Level * 5;
+        public double Health { get; set; } = 50 + GameManager.Instance.GameData.Player.Level * 5;
         public string SkillName { get; set; } = "몽둥이질";
-        public int AttackDamage { get; set; } = 5;
-        public int SkillDamage { get; set; } = 7;
-        public double ArmorRisistence { get; set; } = 0;
-        public double SkillRisistence { get; set; } = 0;
+        public int AttackDamage { get; set; } = 5 + GameManager.Instance.GameData.Player.Level;
+        public int SkillDamage { get; set; } = 7 + GameManager.Instance.GameData.Player.Level;
+        public double ArmorRisistence { get; set; } = 0 + GameManager.Instance.GameData.Player.Level;
+        public double SkillRisistence { get; set; } = 0 + GameManager.Instance.GameData.Player.Level;
 
         public List<IItem> Items { get; } = ItemData.RecoveryItems;
 
@@ -85,13 +85,13 @@ namespace _15TextRPG.Source.Combat
         public string Type { get; set; } = "Cybo";
         public string MonsterName { get; set; } = "경비팀장";
         public int Level { get; set; } = 2;
-        public double MaxHealth { get; set; } = 75;
-        public double Health { get; set; } = 75;
+        public double MaxHealth { get; set; } = 75 + GameManager.Instance.GameData.Player.Level * 5;
+        public double Health { get; set; } = 75 + GameManager.Instance.GameData.Player.Level * 5;
         public string SkillName { get; set; } = "스턴건";
-        public int AttackDamage { get; set; } = 7;
-        public int SkillDamage { get; set; } = 10;
-        public double ArmorRisistence { get; set; } = 1;
-        public double SkillRisistence { get; set; } = 1;
+        public int AttackDamage { get; set; } = 7 + GameManager.Instance.GameData.Player.Level;
+        public int SkillDamage { get; set; } = 10 + GameManager.Instance.GameData.Player.Level;
+        public double ArmorRisistence { get; set; } = 1 + GameManager.Instance.GameData.Player.Level;
+        public double SkillRisistence { get; set; } = 1 + GameManager.Instance.GameData.Player.Level;
 
         public List<IItem> Items { get; } = ItemData.RecoveryItems;
         public Reward GetReward()
@@ -106,13 +106,13 @@ namespace _15TextRPG.Source.Combat
         public string Type { get; set; } = "Human";
         public string MonsterName { get; set; } = "경찰";
         public int Level { get; set; } = 3;
-        public double MaxHealth { get; set; } = 75;
-        public double Health { get; set; } = 75;
+        public double MaxHealth { get; set; } = 75 + GameManager.Instance.GameData.Player.Level * 5;
+        public double Health { get; set; } = 75 + GameManager.Instance.GameData.Player.Level * 5;
         public string SkillName { get; set; } = "소총 사격";
-        public int AttackDamage { get; set; } = 10;
-        public int SkillDamage { get; set; } = 12;
-        public double ArmorRisistence { get; set; } = 2;
-        public double SkillRisistence { get; set; } = 2;
+        public int AttackDamage { get; set; } = 10 + GameManager.Instance.GameData.Player.Level;
+        public int SkillDamage { get; set; } = 12 + GameManager.Instance.GameData.Player.Level;
+        public double ArmorRisistence { get; set; } = 2 + GameManager.Instance.GameData.Player.Level;
+        public double SkillRisistence { get; set; } = 2 + GameManager.Instance.GameData.Player.Level;
 
         public List<IItem> Items { get; } = ItemData.RecoveryItems;
         public Reward GetReward()
