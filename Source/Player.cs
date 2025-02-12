@@ -49,9 +49,8 @@ namespace _15TextRPG.Source
             Job = job;
             MaxHP = 100;
             Health = MaxHP;
-            MP = MaxMP;
             Gold = 1500;
-            //Inventory = new(this);
+            Inventory = new();
         }
 
         public void StartStat(Job choice)
@@ -60,6 +59,7 @@ namespace _15TextRPG.Source
             {
                 Str = 3;
                 Dex = 1;
+                Intelligence = 1;
                 Critical = 20 + Dex;
                 Dodge = 15 + Dex;
                 AttackDamage = 140 + Str;
@@ -67,11 +67,13 @@ namespace _15TextRPG.Source
                 DefensePoint = 5 + Str;
                 SkillDefensePoint = 5 + Str;
                 MaxMP = 25;
+                MP = MaxMP;
             }
             else if (choice == Job.Gutterchild)
             {
                 Str = 1;
                 Dex = 3;
+                Intelligence = 1;
                 Critical = 25 + Dex;
                 Dodge = 20 + Dex;
                 AttackDamage = 20 + Str;
@@ -79,11 +81,13 @@ namespace _15TextRPG.Source
                 DefensePoint = 5 + Str;
                 SkillDefensePoint = 5 + Str;
                 MaxMP = 50;
+                MP = MaxMP;
             }
             else
             {
                 Str = 1;
                 Dex = 1;
+                Intelligence = 3;
                 Critical = 20 + Dex;
                 Dodge = 15 + Dex;
                 AttackDamage = 20 + Str;
@@ -91,6 +95,7 @@ namespace _15TextRPG.Source
                 DefensePoint = 2 + Str;
                 SkillDefensePoint = 2 + Str;
                 MaxMP = 50;
+                MP = MaxMP;
             }
         }
 
@@ -113,8 +118,6 @@ namespace _15TextRPG.Source
             Console.WriteLine($"방어력 : {DefensePoint} ({dp})");
             Console.WriteLine($"체력 : {Health}");
             Console.WriteLine($"Gold : {Gold} G");
-            Console.WriteLine($"{Str}");
-            Console.WriteLine($"{Dex}");
         }
 
         public void Attack(GameManager gameManager, int i)

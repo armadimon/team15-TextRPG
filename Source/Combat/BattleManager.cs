@@ -110,28 +110,28 @@ namespace _15TextRPG.Source.Combat
                 : "0";
 
             Console.SetCursorPosition(60, 0);
-            Console.WriteLine($"Stat");
-            Console.SetCursorPosition(60, 1);
-            Console.WriteLine($"{player.Name} ({GameData.JobDescriptions[player.Job]})");
+            Console.WriteLine($"플레이어 정보");
             Console.SetCursorPosition(60, 2);
-            Console.WriteLine($"Lv . {player.Level}");
+            Console.WriteLine($"{player.Name} ({GameData.JobDescriptions[player.Job]})");
             Console.SetCursorPosition(60, 3);
-            Console.WriteLine($"Exp. {player.Exp} / {player.MaxExp}");
+            Console.WriteLine($"Lv . {player.Level}");
             Console.SetCursorPosition(60, 4);
-            Console.WriteLine($"공격력 : {player.AttackDamage} ({ap})");
+            Console.WriteLine($"Exp. {player.Exp} / {player.MaxExp}");
             Console.SetCursorPosition(60, 5);
-            Console.WriteLine($"스킬 공격력 : {player.SkillDamage}");
+            Console.WriteLine($"공격력 : {player.AttackDamage} ({ap})");
             Console.SetCursorPosition(60, 6);
-            Console.WriteLine($"방어력 : {player.DefensePoint} ({dp})");
+            Console.WriteLine($"스킬 공격력 : {player.SkillDamage}");
             Console.SetCursorPosition(60, 7);
-            Console.WriteLine($"스킬방어력 : {player.SkillDefensePoint}");
+            Console.WriteLine($"방어력 : {player.DefensePoint} ({dp})");
             Console.SetCursorPosition(60, 8);
-            Console.WriteLine($"체력 : {player.Health}");
+            Console.WriteLine($"스킬방어력 : {player.SkillDefensePoint}");
             Console.SetCursorPosition(60, 9);
-            Console.WriteLine($"MP : {player.MP}");
+            Console.WriteLine($"체력 : {player.Health}");
             Console.SetCursorPosition(60, 10);
-            Console.WriteLine($"치명타 확률 : {player.Critical} %");
+            Console.WriteLine($"MP : {player.MP}");
             Console.SetCursorPosition(60, 11);
+            Console.WriteLine($"치명타 확률 : {player.Critical} %");
+            Console.SetCursorPosition(60, 12);
             Console.WriteLine($"회피율 : {player.Dodge} %");
 
         }
@@ -211,6 +211,13 @@ namespace _15TextRPG.Source.Combat
                                 AtkPhase();
                                 break;
                             case "2":
+                                if (GameManager.Instance.BattleManager.userskills[0] == null)
+                                {
+                                    Console.WriteLine("사용할 수 있는 특수 능력이 없습니다.");
+                                    Thread.Sleep(1500);
+                                    goto ReChoose;
+                                }
+                                else
                                 SkillPhase();
                                 break;
                             case "3":
@@ -620,6 +627,10 @@ namespace _15TextRPG.Source.Combat
                     Console.WriteLine();
                     Console.WriteLine($"2. Dex {GameManager.Instance.GameData.Player.Dex}: 특수 공격력과 회피율 및 치명타 확률에 영향을 미칩니다.");
                     Console.WriteLine();
+                    Console.WriteLine($"3. Int {GameManager.Instance.GameData.Player.Intelligence}: 해킹전투 제한시간에 영향을 미칩니다.");
+                    Console.WriteLine();
+                    Console.WriteLine($"4. MaxHP {GameManager.Instance.GameData.Player.MaxHP}: 체력은 곧 국력입니다.");
+                    Console.WriteLine();
                     Console.WriteLine("0. 나가기");
                     Console.Write("\n원하는 능력치를 입력해주세요. >> ");
                     input = Console.ReadLine() ?? "";
@@ -647,6 +658,30 @@ namespace _15TextRPG.Source.Combat
                             else
                             {
                                 GameManager.Instance.GameData.Player.Dex++;
+                                GameManager.Instance.GameData.Player.StatPoint--;
+                            }
+                            break;
+                        case "3":
+                            if (GameManager.Instance.GameData.Player.StatPoint <= 0)
+                            {
+                                Console.WriteLine("StatPoint가 없습니다.");
+                                Thread.Sleep(1500);
+                            }
+                            else
+                            {
+                                GameManager.Instance.GameData.Player.Intelligence++;
+                                GameManager.Instance.GameData.Player.StatPoint--;
+                            }
+                            break;
+                        case "4":
+                            if (GameManager.Instance.GameData.Player.StatPoint <= 0)
+                            {
+                                Console.WriteLine("StatPoint가 없습니다.");
+                                Thread.Sleep(1500);
+                            }
+                            else
+                            {
+                                GameManager.Instance.GameData.Player.MaxHP += 10;
                                 GameManager.Instance.GameData.Player.StatPoint--;
                             }
                             break;
