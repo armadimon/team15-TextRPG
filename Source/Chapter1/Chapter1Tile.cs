@@ -223,26 +223,20 @@ namespace _15TextRPG.Source.Chapter1
         {
             if (IsHacked == true)
             {
-                Console.WriteLine($"1. 기밀문서 획득");
+                Console.WriteLine($"더이상 얻을 수 있는 정보는 없다");
                 string input = Console.ReadLine() ?? "";
-                switch (input)
-                {
-                    case "1":
-                        QuestManager.Instance.UpdateQuest("기밀 문서를 입수하라", 0);
-                        Console.ReadLine();
-                        break;
-                }
             }
             else
             {
                 Console.WriteLine($"1. 해킹");
+                Console.WriteLine($"0. 나가기");
                 string input = Console.ReadLine() ?? "";
                 switch (input)
                 {
                     case "1":
                         GameManager.Instance.ChangeState(HackState);
                         break;
-                    case "2":
+                    case "0":
                         break;
                 }
             }
@@ -252,7 +246,7 @@ namespace _15TextRPG.Source.Chapter1
             Console.WriteLine($"Executing command: {command}");
             if (command == "search")
             {
-                foreach (char c in "전뇌 데이터 베이스 확인중...")
+                foreach (char c in "데이터 베이스 확인중...")
                 {
                     Console.Write(c);
                     Thread.Sleep(50);
@@ -281,7 +275,7 @@ namespace _15TextRPG.Source.Chapter1
                     Console.Write(c);
                     Thread.Sleep(50);
                 }
-                QuestManager.Instance.UpdateQuest("보스를 처치하라", 0);
+                QuestManager.Instance.UpdateQuest("기밀 문서를 입수하라", 0);
                 IsHacked = true;
                 return (true);
             }
