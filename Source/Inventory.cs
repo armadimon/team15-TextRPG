@@ -21,6 +21,10 @@ namespace _15TextRPG.Source
         private List<ItemIdentifier> Items { get; set; } = [];
         public int Count => Items.Count;
         public int GetItemCount(int index) => Items[index].Count;
+        public int GetItemCount(IItem item) =>
+                Items.FirstOrDefault(_ => item.GetType() == Type.GetType(_.ItemType))?.Count ?? 0;
+
+
         public string GetItemName(int index) => Items[index].Name;
 
         public class ItemIdentifier
