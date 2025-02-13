@@ -43,6 +43,9 @@ namespace _15TextRPG.Source.State
                     GameManager.Instance.ChangeState(new InventoryState());
                     break;
                 case "0":
+                    SaveLoadManager saveLoadManager = new SaveLoadManager();
+                    saveLoadManager.AddSaveableEntity(GameManager.Instance.GameData.Player, "Player");
+                    saveLoadManager.DoSave();
                     GameManager.Instance.QuitGame();
                     break;
             }

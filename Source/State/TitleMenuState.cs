@@ -52,6 +52,10 @@ namespace _15TextRPG.Source.State
                     break;
                 case "2":
                     Console.WriteLine("이어하기");
+                    SaveLoadManager saveLoadManager = new SaveLoadManager();
+                    saveLoadManager.AddSaveableEntity(GameManager.Instance.GameData.Player, "Player");
+                    saveLoadManager.DoLoad();
+                    GameManager.Instance.ChangeState(new MainMenuState()); // 메인메뉴로
                     break;
                 case "3":
                     Console.WriteLine("크레딧");
