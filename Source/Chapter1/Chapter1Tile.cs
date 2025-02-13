@@ -246,15 +246,10 @@ namespace _15TextRPG.Source.Chapter1
                 }
             }
         }
-        public bool HackingProcess(string command)
+        public bool HackingProcess(string userCommand)
         {
-<<<<<<< HEAD
             string[] command = userCommand.Split(' ');
             if (command.Length == 1)
-=======
-            Console.WriteLine($"Executing command: {command}");
-            if (command == "help")
->>>>>>> 088f0e8bc0c54b2c644fc5556f8165fbb1b31308
             {
                 switch (command[0])
                 {
@@ -323,6 +318,7 @@ namespace _15TextRPG.Source.Chapter1
                     {
                         switch (command[1])
                         {
+                            case "Home": HackState.directory = "base"; break;
                             case "제정신이야?": Console.WriteLine("야 너 제정신이야? 대체 어떤 놈이 밀리테크 소프트웨어를 백업해놔? 당장 지워.              "); break;
                             case "안녕하세요,밀리테크입니다.": Console.WriteLine("채용담당자입니다.\r\n\r\n귀한 시간을 할애하여 밀리테크에 지원해 주셔서 진심으로 감사드립니다.\r\n\r\n\r\n\r\n귀화와 함께하는 방향에 대해 심사숙고하였으나,\r\n\r\n아쉽게도 이번 [밀리테크] 테크니컬 프로그래머 채용에서는 좋은 소식을 전달드리지 못하게 되었습니다.\r\n\r\n\r\n\r\n채용 전형에 성심성의껏 응해 주심에 다시 한번 깊은 감사를 전하며,\r\n\r\n제출해 주신 이력서는 관련 법령이 허용하는 범위 내에서 밀리테크의 인재풀에 저장하여\r\n\r\n향후 유관한 포지션 오픈 시에 다시금 소중히 검토하여 연락드릴 수 있는 점 안내해 드립니다.\r\n\r\n\r\n\r\n비록 이번 전형에서는 인연이 닿지 못했지만\r\n\r\n귀하께서 보여주신 역량과 열정이 어디에서든 결실을 볼 수 있기를 기원하며,\r\n\r\n추후 더 좋은 기회로 다시 만나 뵐 수 있기를 고대하겠습니다.\r\n\r\n\r\n\r\n\r\n\r\n감사합니다."); break;
                             default: break;
