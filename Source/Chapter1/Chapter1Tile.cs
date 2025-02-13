@@ -278,8 +278,9 @@ namespace _15TextRPG.Source.Chapter1
                             case "Email": HackState.directory = "Email"; break;
                             case "Diary": HackState.directory = "Diary"; break;
                             case "Miliware.exe":
-                                if (GameManager.Instance.GameData.Player.Intelligence > 0 && command[2] == "012345")
+                                if (GameManager.Instance.GameData.Player.Intelligence > 0 && command.Length > 2)
                                 {
+                                    if (command[2] != null && command[2] == "012345")
                                     Console.WriteLine("충분히 해독할 수 있는 프로그램이다. (+Inventory)                ");
                                     GameManager.Instance.GameData.Player.Inventory.Add(new MiliwareIceBreaker());
                                 }

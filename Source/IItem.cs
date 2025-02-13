@@ -134,7 +134,7 @@ namespace _15TextRPG.Source
             if (target is IHackable)
             {
                 IHackable Target = (IHackable)target;
-                if (Target.HackDefenderLV < 5)
+                if (Target.HackDefenderLV <= 5)
                 {
                     Target.HackDefenderLV = 0;
                 }

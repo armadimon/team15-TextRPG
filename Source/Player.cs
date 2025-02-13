@@ -142,6 +142,11 @@ namespace _15TextRPG.Source
             Console.WriteLine($"공격력 : {AttackDamage} ({ap})");
             Console.WriteLine($"방어력 : {DefensePoint} ({dp})");
             Console.WriteLine($"체력 : {Health}");
+            Console.WriteLine($"STR : {Str}");
+            Console.WriteLine($"DEX : {Dex}");
+            Console.WriteLine($"INT : {Intelligence}");
+            Console.WriteLine($"Exp : {Exp}");
+            Console.WriteLine($"SP : {StatPoint}");
             Console.WriteLine($"Gold : {Gold} G");
             Console.WriteLine();
             Console.WriteLine("1. 능력치 배분");
