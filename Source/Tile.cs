@@ -88,6 +88,8 @@ namespace _15TextRPG.Source
         }
         public void Interact()
         {
+            Console.WriteLine();
+            Console.WriteLine("적과의 전투를 시작합니다. 전투 시퀀스를 가동합니다.");
             Console.ReadLine();
             GameManager.Instance.ChangeState(new BattleMenuState(this));
         }
