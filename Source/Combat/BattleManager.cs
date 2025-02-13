@@ -614,7 +614,8 @@ namespace _15TextRPG.Source.Combat
             {
                 Console.WriteLine($"{GameManager.Instance.GameData.Player.Inventory.Items[i - 1].Name}을 사용하였습니다.");
                 Thread.Sleep(750);
-                GameManager.Instance.GameData.Player.Inventory.Use(GameManager.Instance.GameData.Player.Inventory.Items[i - 1].Name); // 수정 요망
+                GameManager.Instance.GameData.Player.Inventory.Use(GameManager.Instance.GameData.Player.Inventory.Items[i - 1].Name);
+                GameManager.Instance.GameData.Player.Inventory.Subtract(GameManager.Instance.GameData.Player.Inventory.Items[i - 1].Name);
             }
         }
         public void MonsterPhase(BattleManager battleManager)
