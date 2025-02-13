@@ -9,7 +9,8 @@ namespace _15TextRPG.Source
     public enum ItemList
     {
         HpRecovery = 1,
-        StrUpPotion
+        StrUpPotion,
+        Others
 
     }
     public static class ItemData
@@ -19,10 +20,18 @@ namespace _15TextRPG.Source
             new RecoveryItem(),
         };
 
+        public static readonly List<IItem> DropItems = new List<IItem>
+        {
+            new RecoveryItem(),
+            new OthersItem(),
+        };
+
         public static readonly List<IItem> StateUpgradeItems = new List<IItem>
         {
             new StateUpgradeItem(),
         };
+
+
 
 
     }

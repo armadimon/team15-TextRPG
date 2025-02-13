@@ -244,7 +244,7 @@ namespace _15TextRPG.Source.Chapter1
         public bool HackingProcess(string command)
         {
             Console.WriteLine($"Executing command: {command}");
-            if (command == "search")
+            if (command == "help")
             {
                 foreach (char c in "데이터 베이스 확인중...")
                 {
