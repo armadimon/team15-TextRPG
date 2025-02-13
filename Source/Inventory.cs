@@ -162,13 +162,21 @@ namespace _15TextRPG.Source
 
             return query;
         }
+        public IEnumerable<ItemIdentifier> Find(string name)
+        {
+            var query = from item in Items
+                        where item.Name == name
+                        select item;
+
+            return query;
+        }
 
         public override string ToString()
         {
             string result = string.Empty;
             foreach(var _ in Items)
             {
-                result += $"{_.Name}: {_.Count} 개                        \n";
+                result += $"{_.Name}: {_.Count} 개                      \n";
             }
             return result;
         }

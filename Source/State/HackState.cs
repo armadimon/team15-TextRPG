@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Design;
+﻿using _15TextRPG.Source.Chapter1;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Drawing;
 using System.Text;
@@ -7,15 +8,24 @@ namespace _15TextRPG.Source.State
 {
     internal class HackState(Func<string, bool> HackingProcess, int limitTimeSec, string[]? _commandList = null) : IGameState
     {
-        string[] commandList = _commandList ?? [];
+        List<string> commandList = [ "exit" ];
 
         List<string> commands = [];
         int commandIndex = -1;
 
         string command = "";
+        public string directory = "base";
 
         public void DisplayMenu()
         {
+            if (_commandList != null)
+            {
+                foreach (var _ in _commandList)
+                {
+                    commandList.Add(_);
+                }
+            }
+
             Console.OutputEncoding = Encoding.UTF8;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Green;
@@ -57,7 +67,7 @@ namespace _15TextRPG.Source.State
                 Console.SetCursorPosition(0, Console.CursorTop);
             }
             Console.WriteLine();
-            foreach (char c in "실행 완료. 슈퍼 베이비 시팅 모드가 필요하면 help를 입력하세요.\n\n해킹을 시작하시겠습니까? [y/n]")
+            foreach (char c in "실행 완료. 슈퍼 베이비 오토 모드가 필요하면 [힘을 줘유 슈퍼파월]를 입력하세요.\n\n해킹을 시작하시겠습니까? [y/n]")
             {
                 Console.Write(c);
                 Thread.Sleep(50);
@@ -68,12 +78,13 @@ namespace _15TextRPG.Source.State
             command = Console.ReadLine();
             if (command == "y")
             {
+                Console.Write(">> ");
             }
-            else if(command == "help")
+            else if(command == "힘을 줘유 슈퍼파월")
             {
                 Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                foreach (char c in "슈퍼 베이비 시팅 모드를 시작합니다. 사람으로 태어나 기계보다 못 한 주인님을 위해 제가 모든 걸 해결할게요.")
+                foreach (char c in "슈퍼 베이비 오토 모드를 시작합니다. 사람으로 태어나 기계보다 못 한 주인님을 위해 제가 모든 걸 해결할게요.")
                 {
                     Console.Write(c);
                     Thread.Sleep(50);
@@ -151,9 +162,8 @@ namespace _15TextRPG.Source.State
 
                     if (key.Key == ConsoleKey.Enter)
                     {
-                        if (HackingProcess(command))
+                        if (HackingProcess(command) || command == "exit")
                         {
-                            Console.WriteLine("\nHacking Success!");
                             GameManager.Instance.ChangeState(new ExploreState(GameManager.Instance.GameData.CurrentChapter.CurrentStage.Name));
                             return;
                         }
@@ -212,7 +222,7 @@ namespace _15TextRPG.Source.State
                         {
                             foreach (string _ in commandList)
                             {
-                                if (_.Contains(command) && _ != command)
+                                if (_.CompareTo(command) > 0 && _ != command)
                                 {
                                     Console.SetCursorPosition(0, Console.CursorTop);
                                     Console.Write(">> " + _);

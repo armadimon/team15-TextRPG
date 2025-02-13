@@ -1,4 +1,5 @@
 using _15TextRPG.Source.Combat;
+using _15TextRPG.Source.State;
 using System;
 using System.Numerics;
 using System.Reflection.Metadata;
@@ -117,6 +118,31 @@ namespace _15TextRPG.Source
         {
             
             Console.WriteLine($"{RecoveryAmount}만큼 플레이어의 STR이 증가 -> {Player.Str}");
+        }
+    }
+
+    class MiliwareIceBreaker : IItem
+    {
+        public int Tag { get; } = (int)ItemList.StrUpPotion;
+        public int Stat { get; } = 1;
+        public int Value { get; } = 1;
+        public string Name { get; } = "밀리브레이커";
+        public string Desc { get; } = "해킹시 보안 등급을 5단계 낮춥니다.";
+        public int RecoveryAmount { get; } = 1;
+
+        private Player Player { get; } = GameManager.Instance.GameData.Player;
+
+        public void Use(ICharacter? target)
+        {
+
+            if(target is IHackable)
+            {
+                IHackable Target = (IHackable)target;
+                if(Target.HackDefenderLV < 5)
+                {
+                    Target.HackDefenderLV = 0;
+                }
+            }
         }
     }
 }

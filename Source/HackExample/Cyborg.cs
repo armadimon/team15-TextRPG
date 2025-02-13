@@ -9,6 +9,7 @@ namespace _15TextRPG.Source.State
     internal class Cyborg : IHackable
     {
         public HackState HackState { get; }
+        public int HackDefenderLV { get; set; } = 5;
 
         public Cyborg() 
         {   

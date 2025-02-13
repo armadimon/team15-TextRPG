@@ -12,7 +12,32 @@ namespace _15TextRPG.Source
 {
     internal class SaveLoadManager()
     {
-        interface ISaveable
+        List<ISaveable> saveableEntitys = [];
+        public void AddSaveableEntity<T>(T target, string fileName) where T : class
+        {
+            SaveableEntity<T> saveableEntity = new(target, fileName);
+            saveableEntitys.Add(saveableEntity);
+        }
+
+        public void DoSave() => saveableEntitys.ForEach(t => t.Save());
+
+        public void DoSave(string fileName) => saveableEntitys.ForEach(t => { if (t.FileName == fileName) t.Save(); });
+
+        public void DoLoad() => saveableEntitys.ForEach(t => t.Load());
+
+        public void DoLoad(string fileName) => saveableEntitys.ForEach(t => { if (t.FileName == fileName) t.Load(); });
+
+        public string ToString(JsonSerializerOptions option)
+        {
+            string result = "";
+            foreach (ISaveable t in saveableEntitys)
+            {
+                result += t.FileName + ": " + t.ToString();
+            }
+            return result;
+        }
+
+        private interface ISaveable
         {
             string FileName { get; }
             bool Save();
@@ -20,9 +45,7 @@ namespace _15TextRPG.Source
             string ToString(JsonSerializerOptions option);
         }
 
-        List<ISaveable> saveableEntitys = [];
-
-        class SaveableEntity<T>(T target, string fileName) : ISaveable where T : class
+        private class SaveableEntity<T>(T target, string fileName) : ISaveable where T : class
         {
             public string FileName { get; set; } = fileName;
 
@@ -62,28 +85,5 @@ namespace _15TextRPG.Source
 
             public string ToString(JsonSerializerOptions? option) => JsonSerializer.Serialize(target, option);
         }
-        public void AddSaveableEntity<T>(T target, string fileName) where T : class
-        {
-            SaveableEntity<T> saveableEntity = new(target, fileName);
-            saveableEntitys.Add(saveableEntity);
-        }
-
-        public string ToString(JsonSerializerOptions option)
-        {
-            string result = "";
-            foreach (ISaveable t in saveableEntitys)
-            {
-                result += t.FileName + ": " + t.ToString();
-            }
-            return result;
-        }
-
-        public void DoSave() => saveableEntitys.ForEach(t => t.Save());
-
-        public void DoSave(string fileName) => saveableEntitys.ForEach(t => { if (t.FileName == fileName) t.Save(); });
-
-        public void DoLoad() => saveableEntitys.ForEach(t => t.Load());
-
-        public void DoLoad(string fileName) => saveableEntitys.ForEach(t => { if (t.FileName == fileName) t.Load(); });
     }
 }
