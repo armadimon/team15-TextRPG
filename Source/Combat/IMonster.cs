@@ -54,11 +54,11 @@ namespace _15TextRPG.Source.Combat
 
         public List<IItem> Items { get; } = ItemData.RecoveryItems;
 
-        //private static readonly Random random = new Random();
-        //public List<IItem> ItemRandom { get; } = new List<IItem> //랜덤으로 넣고싶으면 이렇게 하면 될듯
-        //{
-        //    ItemData.RecoveryItems[random.Next(ItemData.RecoveryItems.Count)]
-        //};
+        private static readonly Random random = new Random();
+        public List<IItem> ItemRandom { get; } = new List<IItem> //랜덤으로 넣고싶으면 이렇게 하면 될듯
+        {
+            ItemData.RecoveryItems[random.Next(ItemData.RecoveryItems.Count)]
+        };
 
         public Reward GetReward()
         {
@@ -94,6 +94,12 @@ namespace _15TextRPG.Source.Combat
         public double SkillRisistence { get; set; } = 1 + GameManager.Instance.GameData.Player.Level;
 
         public List<IItem> Items { get; } = ItemData.RecoveryItems;
+        private static readonly Random random = new Random();
+        public List<IItem> ItemRandom { get; } = new List<IItem> 
+        {
+            ItemData.RecoveryItems[random.Next(ItemData.RecoveryItems.Count)]
+        };
+
         public Reward GetReward()
         {
             return new Reward(Items, 0, 0);
@@ -115,9 +121,14 @@ namespace _15TextRPG.Source.Combat
         public double SkillRisistence { get; set; } = 2 + GameManager.Instance.GameData.Player.Level;
 
         public List<IItem> Items { get; } = ItemData.RecoveryItems;
+        private static readonly Random random = new Random();
+        public List<IItem> ItemRandom { get; } = new List<IItem>
+        {
+            ItemData.DropItems[random.Next(ItemData.DropItems.Count)]
+        };
         public Reward GetReward()
         {
-            return new Reward(Items, 0, 0);
+            return new Reward(ItemRandom, 0, 0);
         }
     }
 }

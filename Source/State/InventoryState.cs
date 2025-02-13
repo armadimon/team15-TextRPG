@@ -21,7 +21,9 @@ namespace _15TextRPG.Source.State
 
         public void HandleInput()
         {
-            var recItem = ItemData.RecoveryItems[0];
+            var recItem = ItemData.DropItems[0];
+            var othertem = ItemData.DropItems[1];
+
             var strItem = ItemData.StateUpgradeItems[0];
 
 
@@ -32,6 +34,8 @@ namespace _15TextRPG.Source.State
                 case "9":
                     GameManager.Instance.GameData.Player.Inventory.Add(recItem);
                     GameManager.Instance.GameData.Player.Inventory.Add(strItem);
+                    GameManager.Instance.GameData.Player.Inventory.Add(othertem);
+
 
                     Console.WriteLine("아이템이 추가됐습니다");
                     break;
@@ -58,6 +62,10 @@ namespace _15TextRPG.Source.State
                             Console.WriteLine($"{GameManager.Instance.GameData.Player.Inventory.GetItemName(i - 1)}을 사용하였습니다.");
                             GameManager.Instance.GameData.Player.Inventory.Use(GameManager.Instance.GameData.Player.Inventory.GetItemName(i - 1));
                             GameManager.Instance.GameData.Player.Inventory.Subtract(GameManager.Instance.GameData.Player.Inventory.GetItemName(i - 1));
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{GameManager.Instance.GameData.Player.Inventory.GetItemName(i - 1)}(이)가 없습니다.");
                         }
                     }
 
