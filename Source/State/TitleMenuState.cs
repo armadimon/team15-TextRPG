@@ -158,6 +158,9 @@ namespace _15TextRPG.Source.State
                 else
                 {
                     Console.ResetColor();
+                    Console.Clear();
+                    Console.WriteLine("[시작]");
+                    AsciiArtRenderer.PrintAsciiArt(0, ascii); // 아스키 아트 출력
                     Console.WriteLine("뭐라고? 다시 한번 말해주겠나.");
                 }
             }

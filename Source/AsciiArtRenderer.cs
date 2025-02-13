@@ -108,18 +108,15 @@ namespace _15TextRPG.Source
             // 메뉴 제목
             PrintAtPosition(x, y + 1, "│" + CenterText("[ 메인 메뉴 ]", width) + "│");
 
-            // 중간 구분선 -> 걍 없는게 낫다
-            PrintAtPosition(x, y + 2, "│" + " " + "│");
-
             // 메뉴 옵션
-            string[] menuOptions = { "1. 새로 시작하기", "2. 이어서 하기", "3. 크레딧", "4. 종료" };
+            string[] menuOptions = { "1. 새로 시작하기", "2. 이어서 하기", "3. 종료" };
             for (int i = 0; i < menuOptions.Length; i++)
             {
                 PrintAtPosition(x, y + 2 + i, "│" + CenterText(menuOptions[i], width) + "│");
             }
 
             // 하단 테두리
-            PrintAtPosition(x, y + height - 1, "│" + horizontalLine + "│");
+            PrintAtPosition(x, y + height - 2, "│" + horizontalLine + "│");
         }
         public static void PrintAtPosition(int x, int y, string text)
         {

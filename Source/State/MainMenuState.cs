@@ -18,7 +18,7 @@ namespace _15TextRPG.Source.State
             Console.WriteLine("\n1. 상태 보기");
             Console.WriteLine("\n2. 의뢰 수주");
             Console.WriteLine("\n3. 챕터 선택");
-            Console.WriteLine("\n4. 회복하기");
+            Console.WriteLine("\n4. 인벤토리 보기");
             Console.WriteLine("\n0. 종료");
         }
 

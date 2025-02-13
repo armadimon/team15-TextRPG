@@ -203,6 +203,8 @@ namespace _15TextRPG.Source.State
 
             ConsoleKeyInfo keyInfo;
             int i = 0;
+            int curL = Console.CursorLeft;
+            int curT = Console.CursorTop;
             do
             {
                 Console.WriteLine($"{i}층 CCTV");
@@ -212,12 +214,15 @@ namespace _15TextRPG.Source.State
                     case ConsoleKey.LeftArrow:
                         if (i > stages.Count - 1)
                             i = 0;
+                        Console.SetCursorPosition(curL, curT);
                         DisplayMap(GameManager.Instance.GameData, stages[i]);
+                        
                         i++;
                         break;
                     case ConsoleKey.RightArrow:
                         if (i > stages.Count - 1)
                             i = 0;
+                        Console.SetCursorPosition(curL, curT);
                         DisplayMap(GameManager.Instance.GameData, stages[i]);
                         i++;
                         break;
