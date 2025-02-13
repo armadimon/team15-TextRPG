@@ -155,7 +155,7 @@ namespace _15TextRPG.Source.Chapter1
                         Thread.Sleep(50);
                     }
                 }
-                if (command == "hack CCTV-01  ")
+                if (command == "hack CCTV-01")
                 {
                     foreach (char c in "[패스워드 크랙 시도 중...] ")
                     {
